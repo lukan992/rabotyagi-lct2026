@@ -374,6 +374,7 @@ class SpiderImport(Base):
     id: Mapped[str] = mapped_column(String(40), primary_key=True)
     site_id: Mapped[str] = mapped_column(ForeignKey("sites.id", ondelete="CASCADE"), index=True)
     source_url: Mapped[str] = mapped_column(String(500))
+    connection_fingerprint: Mapped[str | None] = mapped_column(String(64))
     status: Mapped[str] = mapped_column(String(16))  # pending | succeeded | failed
     started_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
     finished_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
@@ -395,7 +396,9 @@ class SpiderObservationAsset(Base):
     __tablename__ = "spider_observation_assets"
 
     id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    site_id: Mapped[str | None] = mapped_column(ForeignKey("sites.id", ondelete="CASCADE"))
     snapshot_id: Mapped[str] = mapped_column(ForeignKey("spider_snapshots.id", ondelete="CASCADE"))
+    connection_fingerprint: Mapped[str | None] = mapped_column(String(64))
     observation_id: Mapped[str] = mapped_column(String(120))
     image_sha256: Mapped[str] = mapped_column(String(64))
     media_type: Mapped[str] = mapped_column(String(32))
@@ -404,7 +407,7 @@ class SpiderObservationAsset(Base):
     storage_path: Mapped[str] = mapped_column(String(500))
     source_image_url: Mapped[str] = mapped_column(String(1000))
     observed_at: Mapped[datetime] = mapped_column(UTCDateTime)
-    timestamp_quality: Mapped[str] = mapped_column(String(32), default="synthetic_demo", server_default="synthetic_demo")
+    timestamp_quality: Mapped[str] = mapped_column(String(32), default="unknown", server_default="unknown")
     fetched_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
     target_document: Mapped[dict | None] = mapped_column(JSON)
     target_error: Mapped[str | None] = mapped_column(String(64))
@@ -412,10 +415,12 @@ class SpiderObservationAsset(Base):
 
     __table_args__ = (
         UniqueConstraint(
+            "site_id",
             "snapshot_id",
             "observation_id",
             "image_sha256",
-            name="uq_spider_observation_assets_snapshot_observation_image",
+            "connection_fingerprint",
+            name="uq_spider_observation_assets_connection_image",
         ),
     )
 class Observation(Base):

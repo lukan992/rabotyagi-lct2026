@@ -25,7 +25,14 @@ from app.schemas import (
     SpiderSnapshotOut,
 )
 from app.security import SITE_MANAGERS, CurrentUser, Session, encrypt_secret, require_roles
-from app.services.spider import SpiderError, import_source, prepare_observation, resolve_connection, validate_origin
+from app.services.spider import (
+    SpiderError,
+    connection_fingerprint,
+    import_source,
+    prepare_observation,
+    resolve_connection,
+    validate_origin,
+)
 
 router = APIRouter(prefix="/sites/{site_id}/spider", tags=["Источник Camera Stage Monitor"])
 settings = get_settings()
@@ -203,7 +210,12 @@ async def spider_status(site_id: str, user: CurrentUser, session: Session) -> Sp
     if connection.origin is None:
         imports: list[SpiderImport] = []
     else:
-        imports = list(await session.scalars(query.where(SpiderImport.source_url == connection.origin).order_by(SpiderImport.started_at.desc())))
+        imports = list(await session.scalars(
+            query.where(
+                SpiderImport.source_url == connection.origin,
+                SpiderImport.connection_fingerprint == connection_fingerprint(connection),
+            ).order_by(SpiderImport.started_at.desc(), SpiderImport.id.desc())
+        ))
     latest = imports[0] if imports else None
     success = next((item for item in imports if item.status == "succeeded" and item.snapshot_id), None)
     snapshot = await session.get(SpiderSnapshot, success.snapshot_id) if success and success.snapshot_id else None
@@ -251,8 +263,11 @@ async def spider_image(site_id: str, asset_id: str, user: CurrentUser, session: 
         .join(SpiderImport, SpiderImport.snapshot_id == SpiderObservationAsset.snapshot_id)
         .where(
             SpiderObservationAsset.id == asset_id,
+            SpiderObservationAsset.site_id == site_id,
+            SpiderObservationAsset.connection_fingerprint == connection_fingerprint(connection),
             SpiderImport.site_id == site_id,
             SpiderImport.source_url == connection.origin,
+            SpiderImport.connection_fingerprint == connection_fingerprint(connection),
             SpiderImport.status == "succeeded",
         )
         .limit(1)

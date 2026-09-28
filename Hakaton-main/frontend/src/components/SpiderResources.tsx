@@ -11,31 +11,34 @@ import { Modal } from './ui/Modal'
 import { SpiderConnection } from './SpiderConnection'
 
 /**
- * Не смешивает сохранённые данные Camera Stage Monitor с локальным календарным планом и CV: источник демонстрационный,
+ * Не смешивает сохранённые данные Camera Stage Monitor с локальным календарным планом и CV:
  * а подготовка фото всегда начинается только по явному действию пользователя.
  */
 export function SpiderResources({ siteId, siteName, canImport }: { siteId: string; siteName?: string; canImport: boolean }) {
   const queryClient = useQueryClient()
   const key = ['spider', siteId]
   const [confirmImport, setConfirmImport] = useState(false)
-  const [asset, setAsset] = useState<SpiderObservationAsset | null>(null)
+  const [prepared, setPrepared] = useState<{ siteId: string; importId: string | null; asset: SpiderObservationAsset } | null>(null)
   const { data, isPending, isError, error } = useQuery({
     queryKey: key,
     queryFn: () => api.spider(siteId),
     refetchInterval: 60_000,
   })
+  const snapshotId = data?.snapshot?.id
+  const importId = data?.lastImport?.id ?? null
+  const asset = prepared?.siteId === siteId && prepared.importId === importId && prepared.asset.snapshotId === snapshotId ? prepared.asset : null
   const importSource = useMutation({
     mutationFn: () => api.importSpider(siteId),
     onSuccess: () => {
       setConfirmImport(false)
-      setAsset(null)
+      setPrepared(null)
       void queryClient.invalidateQueries({ queryKey: key })
     },
   })
   const prepare = useMutation({
     mutationFn: ({ observationId, snapshotId }: { observationId: string; snapshotId: string }) =>
       api.prepareSpiderObservation(siteId, observationId, snapshotId),
-    onSuccess: setAsset,
+    onSuccess: (result) => setPrepared({ siteId, importId, asset: result }),
   })
 
   if (isPending) return <div className="bg-card rounded-xl border border-border h-44 animate-pulse" aria-busy />
@@ -54,7 +57,7 @@ export function SpiderResources({ siteId, siteName, canImport }: { siteId: strin
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-[18px] font-semibold">Источник Camera Stage Monitor</h2>
-          <p className="mt-0.5 text-[14px] text-muted-foreground">Демонстрационные данные только для просмотра: локальный план объекта не изменяется.</p>
+          <p className="mt-0.5 text-[14px] text-muted-foreground">Данные внешнего источника только для просмотра: локальный план объекта не изменяется.</p>
         </div>
         {canImport && <Button size="sm" onClick={() => setConfirmImport(true)} disabled={importSource.isPending}>
           {importSource.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
@@ -72,10 +75,10 @@ export function SpiderResources({ siteId, siteName, canImport }: { siteId: strin
       {!snapshot ? <EmptySource limitations={data.limitations} /> : <SourceSnapshot snapshot={snapshot} stale={data.stale} lastSuccessAt={data.lastSuccessAt} asset={asset} prepareError={prepare.isError ? prepare.error instanceof ApiError ? prepare.error.message : 'Не удалось подготовить фото источника.' : null} preparing={prepare.isPending} onPrepare={(observationId) => prepare.mutate({ observationId, snapshotId: snapshot.id })} />}
       {canImport && <SpiderConnection siteId={siteId} />}
 
-      <Modal open={confirmImport} onClose={() => !importSource.isPending && setConfirmImport(false)} title="Загрузить демонстрационный источник">
+      <Modal open={confirmImport} onClose={() => !importSource.isPending && setConfirmImport(false)} title="Загрузить внешний источник">
         <div className="space-y-4">
           <p>Будет выполнено ровно 5 запросов к Camera Stage Monitor для объекта{siteName ? ` «${siteName}»` : ''}.</p>
-          <p className="rounded-lg bg-warn-bg text-warn-fg px-3 py-2 text-[14px]">Демонстрационный источник привязывается только для просмотра. План объекта и фактический прогресс не будут заменены.</p>
+          <p className="rounded-lg bg-warn-bg text-warn-fg px-3 py-2 text-[14px]">Данные источника загружаются только для просмотра. План объекта и фактический прогресс не будут заменены.</p>
           {importSource.isError && <p role="alert" className="rounded-lg bg-danger-bg text-danger-fg px-3 py-2 text-[14px]">{importSource.error instanceof ApiError ? importSource.error.message : 'Не удалось загрузить источник.'}</p>}
           <div className="flex flex-wrap gap-3">
             <Button onClick={() => importSource.mutate()} disabled={importSource.isPending}>
@@ -109,11 +112,12 @@ function SourceSnapshot({ snapshot, stale, lastSuccessAt, asset, prepareError, p
   return (
     <div className="mt-4 space-y-4">
       <div className="flex flex-wrap items-center gap-2 text-[14px] text-muted-foreground">
-        <Badge tone="warn">synthetic_demo</Badge>
+        <Badge tone="warn">{snapshot.dataType || 'unknown'}</Badge>
         {stale && <Badge tone="warn">Данные устарели</Badge>}
         <span>Получено: {lastSuccessAt ? fmtWhen(lastSuccessAt) : fmtDate(snapshot.createdAt)}</span>
       </div>
       {snapshot.warning && <p className="rounded-lg bg-warn-bg text-warn-fg px-3 py-2 text-[14px]">{snapshot.warning}</p>}
+      <p className="rounded-lg bg-warn-bg px-3 py-2 text-[14px] text-warn-fg">Spider не передаёт ID объекта. Принадлежность этого плана объекту не подтверждена источником.</p>
       <div className="space-y-3">
         {snapshot.resources.stages.map((stage) => <ResourceStage key={stage.code} stage={stage} />)}
       </div>
@@ -124,7 +128,7 @@ function SourceSnapshot({ snapshot, stale, lastSuccessAt, asset, prepareError, p
           <p className="text-muted-foreground">Наблюдения, ручные оценки и сравнения остаются исходными данными; они не суммируются с CV и не являются фактическим прогрессом.</p>
           {snapshot.sourceObservations.length === 0 ? <p className="text-muted-foreground">Наблюдений нет.</p> : snapshot.sourceObservations.map((observation, index) => {
             const observationId = text(observation, 'observation')
-            return <SourceObservation key={observationId || index} observation={observation} asset={asset?.observationId === observationId ? asset : null} preparing={preparing} onPrepare={() => observationId && onPrepare(observationId)} />
+            return <SourceObservation key={observationId || index} observation={observation} asset={asset?.snapshotId === snapshot.id && asset.observationId === observationId ? asset : null} preparing={preparing} onPrepare={() => observationId && onPrepare(observationId)} />
           })}
           <ManualAnnotations
             rows={snapshot.manualAnnotations}
@@ -178,6 +182,7 @@ function SourceObservation({ observation, asset, preparing, onPrepare }: {
         {asset?.target && <Badge tone="ok">Этап по времени: {[text(asset.target, 'code'), text(asset.target, 'name')].filter(Boolean).join(' · ') || 'получен'}</Badge>}
       </div>
       {asset?.targetError && <p className="mt-2 rounded-lg bg-warn-bg text-warn-fg px-3 py-2">Не удалось определить этап: {asset.targetError}</p>}
+      {asset && <p className="mt-2 text-[13px] text-muted-foreground">Фото получено отдельно {fmtWhen(asset.fetchedAt)}. Spider не подтверждает неизменность изображения с момента загрузки плана.</p>}
       {asset && <ProtectedSpiderImage asset={asset} />}
     </article>
   )
