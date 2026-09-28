@@ -1,0 +1,125 @@
+{
+  "http_status": 200,
+  "body": {
+    "schema_version": "frame-analysis-result-v1",
+    "request_id": "demo-concrete-v1",
+    "analysis_id": "fdcfe8bb-5e7d-496c-b428-52c856ce6877",
+    "service": "deterministic",
+    "context": {
+      "site_id": "demo-concrete-site",
+      "camera_id": "demo-camera",
+      "image_id": "demo-frame",
+      "observed_at": "2026-09-26T12:00:00Z",
+      "image_sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896",
+      "plan_id": "demo-plan",
+      "plan_revision_id": "demo-revision",
+      "plan_stream_code": "demo-stream",
+      "history_snapshot_id": "demo-history",
+      "catalog_version": "catalog-cf435bba295909ab953facca",
+      "input_sha256": "7b4ef00a41f4482f8067a1db906b56b426bf648a121e24bb6c80cfb940734151"
+    },
+    "versions": {
+      "service_version": "0.5.0",
+      "matrix_version": "construction-class-matrix-v2.0",
+      "profiles_version": null,
+      "vision_model": null,
+      "llm_model": null,
+      "schedule_rules_version": "schedule-rules-v1"
+    },
+    "current_work": {
+      "status": "assessed",
+      "work_groups": [
+        {
+          "group_id": "scope-compatibility",
+          "match_status": "ambiguous",
+          "candidates": [
+            {
+              "step_key": "demo-work-a",
+              "stage_id": 47,
+              "ranking": {
+                "status": "single_signal",
+                "signal_score": 2.0,
+                "role_score": 3.0,
+                "matches": [
+                  {
+                    "class_code": "Excavator",
+                    "role_weight": 3,
+                    "signal_weight": 2,
+                    "evidence_group": "earthmoving"
+                  }
+                ]
+              }
+            },
+            {
+              "step_key": "demo-work-c",
+              "stage_id": 65,
+              "ranking": {
+                "status": "single_signal",
+                "signal_score": 2.0,
+                "role_score": 3.0,
+                "matches": [
+                  {
+                    "class_code": "Excavator",
+                    "role_weight": 3,
+                    "signal_weight": 2,
+                    "evidence_group": "earthmoving"
+                  }
+                ]
+              }
+            }
+          ],
+          "visual_state": "not_evaluated",
+          "area_bbox": null,
+          "evidence": [
+            {
+              "source": "cv_detection",
+              "ref": "/cv/detections/0",
+              "role": "supports",
+              "explanation": "Класс техники технологически совместим с кандидатами; присутствие не подтверждает выполнение."
+            }
+          ],
+          "explanation": "Совместимость общего CV участка с планом; отдельные параллельные операции этим расчётом не локализованы."
+        }
+      ]
+    },
+    "visual_observations": [],
+    "visual_relations": [],
+    "transition": {
+      "status": "needs_progress_anchor",
+      "current_step_key": null,
+      "next_step_key": null,
+      "distinctive_codes": [],
+      "evidence_first_at": null,
+      "evidence_last_at": null,
+      "supporting_observations": 0,
+      "evidence_refs": []
+    },
+    "schedule": {
+      "status": "insufficient_evidence",
+      "items": [
+        {
+          "step_key": "demo-work-a",
+          "stage_id": 47,
+          "status": "insufficient_evidence",
+          "reason_code": "no_sourced_progress",
+          "overdue_seconds": null,
+          "evidence_at": null,
+          "evidence_refs": []
+        },
+        {
+          "step_key": "demo-work-c",
+          "stage_id": 65,
+          "status": "no_delay_indicated",
+          "reason_code": "deadline_not_reached",
+          "overdue_seconds": 0,
+          "evidence_at": "2026-09-26T12:00:00Z",
+          "evidence_refs": []
+        }
+      ]
+    },
+    "limitations": [
+      "Баллы не являются вероятностями; условия технологии требуют предметной проверки.",
+      "Для части сроков нет достаточного подтверждённого хода; отсутствие машин не считается отставанием."
+    ]
+  }
+}

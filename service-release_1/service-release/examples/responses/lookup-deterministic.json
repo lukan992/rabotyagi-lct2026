@@ -1,0 +1,125 @@
+{
+  "http_status": 200,
+  "body": {
+    "context": {
+      "plan_id": "demo-plan",
+      "site_id": "demo-concrete-site",
+      "image_id": "demo-frame",
+      "camera_id": "demo-camera",
+      "observed_at": "2026-09-26T12:00:00Z",
+      "image_sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896",
+      "input_sha256": "7b4ef00a41f4482f8067a1db906b56b426bf648a121e24bb6c80cfb940734151",
+      "catalog_version": "catalog-cf435bba295909ab953facca",
+      "plan_revision_id": "demo-revision",
+      "plan_stream_code": "demo-stream",
+      "history_snapshot_id": "demo-history"
+    },
+    "service": "deterministic",
+    "schedule": {
+      "items": [
+        {
+          "status": "insufficient_evidence",
+          "stage_id": 47,
+          "step_key": "demo-work-a",
+          "evidence_at": null,
+          "reason_code": "no_sourced_progress",
+          "evidence_refs": [],
+          "overdue_seconds": null
+        },
+        {
+          "status": "no_delay_indicated",
+          "stage_id": 65,
+          "step_key": "demo-work-c",
+          "evidence_at": "2026-09-26T12:00:00Z",
+          "reason_code": "deadline_not_reached",
+          "evidence_refs": [],
+          "overdue_seconds": 0
+        }
+      ],
+      "status": "insufficient_evidence"
+    },
+    "versions": {
+      "llm_model": null,
+      "vision_model": null,
+      "matrix_version": "construction-class-matrix-v2.0",
+      "service_version": "0.5.0",
+      "profiles_version": null,
+      "schedule_rules_version": "schedule-rules-v1"
+    },
+    "request_id": "demo-concrete-v1",
+    "transition": {
+      "status": "needs_progress_anchor",
+      "evidence_refs": [],
+      "next_step_key": null,
+      "current_step_key": null,
+      "evidence_last_at": null,
+      "distinctive_codes": [],
+      "evidence_first_at": null,
+      "supporting_observations": 0
+    },
+    "analysis_id": "fdcfe8bb-5e7d-496c-b428-52c856ce6877",
+    "limitations": [
+      "Баллы не являются вероятностями; условия технологии требуют предметной проверки.",
+      "Для части сроков нет достаточного подтверждённого хода; отсутствие машин не считается отставанием."
+    ],
+    "current_work": {
+      "status": "assessed",
+      "work_groups": [
+        {
+          "evidence": [
+            {
+              "ref": "/cv/detections/0",
+              "role": "supports",
+              "source": "cv_detection",
+              "explanation": "Класс техники технологически совместим с кандидатами; присутствие не подтверждает выполнение."
+            }
+          ],
+          "group_id": "scope-compatibility",
+          "area_bbox": null,
+          "candidates": [
+            {
+              "ranking": {
+                "status": "single_signal",
+                "matches": [
+                  {
+                    "class_code": "Excavator",
+                    "role_weight": 3,
+                    "signal_weight": 2,
+                    "evidence_group": "earthmoving"
+                  }
+                ],
+                "role_score": 3.0,
+                "signal_score": 2.0
+              },
+              "stage_id": 47,
+              "step_key": "demo-work-a"
+            },
+            {
+              "ranking": {
+                "status": "single_signal",
+                "matches": [
+                  {
+                    "class_code": "Excavator",
+                    "role_weight": 3,
+                    "signal_weight": 2,
+                    "evidence_group": "earthmoving"
+                  }
+                ],
+                "role_score": 3.0,
+                "signal_score": 2.0
+              },
+              "stage_id": 65,
+              "step_key": "demo-work-c"
+            }
+          ],
+          "explanation": "Совместимость общего CV участка с планом; отдельные параллельные операции этим расчётом не локализованы.",
+          "match_status": "ambiguous",
+          "visual_state": "not_evaluated"
+        }
+      ]
+    },
+    "schema_version": "frame-analysis-result-v1",
+    "visual_relations": [],
+    "visual_observations": []
+  }
+}

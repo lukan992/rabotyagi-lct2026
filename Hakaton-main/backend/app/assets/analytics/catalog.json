@@ -1,0 +1,5710 @@
+{
+ "schema_version": "frame-analysis-catalog-v1",
+ "catalog_version": "catalog-cf435bba295909ab953facca",
+ "equipment_classes": [
+  {
+   "code": "Excavator",
+   "name_ru": "Экскаватор",
+   "aliases": []
+  },
+  {
+   "code": "FoundationDrillingPilingRig",
+   "name_ru": "Буровая / сваебойная установка",
+   "aliases": []
+  },
+  {
+   "code": "TowerCrane",
+   "name_ru": "Башенный кран",
+   "aliases": []
+  },
+  {
+   "code": "MobileCrane",
+   "name_ru": "Автокран / мобильный кран",
+   "aliases": []
+  },
+  {
+   "code": "CrawlerCrane",
+   "name_ru": "Гусеничный кран",
+   "aliases": []
+  },
+  {
+   "code": "DumpTruck",
+   "name_ru": "Самосвал",
+   "aliases": [
+    "ArticulatedDumpTruck"
+   ]
+  },
+  {
+   "code": "WheelLoader",
+   "name_ru": "Фронтальный погрузчик",
+   "aliases": []
+  },
+  {
+   "code": "BackhoeLoader",
+   "name_ru": "Экскаватор-погрузчик",
+   "aliases": []
+  },
+  {
+   "code": "Bulldozer",
+   "name_ru": "Бульдозер",
+   "aliases": []
+  },
+  {
+   "code": "ConcreteMixerTruck",
+   "name_ru": "Автобетоносмеситель",
+   "aliases": []
+  },
+  {
+   "code": "RoadRoller",
+   "name_ru": "Дорожный каток",
+   "aliases": []
+  },
+  {
+   "code": "Telehandler",
+   "name_ru": "Телескопический погрузчик",
+   "aliases": []
+  },
+  {
+   "code": "ConcretePumpOrPlacingBoom",
+   "name_ru": "Автобетононасос / бетонораспределительная стрела",
+   "aliases": []
+  },
+  {
+   "code": "TruckMountedAerialPlatform",
+   "name_ru": "Автовышка",
+   "aliases": []
+  },
+  {
+   "code": "MotorGrader",
+   "name_ru": "Автогрейдер",
+   "aliases": []
+  },
+  {
+   "code": "BitumenSprayerTruck",
+   "name_ru": "Автогудронатор",
+   "aliases": []
+  },
+  {
+   "code": "AsphaltPaver",
+   "name_ru": "Асфальтоукладчик",
+   "aliases": []
+  },
+  {
+   "code": "Forklift",
+   "name_ru": "Вилочный погрузчик",
+   "aliases": []
+  },
+  {
+   "code": "TruckMountedCrane",
+   "name_ru": "Кран-манипулятор",
+   "aliases": []
+  },
+  {
+   "code": "Pipelayer",
+   "name_ru": "Кран-трубоукладчик",
+   "aliases": []
+  },
+  {
+   "code": "RoadMarkingMachine",
+   "name_ru": "Машина дорожной разметки",
+   "aliases": []
+  },
+  {
+   "code": "SkidSteerLoader",
+   "name_ru": "Мини-погрузчик",
+   "aliases": [
+    "CompactTrackLoader"
+   ]
+  },
+  {
+   "code": "ScissorLift",
+   "name_ru": "Ножничный подъёмник",
+   "aliases": []
+  },
+  {
+   "code": "AerialWorkPlatform",
+   "name_ru": "Самоходная подъёмная платформа / коленчатый подъёмник",
+   "aliases": []
+  },
+  {
+   "code": "DustSuppressionMachine",
+   "name_ru": "Пылеподавляющая установка",
+   "aliases": []
+  },
+  {
+   "code": "StationaryConcretePump",
+   "name_ru": "Стационарный бетононасос",
+   "aliases": []
+  },
+  {
+   "code": "ConstructionHoist",
+   "name_ru": "Строительный подъёмник",
+   "aliases": []
+  },
+  {
+   "code": "FacadePlatform",
+   "name_ru": "Фасадный подъёмник / строительная люлька",
+   "aliases": []
+  },
+  {
+   "code": "SiteDumper",
+   "name_ru": "Строительный мини-самосвал / думпер",
+   "aliases": []
+  },
+  {
+   "code": "CableLayer",
+   "name_ru": "Кабелеукладчик",
+   "aliases": []
+  },
+  {
+   "code": "SoilConveyor",
+   "name_ru": "Конвейер грунта",
+   "aliases": []
+  },
+  {
+   "code": "TreeTransplanter",
+   "name_ru": "Машина для пересадки деревьев",
+   "aliases": []
+  },
+  {
+   "code": "WoodChipper",
+   "name_ru": "Измельчитель древесины",
+   "aliases": []
+  },
+  {
+   "code": "Hydroseeder",
+   "name_ru": "Установка гидропосева",
+   "aliases": []
+  },
+  {
+   "code": "SlurryMixingPlant",
+   "name_ru": "Установка приготовления глинистого раствора",
+   "aliases": []
+  },
+  {
+   "code": "WheelTractorScraper",
+   "name_ru": "Колёсный скрепер",
+   "aliases": []
+  },
+  {
+   "code": "Trencher",
+   "name_ru": "Траншеекопатель",
+   "aliases": []
+  },
+  {
+   "code": "ColdPlaner",
+   "name_ru": "Дорожная фреза",
+   "aliases": []
+  },
+  {
+   "code": "MobileCrusher",
+   "name_ru": "Мобильная дробильная установка",
+   "aliases": []
+  },
+  {
+   "code": "WaterTruck",
+   "name_ru": "Водовоз / поливомоечная машина",
+   "aliases": []
+  }
+ ],
+ "work_stages": [
+  {
+   "stage_id": 4,
+   "name_ru": "Подготовка территории",
+   "stage_path": "Подготовка территории",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 5,
+   "name_ru": "Отселение домов в пятне застройки",
+   "stage_path": "Подготовка территории / Отселение домов в пятне застройки",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 6,
+   "name_ru": "Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети)",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети)",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 7,
+   "name_ru": "Вынос сетей: теплосеть (ЦТП)",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: теплосеть (ЦТП)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 8,
+   "name_ru": "Вынос сетей: теплосеть (сети)",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: теплосеть (сети)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 9,
+   "name_ru": "Вынос сетей: теплосеть",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: теплосеть",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 10,
+   "name_ru": "Вынос сетей: водоснабжение",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: водоснабжение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 11,
+   "name_ru": "Вынос сетей: Х/Б канализация",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: Х/Б канализация",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 12,
+   "name_ru": "Вынос сетей: ливневая канализация",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: ливневая канализация",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 13,
+   "name_ru": "Вынос сетей: газоснабжение",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: газоснабжение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 14,
+   "name_ru": "Вынос сетей: электроснабжение (ТП)",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: электроснабжение (ТП)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 15,
+   "name_ru": "Вынос сетей: электроснабжение (сети)",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: электроснабжение (сети)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 16,
+   "name_ru": "Вынос сетей: электроснабжение",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: электроснабжение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 17,
+   "name_ru": "Вынос сетей: сети связи (КП МПТЦ)",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: сети связи (КП МПТЦ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 18,
+   "name_ru": "Вынос сетей: сети связи",
+   "stage_path": "Подготовка территории / Вынос инженерных систем из пятна застройки (ЦТП/ТП/сети) / Вынос сетей: сети связи",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 19,
+   "name_ru": "Снос домов в пятне застройки",
+   "stage_path": "Подготовка территории / Снос домов в пятне застройки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 20,
+   "name_ru": "Снос нежилых объектов в пятне застройки",
+   "stage_path": "Подготовка территории / Снос нежилых объектов в пятне застройки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 21,
+   "name_ru": "Вырубка зеленых насаждений",
+   "stage_path": "Подготовка территории / Вырубка зеленых насаждений",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 22,
+   "name_ru": "Пересадка зеленых насождений",
+   "stage_path": "Подготовка территории / Пересадка зеленых насождений",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 23,
+   "name_ru": "Проверка посадки здания",
+   "stage_path": "Подготовка территории / Проверка посадки здания",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 24,
+   "name_ru": "Демонтаж ж/б перекрытий",
+   "stage_path": "Подготовка территории / Демонтаж ж/б перекрытий",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 25,
+   "name_ru": "Погрузка строительного мусора",
+   "stage_path": "Подготовка территории / Погрузка строительного мусора",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 26,
+   "name_ru": "Устройство геодезических знаков",
+   "stage_path": "Подготовка территории / Устройство геодезических знаков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 27,
+   "name_ru": "Обустройство строительной площадки",
+   "stage_path": "Подготовка территории / Обустройство строительной площадки",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 28,
+   "name_ru": "Устройство ограждения строительной площадки",
+   "stage_path": "Подготовка территории / Обустройство строительной площадки / Устройство ограждения строительной площадки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 29,
+   "name_ru": "Устройство временных инженерных сетей",
+   "stage_path": "Подготовка территории / Обустройство строительной площадки / Устройство временных инженерных сетей",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 30,
+   "name_ru": "Устройство временных внутриплощадочных и подъездных дорог",
+   "stage_path": "Подготовка территории / Обустройство строительной площадки / Устройство временных внутриплощадочных и подъездных дорог",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 31,
+   "name_ru": "Возведение хозяйственно-бытового городка",
+   "stage_path": "Подготовка территории / Обустройство строительной площадки / Возведение хозяйственно-бытового городка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 32,
+   "name_ru": "Организация движения согласно ПОДД на период строительства",
+   "stage_path": "Подготовка территории / Организация движения согласно ПОДД на период строительства",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 33,
+   "name_ru": "Оснащение стройплощадки оборудованием по 299-ПП",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки оборудованием по 299-ПП",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 34,
+   "name_ru": "Видеокамеры для обзора территории стройплощадки (тип 1)",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки оборудованием по 299-ПП / Видеокамеры для обзора территории стройплощадки (тип 1)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 35,
+   "name_ru": "Видеокамеры для установки на КПП в зоне входа/выхода на стройплощадку (тип 2)",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки оборудованием по 299-ПП / Видеокамеры для установки на КПП в зоне входа/выхода на стройплощадку (тип 2)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 36,
+   "name_ru": "Видеокамеры для обзора зоны въезда/выезда на стройплощадку с распознаванием гос. номера ТС (тип 3)",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки оборудованием по 299-ПП / Видеокамеры для обзора зоны въезда/выезда на стройплощадку с распознаванием гос. номера ТС (тип 3)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 37,
+   "name_ru": "Установка датчиков шума (тип 4) (при необходимости)",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки оборудованием по 299-ПП / Установка датчиков шума (тип 4) (при необходимости)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 38,
+   "name_ru": "Оснащение стройплощадки системой СКУД с Face ID",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки системой СКУД с Face ID",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 39,
+   "name_ru": "Закупка оборудования",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки системой СКУД с Face ID / Закупка оборудования",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 40,
+   "name_ru": "Установка оборудования СКУД с FaceID",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки системой СКУД с Face ID / Установка оборудования СКУД с FaceID",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 41,
+   "name_ru": "Интеграция с ЕЦХД",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки системой СКУД с Face ID / Интеграция с ЕЦХД",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 42,
+   "name_ru": "Проведение работ по интеграционному тестированию",
+   "stage_path": "Подготовка территории / Оснащение стройплощадки системой СКУД с Face ID / Проведение работ по интеграционному тестированию",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 43,
+   "name_ru": "Выполнение строительно-монтажных работ",
+   "stage_path": "Выполнение строительно-монтажных работ",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 44,
+   "name_ru": "Сборка и подготовка устройства ТПМК",
+   "stage_path": "Выполнение строительно-монтажных работ / Сборка и подготовка устройства ТПМК",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 45,
+   "name_ru": "Проходка тоннелей с монтажем ж/б обделки",
+   "stage_path": "Выполнение строительно-монтажных работ / Проходка тоннелей с монтажем ж/б обделки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 46,
+   "name_ru": "Устройство подземной части",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 47,
+   "name_ru": "Устройство котлована",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство котлована",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 48,
+   "name_ru": "Устройство свай",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство свай",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 49,
+   "name_ru": "Устройство основания",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство основания",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 50,
+   "name_ru": "Устройство фундамента",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 51,
+   "name_ru": "Устройство свайного фундамента (при необходимости)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Устройство свайного фундамента (при необходимости)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 52,
+   "name_ru": "Устройство песчаной подготовки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Устройство песчаной подготовки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 53,
+   "name_ru": "Устройство щебеночного основания",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Устройство щебеночного основания",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 54,
+   "name_ru": "Устройство бетонной подготовки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Устройство бетонной подготовки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 55,
+   "name_ru": "Устройство монолитных ж/б плит перекрытия/покрытия",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Устройство монолитных ж/б плит перекрытия/покрытия",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 56,
+   "name_ru": "Устройство фундаментной плиты",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Устройство фундаментной плиты",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 57,
+   "name_ru": "Устройство фундамента под башенный кран",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Устройство фундамента под башенный кран",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 58,
+   "name_ru": "Армокаркас",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство фундамента / Армокаркас",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 59,
+   "name_ru": "Ограждающие конструкции (СВГ,БСС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Ограждающие конструкции (СВГ,БСС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 60,
+   "name_ru": "Устройство скважины интервала (бурение, разработка, погружение каркаса, бетонирование)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Ограждающие конструкции (СВГ,БСС) / Устройство скважины интервала (бурение, разработка, погружение каркаса, бетонирование)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 61,
+   "name_ru": "Закрепление грунтов",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Ограждающие конструкции (СВГ,БСС) / Закрепление грунтов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 62,
+   "name_ru": "Обвязочная балка",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Ограждающие конструкции (СВГ,БСС) / Обвязочная балка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 63,
+   "name_ru": "Устройство ограждающих конструкций котлована",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство ограждающих конструкций котлована",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 64,
+   "name_ru": "Земляные работы",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 65,
+   "name_ru": "Разработка грунта",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Разработка грунта",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 66,
+   "name_ru": "Обратная засыпка",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Обратная засыпка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 67,
+   "name_ru": "Планировка грунта",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Планировка грунта",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 68,
+   "name_ru": "Уплотнение грунта",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Уплотнение грунта",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 69,
+   "name_ru": "Распорная система",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Распорная система",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 70,
+   "name_ru": "Шпунтовое ограждение",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Шпунтовое ограждение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 71,
+   "name_ru": "Устройство шпунтового ограждения котлована, устройство деревянной забирки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Устройство шпунтового ограждения котлована, устройство деревянной забирки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 72,
+   "name_ru": "Выемка грунта котлована",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Выемка грунта котлована",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 73,
+   "name_ru": "Разработка грунта с креплением котлована",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Разработка грунта с креплением котлована",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 74,
+   "name_ru": "Буронабивные сваи",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Буронабивные сваи",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 75,
+   "name_ru": "Буроинъекционные сваи",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Буроинъекционные сваи",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 76,
+   "name_ru": "Песчаное основание",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Песчаное основание",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 77,
+   "name_ru": "Обратная засыпка грунтом",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Обратная засыпка грунтом",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 78,
+   "name_ru": "Обратная засыпка песком",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Земляные работы / Обратная засыпка песком",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 79,
+   "name_ru": "Основание нижнего слоя дорожной одежды (в т.ч. Песчано-подстилающий слой)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Основание нижнего слоя дорожной одежды (в т.ч. Песчано-подстилающий слой)",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 80,
+   "name_ru": "Устройство нижнего слоя основания дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Основание нижнего слоя дорожной одежды (в т.ч. Песчано-подстилающий слой) / Устройство нижнего слоя основания дорожной одежды",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 81,
+   "name_ru": "Планировка нижнего слоя основания дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Основание нижнего слоя дорожной одежды (в т.ч. Песчано-подстилающий слой) / Планировка нижнего слоя основания дорожной одежды",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 82,
+   "name_ru": "Уплотнение нижнего слоя основания дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Основание нижнего слоя дорожной одежды (в т.ч. Песчано-подстилающий слой) / Уплотнение нижнего слоя основания дорожной одежды",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 83,
+   "name_ru": "Монолитные работы ниже отметки\"0\"",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\"",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 84,
+   "name_ru": "Устройство стен, колонн и пилонов подземного этажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\" / Устройство стен, колонн и пилонов подземного этажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 85,
+   "name_ru": "Устройство монолитной ж/б фундаментной плиты (плита под здание, плита под башенный кран, фундамент под оборудование), в т.ч. устройство бетонной подготовки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\" / Устройство монолитной ж/б фундаментной плиты (плита под здание, плита под башенный кран, фундамент под оборудование), в т.ч. устройство бетонной подготовки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 86,
+   "name_ru": "Устройство несущих ж/б контсрукций подземной части здания",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\" / Устройство несущих ж/б контсрукций подземной части здания",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 87,
+   "name_ru": "Устройство монолитных ж/б колонн",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\" / Устройство монолитных ж/б колонн",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 88,
+   "name_ru": "Устройство монолитных ж/б плит перекрытия/покрытия",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\" / Устройство монолитных ж/б плит перекрытия/покрытия",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 89,
+   "name_ru": "Устройство монолитных ж/б лестниц",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\" / Устройство монолитных ж/б лестниц",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 90,
+   "name_ru": "Устройство плиты перекрытия подземного этажа (+0.000)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Монолитные работы ниже отметки\"0\" / Устройство плиты перекрытия подземного этажа (+0.000)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 91,
+   "name_ru": "Устройство гидроизоляции",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство гидроизоляции",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 92,
+   "name_ru": "Устройство горизонтальной рулонной гидроизоляции в 2 слоя под защитой",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство гидроизоляции / Устройство горизонтальной рулонной гидроизоляции в 2 слоя под защитой",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 93,
+   "name_ru": "Устройство вертикальной рулонной гидроизоляции в 2 слоя",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство гидроизоляции / Устройство вертикальной рулонной гидроизоляции в 2 слоя",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 94,
+   "name_ru": "Устройство отсечной гидроизоляции стен подвала (пакеры)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Устройство гидроизоляции / Устройство отсечной гидроизоляции стен подвала (пакеры)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 95,
+   "name_ru": "Инъектирование стен подвала",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство подземной части / Инъектирование стен подвала",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 96,
+   "name_ru": "Устройство надземной части",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 97,
+   "name_ru": "Заказ оборудования",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Заказ оборудования",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 98,
+   "name_ru": "Поставка оборудования",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Поставка оборудования",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 99,
+   "name_ru": "Монтаж оборудования",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монтаж оборудования",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 100,
+   "name_ru": "Устройство несущих ж/б контсрукций надземной части здания",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство несущих ж/б контсрукций надземной части здания",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 101,
+   "name_ru": "Армокаркас",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Армокаркас",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 102,
+   "name_ru": "Опоры",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Опоры",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 103,
+   "name_ru": "Устройство гидрозоляции",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Опоры / Устройство гидрозоляции",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 104,
+   "name_ru": "Устройство ж/б конструкций",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Опоры / Устройство ж/б конструкций",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 105,
+   "name_ru": "Окраска бетонных поверхностей",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Опоры / Окраска бетонных поверхностей",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 106,
+   "name_ru": "Пролеты",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Пролеты",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 107,
+   "name_ru": "Армирование пролетного строения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Пролеты / Армирование пролетного строения",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 108,
+   "name_ru": "Бетонирование пролетного строения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Пролеты / Бетонирование пролетного строения",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 109,
+   "name_ru": "Устройство конструкций пролетного строения (металл, балки)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Пролеты / Устройство конструкций пролетного строения (металл, балки)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 110,
+   "name_ru": "Устройство конструкций кровли",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Пролеты / Устройство конструкций кровли",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 111,
+   "name_ru": "Устройство пирога кровли",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Пролеты / Устройство пирога кровли",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 112,
+   "name_ru": "Стены и перегородки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 113,
+   "name_ru": "Устройство наружных стен",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство наружных стен",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 114,
+   "name_ru": "Устройство внутренних перегородок",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство внутренних перегородок",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 115,
+   "name_ru": "Устройство стен из ячеистого бетона, в т.ч. креплением их к монолитным стенам/перекрытиям, заделкой мест примыканий, установкой перемычек и армированием сеткой",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство стен из ячеистого бетона, в т.ч. креплением их к монолитным стенам/перекрытиям, заделкой мест примыканий, установкой перемычек и армированием сеткой",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 116,
+   "name_ru": "Устройство внутренних перегородок",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство внутренних перегородок",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 117,
+   "name_ru": "Кладка стен наружных армированных из кирпича",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Кладка стен наружных армированных из кирпича",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 118,
+   "name_ru": "Наружная облицовка поверхности стен, отливов профлистом",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Наружная облицовка поверхности стен, отливов профлистом",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 119,
+   "name_ru": "Монтаж наружных стеновых сэндвич-панелей \n (сэндвич-панели, нащельники)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Монтаж наружных стеновых сэндвич-панелей   (сэндвич-панели, нащельники)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 120,
+   "name_ru": "Устройство стен и перегородок из кирпича, в т.ч. креплением их к монолитным стенам/перекрытиям, заделкой мест примыканий, установкой перемычек и армированием сеткой",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство стен и перегородок из кирпича, в т.ч. креплением их к монолитным стенам/перекрытиям, заделкой мест примыканий, установкой перемычек и армированием сеткой",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 121,
+   "name_ru": "Устройство армированных кирпичных перегородок, укладка перемычек",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство армированных кирпичных перегородок, укладка перемычек",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 122,
+   "name_ru": "Облицовка стен ГВЛВ по металлическому каркасу с теплоизоляцией",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Облицовка стен ГВЛВ по металлическому каркасу с теплоизоляцией",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 123,
+   "name_ru": "Устройство армированных перегородок из газобетонных блоков",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство армированных перегородок из газобетонных блоков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 124,
+   "name_ru": "Устройство армированных внутренних перегородок из газобетонного блока",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство армированных внутренних перегородок из газобетонного блока",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 125,
+   "name_ru": "Установка сантехнических перегородок",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Установка сантехнических перегородок",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 126,
+   "name_ru": "Устройство перегородок из гипсокартонных листов (ГКЛ)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Устройство перегородок из гипсокартонных листов (ГКЛ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 127,
+   "name_ru": "Облицовка стен листами ГКЛ на клею в 2 слоя",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Облицовка стен листами ГКЛ на клею в 2 слоя",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 128,
+   "name_ru": "Установка люков сантехнических (ревизионных)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Стены и перегородки / Установка люков сантехнических (ревизионных)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 129,
+   "name_ru": "Бетонирование плиты и стен",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Бетонирование плиты и стен",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 130,
+   "name_ru": "Бетонирование колонн и перекрытий",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Бетонирование колонн и перекрытий",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 131,
+   "name_ru": "Фасад",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Фасад",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 132,
+   "name_ru": "Монтаж утеплителя",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Фасад / Монтаж утеплителя",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 133,
+   "name_ru": "Монтаж фасадной системы",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Фасад / Монтаж фасадной системы",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 134,
+   "name_ru": "Монтаж навесных элементов фасада",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Фасад / Монтаж навесных элементов фасада",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 135,
+   "name_ru": "Заполнение оконных проемов",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Фасад / Заполнение оконных проемов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 136,
+   "name_ru": "Основание верхнего слоя дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Основание верхнего слоя дорожной одежды",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 137,
+   "name_ru": "Устройство верхнего слоя основания дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Основание верхнего слоя дорожной одежды / Устройство верхнего слоя основания дорожной одежды",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 138,
+   "name_ru": "Планировка верхнего слоя основания дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Основание верхнего слоя дорожной одежды / Планировка верхнего слоя основания дорожной одежды",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 139,
+   "name_ru": "Уплотнение верхнего слоя основания дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Основание верхнего слоя дорожной одежды / Уплотнение верхнего слоя основания дорожной одежды",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 140,
+   "name_ru": "Устройство бортового камня",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Основание верхнего слоя дорожной одежды / Устройство бортового камня",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 141,
+   "name_ru": "Мостовое полотно",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Мостовое полотно",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 142,
+   "name_ru": "Устройство плиты проезжей части",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Мостовое полотно / Устройство плиты проезжей части",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 143,
+   "name_ru": "Устройство монолитного участка деформационного шва",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Мостовое полотно / Устройство монолитного участка деформационного шва",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 144,
+   "name_ru": "Установка бокового барьерного ограждения с внешней стороны пролетного строения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Мостовое полотно / Установка бокового барьерного ограждения с внешней стороны пролетного строения",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 145,
+   "name_ru": "Установка барьерного ограждения на разделительной полосе",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Мостовое полотно / Установка барьерного ограждения на разделительной полосе",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 146,
+   "name_ru": "Установка перильного ограждения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Мостовое полотно / Установка перильного ограждения",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 147,
+   "name_ru": "Устройство конструкций пролетного строения (металл, балки)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Мостовое полотно / Устройство конструкций пролетного строения (металл, балки)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 148,
+   "name_ru": "Покрытие дорожной одежды",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 149,
+   "name_ru": "Устройство нижнего слоя покрытия",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды / Устройство нижнего слоя покрытия",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 150,
+   "name_ru": "Устройство верхнего слоя покрытия",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды / Устройство верхнего слоя покрытия",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 151,
+   "name_ru": "Дорожные знаки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды / Дорожные знаки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 152,
+   "name_ru": "Пешеходное ограждение",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды / Пешеходное ограждение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 153,
+   "name_ru": "Светофорные объекты",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды / Светофорные объекты",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 154,
+   "name_ru": "Шумо/грязезащитные экраны",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды / Шумо/грязезащитные экраны",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 155,
+   "name_ru": "Дорожное ограждение",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Покрытие дорожной одежды / Дорожное ограждение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 156,
+   "name_ru": "ВСП (верхнее строение пути)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / ВСП (верхнее строение пути)",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 157,
+   "name_ru": "Жесткое основание",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / ВСП (верхнее строение пути) / Жесткое основание",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 158,
+   "name_ru": "Рельсо-шпальная решетка, стрелочные переводы",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / ВСП (верхнее строение пути) / Рельсо-шпальная решетка, стрелочные переводы",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 159,
+   "name_ru": "Путевой бетон",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / ВСП (верхнее строение пути) / Путевой бетон",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 160,
+   "name_ru": "Средства организации дорожного движения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Средства организации дорожного движения",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 161,
+   "name_ru": "Дорожная разметка",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Дорожная разметка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 162,
+   "name_ru": "Обустройство",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Обустройство",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 163,
+   "name_ru": "Установка дорожных знаков",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка дорожных знаков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 164,
+   "name_ru": "Установка пешеходного ограждения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка пешеходного ограждения",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 165,
+   "name_ru": "Установка светофорных объектов",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка светофорных объектов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 166,
+   "name_ru": "Установка шумо/грязезащитных экранов",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка шумо/грязезащитных экранов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 167,
+   "name_ru": "Подпорная / противопожарная стена",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Подпорная / противопожарная стена",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 168,
+   "name_ru": "Противопожарные мероприятия",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Противопожарные мероприятия",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 169,
+   "name_ru": "Трансбарьер",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Трансбарьер",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 170,
+   "name_ru": "огнезащита, окраска",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / огнезащита, окраска",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 171,
+   "name_ru": "Насыпь/Призма",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Насыпь/Призма",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 172,
+   "name_ru": "Монолитные работы выше отметки\"0\"",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\"",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 173,
+   "name_ru": "Сталебетонные перекрытия выше отм. 0,000",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Сталебетонные перекрытия выше отм. 0,000",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 174,
+   "name_ru": "Устройство монолитных ж/б лестниц",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Устройство монолитных ж/б лестниц",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 175,
+   "name_ru": "Трибуны актового зала",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Трибуны актового зала",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 176,
+   "name_ru": "Устройство монолитных ж/б конструкций входных групп",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Устройство монолитных ж/б конструкций входных групп",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 177,
+   "name_ru": "Устройство горизонтальной рулонной гидроизоляции в 2 слоя под защитой",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Устройство горизонтальной рулонной гидроизоляции в 2 слоя под защитой",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 178,
+   "name_ru": "Устройство вертикальной рулонной гидроизоляции в 2 слоя по праймеру",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Устройство вертикальной рулонной гидроизоляции в 2 слоя по праймеру",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 179,
+   "name_ru": "Теплоизоляция стен экструдированным пенополистиролом толщ. 100 мм",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Теплоизоляция стен экструдированным пенополистиролом толщ. 100 мм",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 180,
+   "name_ru": "Устройство пристенного дренажа, в т.ч. прижимной стенки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монолитные работы выше отметки\"0\" / Устройство пристенного дренажа, в т.ч. прижимной стенки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 181,
+   "name_ru": "Каркас здания",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Каркас здания",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 182,
+   "name_ru": "Устройство ж/б конструкций",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Каркас здания / Устройство ж/б конструкций",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 183,
+   "name_ru": "Металлоконструкции",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлоконструкции",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 184,
+   "name_ru": "Металлоконструкции (фермы, балки, прогоны, надколонники, связи, козырьки, решетки приямков, лестницы)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлоконструкции / Металлоконструкции (фермы, балки, прогоны, надколонники, связи, козырьки, решетки приямков, лестницы)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 185,
+   "name_ru": "Покрытие из профилированного листа",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлоконструкции / Покрытие из профилированного листа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 186,
+   "name_ru": "Огнезащита м/к",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлоконструкции / Огнезащита м/к",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 187,
+   "name_ru": "Ограждения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлоконструкции / Ограждения",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 188,
+   "name_ru": "Решетки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлоконструкции / Решетки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 189,
+   "name_ru": "Пожарные лестницы",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлоконструкции / Пожарные лестницы",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 190,
+   "name_ru": "Устройство пирога кровли",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 191,
+   "name_ru": "Пароизоляция",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Пароизоляция",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 192,
+   "name_ru": "Утепление",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Утепление",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 193,
+   "name_ru": "Разуклонка ЦПР",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Разуклонка ЦПР",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 194,
+   "name_ru": "Гидроизоляция 3 слоя",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Гидроизоляция 3 слоя",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 195,
+   "name_ru": "Покрытие козырьков",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Покрытие козырьков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 196,
+   "name_ru": "Водосток с основной кровли, с кровли крылец",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Водосток с основной кровли, с кровли крылец",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 197,
+   "name_ru": "Устройство кровли. Тип 1",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 1",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 198,
+   "name_ru": "Устройство кровли. Тип 2",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 2",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 199,
+   "name_ru": "Устройство кровли. Тип 3",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 3",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 200,
+   "name_ru": "Устройство кровли. Тип 4",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 4",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 201,
+   "name_ru": "Устройство кровли. Тип 5",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 5",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 202,
+   "name_ru": "Устройство кровли. Тип 6",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 6",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 203,
+   "name_ru": "Устройство кровли. Тип 7",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 7",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 204,
+   "name_ru": "Устройство кровли. Тип 8",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли. Тип 8",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 205,
+   "name_ru": "Козырьки из светопрозрачных металлических конструкций",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Козырьки из светопрозрачных металлических конструкций",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 206,
+   "name_ru": "Дополнительные элементы и надстройки кровли",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Дополнительные элементы и надстройки кровли",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 207,
+   "name_ru": "Парапеты вентшахты",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Парапеты вентшахты",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 208,
+   "name_ru": "Устройство кровли по железобетонному покрытию (Тип кровли 1)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли по железобетонному покрытию (Тип кровли 1)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 209,
+   "name_ru": "Устройство кровли по покрытию из стального профлиста (Тип кровли 2)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство кровли по покрытию из стального профлиста (Тип кровли 2)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 210,
+   "name_ru": "Установка аэраторов",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Установка аэраторов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 211,
+   "name_ru": "Устройство парапетной крышки, крышки фахверка, отделка фахверков парапета",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство парапетной крышки, крышки фахверка, отделка фахверков парапета",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 212,
+   "name_ru": "Устройство эксплуатируемой дорожки",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство эксплуатируемой дорожки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 213,
+   "name_ru": "Устройство примыканий в парапету, воронкам",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство примыканий в парапету, воронкам",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 214,
+   "name_ru": "Устройство проходок через кровлю",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство проходок через кровлю",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 215,
+   "name_ru": "Устройство шумозащитного экрана",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство пирога кровли / Устройство шумозащитного экрана",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 216,
+   "name_ru": "Устройство конструкций кровли",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство конструкций кровли",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 217,
+   "name_ru": "Установка ворот",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка ворот",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 218,
+   "name_ru": "Установка дверей деревянных",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка дверей деревянных",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 219,
+   "name_ru": "Установка внутренних металлических дверей",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка внутренних металлических дверей",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 220,
+   "name_ru": "Установка наружных дверей",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка наружных дверей",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 221,
+   "name_ru": "Монтаж алюминиевых витражей (шторы противопожарные, алюминиевые витражи)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монтаж алюминиевых витражей (шторы противопожарные, алюминиевые витражи)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 222,
+   "name_ru": "Установка оконных блоков ПВХ",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка оконных блоков ПВХ",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 223,
+   "name_ru": "Установка алюминиевых подоконников",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка алюминиевых подоконников",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 224,
+   "name_ru": "Установка подоконников ГКЛВ с отделкой",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка подоконников ГКЛВ с отделкой",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 225,
+   "name_ru": "Устройство теплоизоляции стен, в т.ч. укрытие плит утеплителя ветровлагозащитной пленкой (при необходимости)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство теплоизоляции стен, в т.ч. укрытие плит утеплителя ветровлагозащитной пленкой (при необходимости)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 226,
+   "name_ru": "Устройство вентилируемого навесного фасада из керамогранита",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство вентилируемого навесного фасада из керамогранита",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 227,
+   "name_ru": "Облицовка цоколя крупноформатными панелями из керамогранита на растворе",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Облицовка цоколя крупноформатными панелями из керамогранита на растворе",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 228,
+   "name_ru": "Облицовка крылец и наружных лестниц нескользящей бетонной плитки с гранитной крошкой на клее",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Облицовка крылец и наружных лестниц нескользящей бетонной плитки с гранитной крошкой на клее",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 229,
+   "name_ru": "Устройство откосов и сливов из оцинкованной стали с полимерным покрытием",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство откосов и сливов из оцинкованной стали с полимерным покрытием",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 230,
+   "name_ru": "Навесной вентилируемый фасад из стеклофибробетона со вставками из стемалита",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Навесной вентилируемый фасад из стеклофибробетона со вставками из стемалита",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 231,
+   "name_ru": "Облицовка цоколя гранитной плиткой на подсистеме вентилируемого фасада",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Облицовка цоколя гранитной плиткой на подсистеме вентилируемого фасада",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 232,
+   "name_ru": "Облицовка крылец и наружных лестниц гранитной плиткой на растворе",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Облицовка крылец и наружных лестниц гранитной плиткой на растворе",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 233,
+   "name_ru": "Металлические декоративные ламели",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Металлические декоративные ламели",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 234,
+   "name_ru": "Облицовка керамогранитной плиткой внутренней поверхности приямков",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Облицовка керамогранитной плиткой внутренней поверхности приямков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 235,
+   "name_ru": "Подшивка нависающих частей здания алюминиевой рейкой",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Подшивка нависающих частей здания алюминиевой рейкой",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 236,
+   "name_ru": "Элементы фасада (логотипы, вывески, указатели, светильники, флагодержатели и пр.)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Элементы фасада (логотипы, вывески, указатели, светильники, флагодержатели и пр.)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 237,
+   "name_ru": "Ограждения из нержавеющей стали",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Ограждения из нержавеющей стали",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 238,
+   "name_ru": "Теплоизоляция фасада",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Теплоизоляция фасада",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 239,
+   "name_ru": "Устройство гидроизоляции цоколя",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Устройство гидроизоляции цоколя",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 240,
+   "name_ru": "Установка перфорированной фасадной кассеты",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Установка перфорированной фасадной кассеты",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 241,
+   "name_ru": "Монтаж козырьков",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство надземной части / Монтаж козырьков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 242,
+   "name_ru": "Устройство инженерных систем",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 243,
+   "name_ru": "Устройство наружных сетей",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 244,
+   "name_ru": "Теплосеть",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Теплосеть",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 245,
+   "name_ru": "Водоснабжение",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Водоснабжение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 246,
+   "name_ru": "Х/Б канализация",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Х/Б канализация",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 247,
+   "name_ru": "Ливневая канализация",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Ливневая канализация",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 248,
+   "name_ru": "Электроснабжение",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Электроснабжение",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 249,
+   "name_ru": "Слаботочные сети",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Слаботочные сети",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 250,
+   "name_ru": "Устройство трубной канализации",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Устройство трубной канализации",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 251,
+   "name_ru": "Прокладка кабеля",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Прокладка кабеля",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 252,
+   "name_ru": "Дизель-генераторная установка, в т.ч. фундамент под оборудование",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Дизель-генераторная установка, в т.ч. фундамент под оборудование",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 253,
+   "name_ru": "Наружные сети связи",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство наружных сетей / Наружные сети связи",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 254,
+   "name_ru": "Устройство внутренних сетей",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 255,
+   "name_ru": "Вентиляция и кондиционирование",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Вентиляция и кондиционирование",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 256,
+   "name_ru": "Электрика",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Электрика",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 257,
+   "name_ru": "Сантехника",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Сантехника",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 258,
+   "name_ru": "Сети связи",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Сети связи",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 259,
+   "name_ru": "Сети водоснабжения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Сети водоснабжения",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 260,
+   "name_ru": "Сети канализации",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Сети канализации",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 261,
+   "name_ru": "Система отопления",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система отопления",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 262,
+   "name_ru": "Ливневая канализация",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Ливневая канализация",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 263,
+   "name_ru": "Разработка грунта с креплением",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Разработка грунта с креплением",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 264,
+   "name_ru": "Устройство колодцев",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Устройство колодцев",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 265,
+   "name_ru": "Прокладка труб",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Прокладка труб",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 266,
+   "name_ru": "Индивидуальный тепловой пункт (ИТП)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Индивидуальный тепловой пункт (ИТП)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 267,
+   "name_ru": "Охранно-защитная дератизационная система (ОЗДС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Охранно-защитная дератизационная система (ОЗДС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 268,
+   "name_ru": "Система автоматизации теплового пункта (АТМ ИТП)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система автоматизации теплового пункта (АТМ ИТП)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 269,
+   "name_ru": "Силовое электрооборудование и электроосвещение теплового пункта (ЭОМ ИТП)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Силовое электрооборудование и электроосвещение теплового пункта (ЭОМ ИТП)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 270,
+   "name_ru": "Система радиофикации (РФ)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система радиофикации (РФ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 271,
+   "name_ru": "Система электрочасофикации (ЭЧ)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система электрочасофикации (ЭЧ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 272,
+   "name_ru": "Обеспечение доступа инвалидам (ОДИ)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Обеспечение доступа инвалидам (ОДИ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 273,
+   "name_ru": "Система вызова для МГН (СВМГН)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система вызова для МГН (СВМГН)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 274,
+   "name_ru": "Система телефонизации, телевидения, доступа к сети передачи данных, домофонии, внутренних сетей (СС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система телефонизации, телевидения, доступа к сети передачи данных, домофонии, внутренних сетей (СС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 275,
+   "name_ru": "Система охранной сигнализации (ОС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система охранной сигнализации (ОС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 276,
+   "name_ru": "Система охранного телевидения (СОТ)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система охранного телевидения (СОТ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 277,
+   "name_ru": "Система контроля управления доступом (СКУД)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система контроля управления доступом (СКУД)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 278,
+   "name_ru": "Система автоматической установки пожарная сигнализация (АПС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система автоматической установки пожарная сигнализация (АПС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 279,
+   "name_ru": "Система оповещения и управления эвакуацией (СОУЭ)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система оповещения и управления эвакуацией (СОУЭ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 280,
+   "name_ru": "Система автоматики противопожарной защиты (АППЗ)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Система автоматики противопожарной защиты (АППЗ)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 281,
+   "name_ru": "Автоматизация инженерных систем",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Автоматизация инженерных систем",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 282,
+   "name_ru": "Монтаж автоматической установки газового пожаротушения (АУГП)",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Монтаж автоматической установки газового пожаротушения (АУГП)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 283,
+   "name_ru": "Автоматическая установка водяного пожаротушения",
+   "stage_path": "Выполнение строительно-монтажных работ / Устройство инженерных систем / Устройство внутренних сетей / Автоматическая установка водяного пожаротушения",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 284,
+   "name_ru": "Отделочные работы",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 285,
+   "name_ru": "Внешняя отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внешняя отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 286,
+   "name_ru": "Черновая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внешняя отделка / Черновая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 287,
+   "name_ru": "Чистовая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внешняя отделка / Чистовая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 288,
+   "name_ru": "Внутренняя отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 289,
+   "name_ru": "Черновая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка / Черновая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 290,
+   "name_ru": "Чистовая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка / Чистовая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 291,
+   "name_ru": "Внутренняя отделка полов",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка полов",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 292,
+   "name_ru": "Черновая отделка полов",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка полов / Черновая отделка полов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 293,
+   "name_ru": "Чистовая отделка полов",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка полов / Чистовая отделка полов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 294,
+   "name_ru": "Внутренняя отделка стен",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка стен",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 295,
+   "name_ru": "Черновая отделка стен",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка стен / Черновая отделка стен",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 296,
+   "name_ru": "Чистовая отделка стен",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка стен / Чистовая отделка стен",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 297,
+   "name_ru": "Внутренняя отделка потолков",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка потолков",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 298,
+   "name_ru": "Черновая отделка потолков",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка потолков / Черновая отделка потолков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 299,
+   "name_ru": "Чистовая отделка потолков",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка потолков / Чистовая отделка потолков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 300,
+   "name_ru": "Внутренняя отделка дверей",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 301,
+   "name_ru": "Монтаж внутренних дверей",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Монтаж внутренних дверей",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 302,
+   "name_ru": "Монтаж наружных дверей и ворот",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Монтаж наружных дверей и ворот",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 303,
+   "name_ru": "Двери автоматические раздвижные светопрозрачные",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери автоматические раздвижные светопрозрачные",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 304,
+   "name_ru": "Двери алюминиевые наружные",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери алюминиевые наружные",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 305,
+   "name_ru": "Двери алюминиевые внутренние",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери алюминиевые внутренние",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 306,
+   "name_ru": "Двери металлические наружные",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери металлические наружные",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 307,
+   "name_ru": "Двери металлические взломостойкие с решеткой",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери металлические взломостойкие с решеткой",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 308,
+   "name_ru": "Двери металлические рентгенозащитные",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери металлические рентгенозащитные",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 309,
+   "name_ru": "Двери глухие ПВХ",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери глухие ПВХ",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 310,
+   "name_ru": "Двери комбинированные",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Двери комбинированные",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 311,
+   "name_ru": "Перегородки душевых кабинок из матового стекла",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Перегородки душевых кабинок из матового стекла",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 312,
+   "name_ru": "Сантехнические перегородки из HPL пластика",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Сантехнические перегородки из HPL пластика",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 313,
+   "name_ru": "Трансформируемые перегородки",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Трансформируемые перегородки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 314,
+   "name_ru": "Люки",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Люки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 315,
+   "name_ru": "Люки герметические (кровля)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка дверей / Люки герметические (кровля)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 316,
+   "name_ru": "Внутренняя отделка (технические помещения)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка (технические помещения)",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 317,
+   "name_ru": "Черновая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка (технические помещения) / Черновая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 318,
+   "name_ru": "Чистовая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка (технические помещения) / Чистовая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 319,
+   "name_ru": "Внутренняя отделка (пассажирские зоны)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка (пассажирские зоны)",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 320,
+   "name_ru": "Черновая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка (пассажирские зоны) / Черновая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 321,
+   "name_ru": "Чистовая отделка",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Внутренняя отделка (пассажирские зоны) / Чистовая отделка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 322,
+   "name_ru": "Монтаж вертикального транспорта",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж вертикального транспорта",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 323,
+   "name_ru": "Монтаж оборудования по ТХЗ",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования по ТХЗ",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 324,
+   "name_ru": "Монтаж мебели",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж мебели",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare",
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 325,
+   "name_ru": "Медицинская мебель (с учетом установки и распаковки) (не облагаемая НДС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж мебели / Медицинская мебель (с учетом установки и распаковки) (не облагаемая НДС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 326,
+   "name_ru": "Медицинская мебель (с учетом установки и распаковки)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж мебели / Медицинская мебель (с учетом установки и распаковки)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 327,
+   "name_ru": "Мебель общего назначения (с учетом установки и распаковки)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж мебели / Мебель общего назначения (с учетом установки и распаковки)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 328,
+   "name_ru": "Монтаж эскалаторов",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж эскалаторов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 329,
+   "name_ru": "Монтаж оборудования",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 330,
+   "name_ru": "Монтируемое оборудование",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 331,
+   "name_ru": "Медицинское оборудование, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Медицинское оборудование, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 332,
+   "name_ru": "Медицинское оборудование, с учетом монтажа (не облагаемое НДС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Медицинское оборудование, с учетом монтажа (не облагаемое НДС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 333,
+   "name_ru": "Офисное оборудование, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Офисное оборудование, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 334,
+   "name_ru": "Оборудование и мебель конференц-зала, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Оборудование и мебель конференц-зала, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 335,
+   "name_ru": "Электро- и бытовая техника, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Электро- и бытовая техника, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 336,
+   "name_ru": "Хозяйственный инвентарь, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Хозяйственный инвентарь, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 337,
+   "name_ru": "Периметр безопасности, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Периметр безопасности, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 338,
+   "name_ru": "Спортивно-технологическое оборудование и спортивный инвентарь, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Спортивно-технологическое оборудование и спортивный инвентарь, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 339,
+   "name_ru": "Учебное оборудование, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Учебное оборудование, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 340,
+   "name_ru": "Учебное оборудование, с учетом монтажа (не облагаемое НДС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Учебное оборудование, с учетом монтажа (не облагаемое НДС)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 341,
+   "name_ru": "Компьютеры и программное обеспечение, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Компьютеры и программное обеспечение, с учетом монтажа",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 342,
+   "name_ru": "Занавески, жалюзи и прочие предметы обстановки, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Занавески, жалюзи и прочие предметы обстановки, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 343,
+   "name_ru": "Кухонное оборудование и инвентарь, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Кухонное оборудование и инвентарь, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 344,
+   "name_ru": "Музыкальные инструменты и оборудование для залов, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Музыкальные инструменты и оборудование для залов, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 345,
+   "name_ru": "Театральное оборудование, оборудование сцены (с учетом монтажа)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Театральное оборудование, оборудование сцены (с учетом монтажа)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 346,
+   "name_ru": "Светотехническое оборудование, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Светотехническое оборудование, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 347,
+   "name_ru": "Торгово-технологическое оборудование, с учетом монтажа",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Монтируемое оборудование / Торгово-технологическое оборудование, с учетом монтажа",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 348,
+   "name_ru": "Немонтируемое оборудование",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Немонтируемое оборудование",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 349,
+   "name_ru": "Инструмент медицинский, расходные материалы (не облагаемое НДС)",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Немонтируемое оборудование / Инструмент медицинский, расходные материалы (не облагаемое НДС)",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 350,
+   "name_ru": "Инструмент медицинский, расходные материалы",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Немонтируемое оборудование / Инструмент медицинский, расходные материалы",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 351,
+   "name_ru": "Хозяйственный инвентарь",
+   "stage_path": "Выполнение строительно-монтажных работ / Отделочные работы / Монтаж оборудования / Немонтируемое оборудование / Хозяйственный инвентарь",
+   "stage_kind": "no_class",
+   "object_type_codes": [
+    "healthcare"
+   ]
+  },
+  {
+   "stage_id": 352,
+   "name_ru": "Благоустройство территории",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 353,
+   "name_ru": "Устройство проездов и тротуаров",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 354,
+   "name_ru": "Устройство асфальтобетонного покрытия проездов, тротуаров, площадок с установкой бортового камня",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров / Устройство асфальтобетонного покрытия проездов, тротуаров, площадок с установкой бортового камня",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 355,
+   "name_ru": "Устройство покрытий из тротуарной плитки с установкой бортового камня",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров / Устройство покрытий из тротуарной плитки с установкой бортового камня",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 356,
+   "name_ru": "Устройство бетонных покрытий (отмостка)",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров / Устройство бетонных покрытий (отмостка)",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 357,
+   "name_ru": "Устройство площадок с покрытием из резиновой крошки",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров / Устройство площадок с покрытием из резиновой крошки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 358,
+   "name_ru": "Установка водоотводных лотков",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров / Установка водоотводных лотков",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 359,
+   "name_ru": "Устройство подпорных стен",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров / Устройство подпорных стен",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 360,
+   "name_ru": "Обустройство дорог: установка знаков, нанесение разметки",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство проездов и тротуаров / Обустройство дорог: установка знаков, нанесение разметки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 361,
+   "name_ru": "Озеленение",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Озеленение",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 362,
+   "name_ru": "Устройство газона рулонного",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Озеленение / Устройство газона рулонного",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 363,
+   "name_ru": "Устройство газона посевного",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Озеленение / Устройство газона посевного",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 364,
+   "name_ru": "Устройство цветников",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Озеленение / Устройство цветников",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 365,
+   "name_ru": "Посадка деревьев",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Озеленение / Посадка деревьев",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 366,
+   "name_ru": "Посадка кустарников",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Озеленение / Посадка кустарников",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 367,
+   "name_ru": "Установка МАФов",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Установка МАФов",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 368,
+   "name_ru": "Вертикальная планировка",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Вертикальная планировка",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 369,
+   "name_ru": "Устройство насыпи",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Вертикальная планировка / Устройство насыпи",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 370,
+   "name_ru": "Устройство выемки",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Вертикальная планировка / Устройство выемки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 371,
+   "name_ru": "Посадка зеленых насаждений",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Посадка зеленых насаждений",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 372,
+   "name_ru": "Ограждение территории",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Ограждение территории",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 373,
+   "name_ru": "Ограждение территории, в т.ч. ворота, калитки, шлагбаумы",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Ограждение территории / Ограждение территории, в т.ч. ворота, калитки, шлагбаумы",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 374,
+   "name_ru": "Ограждение спортивной площадки",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Ограждение территории / Ограждение спортивной площадки",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 375,
+   "name_ru": "Устройство пешеходных зон и тротуаров",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство пешеходных зон и тротуаров",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 376,
+   "name_ru": "Наружное освещение",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство пешеходных зон и тротуаров / Наружное освещение",
+   "stage_kind": "summary",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  },
+  {
+   "stage_id": 377,
+   "name_ru": "Прокладка кабеля",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство пешеходных зон и тротуаров / Прокладка кабеля",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 378,
+   "name_ru": "Устройство фундаментов опор",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство пешеходных зон и тротуаров / Устройство фундаментов опор",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 379,
+   "name_ru": "Установка опор",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство пешеходных зон и тротуаров / Установка опор",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "roads"
+   ]
+  },
+  {
+   "stage_id": 380,
+   "name_ru": "Архитектурно-художественная подсветка здания",
+   "stage_path": "Выполнение строительно-монтажных работ / Благоустройство территории / Устройство пешеходных зон и тротуаров / Архитектурно-художественная подсветка здания",
+   "stage_kind": "concrete",
+   "object_type_codes": [
+    "administrative",
+    "culture",
+    "education",
+    "healthcare",
+    "housing",
+    "office",
+    "preschool",
+    "roads",
+    "sports"
+   ]
+  }
+ ]
+}

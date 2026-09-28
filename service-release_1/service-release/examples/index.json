@@ -1,0 +1,61 @@
+{
+  "notice": "All plans, CV and progress are demonstration fixtures, not real construction facts. frame.png is an original synthetic illustration. responses/ contains recorded HTTP executions, not recognition accuracy evidence.",
+  "cases": {
+    "concrete": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": true
+    },
+    "mixed-unconfirmed": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": true
+    },
+    "mixed-completed": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": true
+    },
+    "only-no-class": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "no-plan": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "invalid-summary": {
+      "expected_deterministic_status": 422,
+      "requires_model_for_vlm": false
+    },
+    "invalid-structure": {
+      "expected_deterministic_status": 422,
+      "requires_model_for_vlm": false
+    },
+    "resource-cv": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "resource-partial": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "resource-manual": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "resource-unmapped": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "resource-missing": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "resource-unavailable": {
+      "expected_deterministic_status": 200,
+      "requires_model_for_vlm": false
+    },
+    "resource-invalid-mode": {
+      "expected_deterministic_status": 422,
+      "requires_model_for_vlm": false
+    }
+  }
+}

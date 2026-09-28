@@ -1,0 +1,20 @@
+{
+  "schema_version": "frame-analysis-capabilities-v1",
+  "service": "vlm_llm",
+  "service_version": "0.5.0",
+  "input_version": "frame-analysis-input-v1",
+  "result_version": "frame-analysis-result-v1",
+  "catalog_version": "catalog-cf435bba295909ab953facca",
+  "limits": {
+    "image_max_bytes": 25000000,
+    "metadata_max_bytes": 1000000,
+    "image_max_side": 8192,
+    "image_max_pixels": 40000000,
+    "detections_max": 200,
+    "plan_steps_max": 500,
+    "history_observations_max": 500,
+    "progress_events_max": 1000,
+    "model_context_max_chars": 120000,
+    "idempotency_retention_seconds": 604800
+  }
+}

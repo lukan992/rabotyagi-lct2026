@@ -1,0 +1,449 @@
+{
+  "release_version": "0.5.0",
+  "created_at": "2026-09-27T15:50:34.205196+00:00",
+  "platform": "linux/amd64",
+  "input_version": "frame-analysis-input-v2",
+  "result_version": "frame-analysis-result-v2",
+  "supported_inputs": [
+    "frame-analysis-input-v1",
+    "frame-analysis-input-v2"
+  ],
+  "supported_results": [
+    "frame-analysis-result-v1",
+    "frame-analysis-result-v2"
+  ],
+  "resource_rules_version": "resource-rules-v1",
+  "matrix_version": "construction-class-matrix-v2.0",
+  "catalog_version": "catalog-cf435bba295909ab953facca",
+  "profiles_version": "visual-profiles-708cb01523c740f39b8789aa",
+  "profile_status": "ai_authored_unvalidated",
+  "catalog_stages": 377,
+  "equipment_classes": 40,
+  "images": [
+    {
+      "tag": "lct-analytics-deterministic:0.5.0",
+      "image_id": "sha256:7d88a72aa7f6cf1732ca2ae8102510c898c51c64edd22901f03c9f4b8b1ae38c",
+      "platform": "linux/amd64",
+      "repository_digests": [
+        "lct-analytics-deterministic@sha256:7d88a72aa7f6cf1732ca2ae8102510c898c51c64edd22901f03c9f4b8b1ae38c"
+      ],
+      "included_in_archive": true
+    },
+    {
+      "tag": "lct-analytics-vlm-llm:0.5.0",
+      "image_id": "sha256:291029c4a847757fe5812a99e3d50499410e3905869ca5e2c651fa01cfff3043",
+      "platform": "linux/amd64",
+      "repository_digests": [
+        "lct-analytics-vlm-llm@sha256:291029c4a847757fe5812a99e3d50499410e3905869ca5e2c651fa01cfff3043"
+      ],
+      "included_in_archive": true
+    },
+    {
+      "tag": "postgres:16.15-alpine",
+      "image_id": "sha256:cf78e76683b9ca8c5733cbbdce6c9262b45b6767934dd0a95e671f9a0fc20685",
+      "platform": "linux/amd64",
+      "repository_digests": [
+        "postgres@sha256:cf78e76683b9ca8c5733cbbdce6c9262b45b6767934dd0a95e671f9a0fc20685"
+      ],
+      "included_in_archive": true
+    }
+  ],
+  "files": [
+    {
+      "path": ".env.example",
+      "bytes": 524,
+      "sha256": "be43ca55160c3f891f0d8d262c40856f1bfcf1a7a9ccd5fe4eabf584fa2a3392"
+    },
+    {
+      "path": "ANALYTICS_RESOURCE_PLAN_PRD.md",
+      "bytes": 34737,
+      "sha256": "ef51460f8642fb26a4b5d8360a2504461f99b2168481ca58c19e635498760870"
+    },
+    {
+      "path": "BACKEND_INTEGRATION.md",
+      "bytes": 69023,
+      "sha256": "18042ba9770f7f0ca23c80eac0b96716b1d7251252cee3df36a413315018525e"
+    },
+    {
+      "path": "catalog/capabilities-v1-deterministic.json",
+      "bytes": 644,
+      "sha256": "60f97d3223004e38d585259e8eaaed06c1be673950954a2ef75a091d9745545e"
+    },
+    {
+      "path": "catalog/capabilities-v1-vlm_llm.json",
+      "bytes": 638,
+      "sha256": "eb813ba098536b60feb8a7e187f8445d75e626265f99f46d1f0ccbb9bea4cc53"
+    },
+    {
+      "path": "catalog/capabilities-v2-deterministic.json",
+      "bytes": 1066,
+      "sha256": "a7f1ae5111e5cfb79c0e3bc7d771c23d8be7b03e63c72a5e72cd249d85360f0a"
+    },
+    {
+      "path": "catalog/capabilities-v2-vlm_llm.json",
+      "bytes": 1045,
+      "sha256": "36b70024ff36e5926237e16263c5e7dfd366730e88071944fc68c52188d9230e"
+    },
+    {
+      "path": "catalog/catalog.json",
+      "bytes": 226576,
+      "sha256": "f9299eae8a1d625c7d65b9c9c9bdb3f71de1bac9a849c19c16d6f10752f38cdd"
+    },
+    {
+      "path": "compose.yaml",
+      "bytes": 3486,
+      "sha256": "f41081e392a711a45070d0885d6b24a3a687dcc2eefd945a6e266bcbb0c91784"
+    },
+    {
+      "path": "construction_analytics/README.md",
+      "bytes": 36679,
+      "sha256": "ffc17dd68c8f0eba3cf372a58d80f8f3fbe10e47f9553dea470ee435ddf97023"
+    },
+    {
+      "path": "contracts/frame-analysis-v1.schema.json",
+      "bytes": 63982,
+      "sha256": "9fbf30bc0363004b1d03d6a16eb1c847b169f90915733f163603ca59ca5c4936"
+    },
+    {
+      "path": "contracts/frame-analysis-v2.schema.json",
+      "bytes": 86686,
+      "sha256": "8312579226838882d095ba7afceaa5e23026f3944002b12981e88252baa5dc0b"
+    },
+    {
+      "path": "db/005_analytics_services.sql",
+      "bytes": 5583,
+      "sha256": "fac46922064053cd12be050fa83226c41b08a43b77599549e041a9f75fec120c"
+    },
+    {
+      "path": "db/006_resource_plan.sql",
+      "bytes": 1054,
+      "sha256": "56ac6ee1b089266bb0469dcd04c2cc5b3a9169f63144de5a5d74edae5950f32a"
+    },
+    {
+      "path": "distribution-verification.json",
+      "bytes": 447,
+      "sha256": "125a71c1496fabfdb5ba8e06a542fc604be34aa3aed630270eda4a90ac1cf355"
+    },
+    {
+      "path": "examples/concrete.json",
+      "bytes": 1838,
+      "sha256": "5f12dacf77f9aa5cc27c188b21fbdcf6265f97f806fb84e5b7cfeb1a843fa337"
+    },
+    {
+      "path": "examples/frame.png",
+      "bytes": 6701,
+      "sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896"
+    },
+    {
+      "path": "examples/index.json",
+      "bytes": 1901,
+      "sha256": "0e33f41478bf84bce0df1909033ec7e838c1cedf2692cf61cb4fef52b2d1a587"
+    },
+    {
+      "path": "examples/invalid-structure.json",
+      "bytes": 1837,
+      "sha256": "f3910e4b59b1020b4db06fbe23de5f827479947a0810379914342455955c9251"
+    },
+    {
+      "path": "examples/invalid-summary.json",
+      "bytes": 1851,
+      "sha256": "824d783b235269c379992b1615888c4f5135fd896d429e67615baf1e065e9106"
+    },
+    {
+      "path": "examples/mixed-completed.json",
+      "bytes": 2919,
+      "sha256": "02465f66cdc6aa63a2696a13891f506e1db5e9298bc094f5c53d8696a136e449"
+    },
+    {
+      "path": "examples/mixed-unconfirmed.json",
+      "bytes": 2487,
+      "sha256": "677191944d24854feab3629cb95d5c220b0599d5149083955311d92a419a8d82"
+    },
+    {
+      "path": "examples/no-plan.json",
+      "bytes": 1286,
+      "sha256": "18c9af9415402e4467a545a9123d1dbabc8e6685569f0aca38f48c29c4950f3d"
+    },
+    {
+      "path": "examples/only-no-class.json",
+      "bytes": 1640,
+      "sha256": "f628b926dffe726ff6d426a0f8eca832aa5c35370bff9bd75fbddabb752af9dd"
+    },
+    {
+      "path": "examples/resource-cv.json",
+      "bytes": 3074,
+      "sha256": "555b947f2abb9bdf215093fccfaee341325fb1f16036d2eb2a371db3ffbf3f79"
+    },
+    {
+      "path": "examples/resource-invalid-mode.json",
+      "bytes": 3092,
+      "sha256": "2f22ebd2b3f7751d17a70706c1b698f8fba6f95ff5ac315ef581381a4e9a04c9"
+    },
+    {
+      "path": "examples/resource-manual.json",
+      "bytes": 3112,
+      "sha256": "73a6519ebc8835f7585d304dc0bec7a679c4780f1edaa9fbca4dd25631878420"
+    },
+    {
+      "path": "examples/resource-missing.json",
+      "bytes": 1907,
+      "sha256": "0a8c1e26647783956acba53e41e891152a7500c2901faa50329677687a10a5dd"
+    },
+    {
+      "path": "examples/resource-partial.json",
+      "bytes": 3087,
+      "sha256": "5fea809399fb9ba508a81fc1f6e4f3629db690f531965d020485c9c058056c24"
+    },
+    {
+      "path": "examples/resource-unavailable.json",
+      "bytes": 2807,
+      "sha256": "abfe827603f0504aa65dd8e8d8eb13e2c6fc5fea3a02d1a7f27990d999f0644a"
+    },
+    {
+      "path": "examples/resource-unmapped.json",
+      "bytes": 3081,
+      "sha256": "fd193956754019f6d0769f2df248cf6595d54332aaf24ca25ebf113e79c7c80c"
+    },
+    {
+      "path": "examples/responses/concrete-deterministic.json",
+      "bytes": 4500,
+      "sha256": "ade3ca018c34629d5114f38de777b18e9032ceab8939244bf140f65dcf39fada"
+    },
+    {
+      "path": "examples/responses/concrete-vlm_llm.json",
+      "bytes": 327,
+      "sha256": "fadfcf8c8e595391d7b6771ee595c536eb7dc29aa7633c6e5b8a9856462bef0c"
+    },
+    {
+      "path": "examples/responses/conflict-deterministic.json",
+      "bytes": 356,
+      "sha256": "036e53a59a41e4db1299b96bbaf8367c3adaeec75587de93a330a9256bf44208"
+    },
+    {
+      "path": "examples/responses/invalid-structure-deterministic.json",
+      "bytes": 479,
+      "sha256": "a0fe5dee09a49708ae4aece05884e75236b1eadc8d3897e43d2a571c3a3a7e8b"
+    },
+    {
+      "path": "examples/responses/invalid-structure-vlm_llm.json",
+      "bytes": 473,
+      "sha256": "bbb2837c2f47e249807ff91a6274e9acd138b818bd2d465566225c5233d3efa4"
+    },
+    {
+      "path": "examples/responses/invalid-summary-deterministic.json",
+      "bytes": 536,
+      "sha256": "4607c95baad967bcde83d75575fed856187574a2dc7962cf600c25c26185a214"
+    },
+    {
+      "path": "examples/responses/invalid-summary-vlm_llm.json",
+      "bytes": 530,
+      "sha256": "42f33d88bbcd0097c8556176cf59d3a66886c12c30ad3f2bd0c2c5c83ba3806e"
+    },
+    {
+      "path": "examples/responses/lookup-deterministic.json",
+      "bytes": 4500,
+      "sha256": "5e480bfb8cc707570aff952b06f772d5a51eda0ac4c08c6a655b2efd2922e046"
+    },
+    {
+      "path": "examples/responses/mixed-completed-deterministic.json",
+      "bytes": 4976,
+      "sha256": "dde9b0f20b6f1712f2af04843580095e2ef21ecd7268a2c0b797e72635b1f8d4"
+    },
+    {
+      "path": "examples/responses/mixed-completed-vlm_llm.json",
+      "bytes": 334,
+      "sha256": "499bff950719b8ffbb2b597583714f37e78cc9d539a39072b6d7ae5fbb10fc58"
+    },
+    {
+      "path": "examples/responses/mixed-unconfirmed-deterministic.json",
+      "bytes": 5335,
+      "sha256": "82f06376585aae813189a43428e9d79009b5f7be12d2467a1b0ac3fd84dca923"
+    },
+    {
+      "path": "examples/responses/mixed-unconfirmed-vlm_llm.json",
+      "bytes": 336,
+      "sha256": "e56a086d5b33d91c156e3b5cef9fb8705f768d585aa9f6966f246de350c58249"
+    },
+    {
+      "path": "examples/responses/no-plan-deterministic.json",
+      "bytes": 1755,
+      "sha256": "a9747ab02bfd400eeff47ec970ab4b7a3c78afc2725132c53feff3743cc03ea4"
+    },
+    {
+      "path": "examples/responses/no-plan-vlm_llm.json",
+      "bytes": 1766,
+      "sha256": "5da73dd4a966f971a653bbe684d64a413a7c9f345b018f7d4e0c9c7e3ca6cbfc"
+    },
+    {
+      "path": "examples/responses/only-no-class-deterministic.json",
+      "bytes": 2336,
+      "sha256": "df0d8819afee78008ac13123b3a171d2a74d178e0e0e8314831cd9917f47ab5e"
+    },
+    {
+      "path": "examples/responses/only-no-class-vlm_llm.json",
+      "bytes": 1894,
+      "sha256": "9eb2ad8d8728dff274c8b279ec61c7ec03c0d37f19910a52b362e3b1c463ecad"
+    },
+    {
+      "path": "examples/responses/repeat-deterministic.json",
+      "bytes": 4500,
+      "sha256": "ade3ca018c34629d5114f38de777b18e9032ceab8939244bf140f65dcf39fada"
+    },
+    {
+      "path": "examples/responses/resource-cv-deterministic.json",
+      "bytes": 4145,
+      "sha256": "4589b66048f2f3d4a72f07978ba4211d295abf657eec54f27a08d1f69bec1f6f"
+    },
+    {
+      "path": "examples/responses/resource-cv-vlm_llm.json",
+      "bytes": 3625,
+      "sha256": "603e8808448a73370197fab17bff9633f15d6ce138d4762d0c2bf7ecbff3ca26"
+    },
+    {
+      "path": "examples/responses/resource-invalid-mode-deterministic.json",
+      "bytes": 597,
+      "sha256": "cc45e59322aa3adadcf204092f91870f5ce805e2c63d1e608d5d08b8dfb6bd9a"
+    },
+    {
+      "path": "examples/responses/resource-invalid-mode-vlm_llm.json",
+      "bytes": 591,
+      "sha256": "ebc659eb3c1c0746b3399e3417fd43848a84a9fee4b0cd68108f816d26d2899c"
+    },
+    {
+      "path": "examples/responses/resource-manual-deterministic.json",
+      "bytes": 4176,
+      "sha256": "5f4b2d604aa22d56a9f595a63b760d0966e42066b2cb741f95ee13e04e4234c6"
+    },
+    {
+      "path": "examples/responses/resource-manual-vlm_llm.json",
+      "bytes": 3642,
+      "sha256": "e5ce2228a6953fd4b23943208c7e0b6f4420951dc813234afd5a1cd013a7fb26"
+    },
+    {
+      "path": "examples/responses/resource-missing-deterministic.json",
+      "bytes": 3773,
+      "sha256": "93c9903be55a428ae17d08c0c5dd9577b95e936d0ca88fdb079bb4fed1686a8e"
+    },
+    {
+      "path": "examples/responses/resource-missing-vlm_llm.json",
+      "bytes": 3446,
+      "sha256": "b60f74c9c3b7dd54166fec74a00bdb45c42003cee46a53fdc4e97185c7fdb82a"
+    },
+    {
+      "path": "examples/responses/resource-partial-deterministic.json",
+      "bytes": 4420,
+      "sha256": "ebd8001142f48dafd9df77bea0193288d4372791a3f5d0fc2d5ce08b454e141f"
+    },
+    {
+      "path": "examples/responses/resource-partial-vlm_llm.json",
+      "bytes": 3638,
+      "sha256": "b1cd97639e87ee0896de6cd746fdcb79192f1999fd4ec9a802b9f0f7e0842cb2"
+    },
+    {
+      "path": "examples/responses/resource-unavailable-deterministic.json",
+      "bytes": 4407,
+      "sha256": "d35de806bddfb37bb5455c052a6ff8455163b33baf86c551238ccc064a7880a3"
+    },
+    {
+      "path": "examples/responses/resource-unavailable-vlm_llm.json",
+      "bytes": 3641,
+      "sha256": "426bb60111a98375525bbd9cb390e57e819d1a88fe54fb7bcec3d9e707421ec2"
+    },
+    {
+      "path": "examples/responses/resource-unmapped-deterministic.json",
+      "bytes": 4408,
+      "sha256": "2d924e4b4cc4935510d289b01abdd88215e3a113eae821d567ae8fa21945c531"
+    },
+    {
+      "path": "examples/responses/resource-unmapped-vlm_llm.json",
+      "bytes": 3637,
+      "sha256": "1603ef8210952af88fa93c2b31da6f54b46b96fc11a0dfd784ad1d5e845a49d6"
+    },
+    {
+      "path": "examples/send_example.py",
+      "bytes": 2770,
+      "sha256": "a7400a8917393685718ea01d924997098e711efba70b067680ec1016a3ac1be4"
+    },
+    {
+      "path": "EXTERNAL_RESOURCE_ADAPTER_PRD.md",
+      "bytes": 36655,
+      "sha256": "87ddf95421b12495daa870890e2517c395a4e37feefb381f9cc2d58031ec80fe"
+    },
+    {
+      "path": "images/analytics-images.tar",
+      "bytes": 181783040,
+      "sha256": "68aef89954fa77f1eb4d6b36a2d694110b778947da20143f7319f4356e9678c2"
+    },
+    {
+      "path": "implementation-verification.json",
+      "bytes": 578,
+      "sha256": "63fb6599542a579e764d568a76ba2caa8cd1ab80627e7083fbf8ae62c621cdff"
+    },
+    {
+      "path": "PRD.md",
+      "bytes": 31868,
+      "sha256": "bd4c6c41096337705238c84d876b94bdde07acbd840fa7f4c88cacedc9e55ec3"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13970,
+      "sha256": "5706e1e16ce69aff385b05213cd4e33f6d0089ede589bec51212a4a54d309392"
+    },
+    {
+      "path": "references/matrix_v2.json",
+      "bytes": 4428434,
+      "sha256": "cf435bba295909ab953faccaa146f0916341d583ea8d637e12f0fd2d7ecf092c"
+    },
+    {
+      "path": "references/visual_work_profiles.sqlite3",
+      "bytes": 6299648,
+      "sha256": "708cb01523c740f39b8789aa039c00ee5a8b8c63b2eedc6b6b73bcdc4c65e911"
+    },
+    {
+      "path": "RESOURCE_INTEGRATION.md",
+      "bytes": 18662,
+      "sha256": "aaffd6bfab9f609c25eadc7cdc8846b68006443db434cab2d3dd6aaa9f3eda38"
+    },
+    {
+      "path": "runtime-packages.txt",
+      "bytes": 492,
+      "sha256": "1eadecb6a28a7fe9cfbac2c2a8a4e90070628a7ad1de9cc307a6f7097eb8ebaa"
+    },
+    {
+      "path": "SPEC.md",
+      "bytes": 116180,
+      "sha256": "2ad3b85ae3b80f41eed6c12fbe3adde8d119b288e69abf99afef746286b41a8b"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 1128,
+      "sha256": "8a415c488967399b1527203138af73d6d8c801b5bd0b9db7898d6063661cde33"
+    },
+    {
+      "path": "wheels/lct_construction_analytics-0.5.0-py3-none-any.whl",
+      "bytes": 82146,
+      "sha256": "5b7da34c30f1b17485e655500baabd6227d91bbba4c8af045e816f41268f4e87"
+    }
+  ],
+  "verification": {
+    "status": "passed",
+    "service_version": "0.5.0",
+    "platform": "linux/amd64",
+    "checks": [
+      "archive loaded; fresh PostgreSQL/bootstrap/HTTP; honest readiness without model key",
+      "real catalog export equals both APIs; schema/capabilities validated",
+      "14 example inputs on both APIs; v1/no_class and v2/resource provenance/coverage/manual arithmetic; errors/repeat/409/lookup",
+      "repeat additive bootstrap and immutable reference import on existing volume",
+      "actual LOGIN credentials: no admin/catalog mutation/legacy access/other role; RLS request and attempt isolation",
+      "same-volume application recreation preserves original results and exact image bytes",
+      "pg_dump/pg_restore on separate DB preserve audit/image/snapshots/references",
+      "container gateway timeout stays unknown across repeat/recreation; one explicitly local fixture request"
+    ],
+    "real_model_gateway": "not_run_no_user_provided_key",
+    "external_backend_integration": "not_run_external_team_required",
+    "recognition_accuracy": "not_measured",
+    "protocol_gateway": "explicit_local_test_fixture_only"
+  },
+  "network_dependency": "Remote model gateway required for visual model analysis; no key included.",
+  "notice": "Synthetic examples validate contracts only. Real external adapter and model quality are unverified. SHA256SUMS additionally covers this manifest; the checksum list excludes itself."
+}

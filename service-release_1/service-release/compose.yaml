@@ -1,0 +1,92 @@
+name: lct-analytics-release
+
+x-application: &application
+  platform: linux/amd64
+  restart: unless-stopped
+  read_only: true
+  tmpfs: [/tmp]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  depends_on:
+    postgres: {condition: service_healthy}
+    bootstrap: {condition: service_completed_successfully}
+
+x-runtime-env: &runtime-env
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: '5432'
+  POSTGRES_DB: ${POSTGRES_DB:-construction_analytics}
+  ANALYTICS_SERVICE_TOKEN: ${ANALYTICS_SERVICE_TOKEN:?Set ANALYTICS_SERVICE_TOKEN}
+  ANALYTICS_MATRIX_VERSION: construction-class-matrix-v2.0
+  ANALYTICS_PROFILES_VERSION: visual-profiles-708cb01523c740f39b8789aa
+  ANALYTICS_MAX_CONCURRENCY: ${ANALYTICS_MAX_CONCURRENCY:-1}
+  ANALYTICS_MODEL_TIMEOUT_SECONDS: ${ANALYTICS_MODEL_TIMEOUT_SECONDS:-240}
+  ANALYTICS_EXECUTION_TIMEOUT_SECONDS: ${ANALYTICS_EXECUTION_TIMEOUT_SECONDS:-1020}
+
+services:
+  postgres:
+    image: postgres:16.15-alpine
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-construction_analytics}
+      POSTGRES_USER: ${POSTGRES_USER:-analytics_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set administrator database password}
+    ports: ['127.0.0.1:${POSTGRES_PORT:-15432}:5432']
+    volumes: [pg_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  bootstrap:
+    image: lct-analytics-deterministic:0.5.0
+    platform: linux/amd64
+    restart: 'no'
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      postgres: {condition: service_healthy}
+    environment:
+      <<: *runtime-env
+      POSTGRES_USER: ${POSTGRES_USER:-analytics_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set administrator database password}
+      ANALYTICS_DETERMINISTIC_DB_PASSWORD: ${ANALYTICS_DETERMINISTIC_DB_PASSWORD:?Set deterministic database password}
+      ANALYTICS_VLM_DB_PASSWORD: ${ANALYTICS_VLM_DB_PASSWORD:?Set VLM database password}
+    volumes: ['./references:/references:ro']
+    command: ['bootstrap', '--matrix', '/references/matrix_v2.json', '--profiles', '/references/visual_work_profiles.sqlite3']
+
+  deterministic:
+    <<: *application
+    image: lct-analytics-deterministic:0.5.0
+    environment:
+      <<: *runtime-env
+      POSTGRES_USER: lct_deterministic_app
+      POSTGRES_PASSWORD: ${ANALYTICS_DETERMINISTIC_DB_PASSWORD:?Set deterministic database password}
+    ports: ['127.0.0.1:${DETERMINISTIC_PORT:-18001}:8000']
+    healthcheck:
+      test: ['CMD', 'python', '-c', 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/health/ready", timeout=3)']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  vlm_llm:
+    <<: *application
+    image: lct-analytics-vlm-llm:0.5.0
+    environment:
+      <<: *runtime-env
+      POSTGRES_USER: lct_vlm_app
+      POSTGRES_PASSWORD: ${ANALYTICS_VLM_DB_PASSWORD:?Set VLM database password}
+      LITELLM_API_KEY: ${LITELLM_API_KEY:-}
+      LITELLM_GATEWAY_URL: ${LITELLM_GATEWAY_URL:-https://litellm.g-309.ru/v1}
+      ANALYTICS_MODEL: ${ANALYTICS_MODEL:-qwen3.8-27b}
+    ports: ['127.0.0.1:${VLM_LLM_PORT:-18002}:8000']
+    healthcheck:
+      test: ['CMD', 'python', '-c', 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/health/live", timeout=3)']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  pg_data:

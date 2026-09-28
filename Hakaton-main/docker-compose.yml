@@ -1,0 +1,146 @@
+# Рабочая установка: задайте случайный SK_SECRET_KEY в .env, затем docker compose up --build.
+# Демо-стенд включается явно: SK_DEMO_MODE=true SK_SEED_ON_START=true docker compose up --build
+# Интерфейс — http://localhost:8080, API и Swagger — http://localhost:8100/docs, видео (WebRTC) — :8889
+# Открываете стенд с другого устройства (телефон в той же сети) — укажите адрес этого компьютера:
+#   VIDEO_PUBLIC_HOST=192.168.1.10 docker compose up
+# Технику на видео распознаёт своя модель (backend/models/detector.onnx) прямо в бэкенде — и на кадрах раз в 2 с, и рамками
+# в реальном времени по видео камер, которые смотрят. В Docker она считает только на процессоре: на Mac с M4 это ≈ 0,2 с
+# на кадр против 0,035 с с CoreML без Docker — для показа на Mac бэкенд лучше запускать без Docker (см. README).
+# Вместо неё — имитация внешнего сервиса разметки (рамки по разметке демо-роликов):
+#   SK_TRACKER_URL=ws://tracker:8200/stream SK_TRACKER_API_KEY=dev-tracker-key docker compose --profile tracker up --build
+# Внешний сервис разметки на другом компьютере: он читает видео по RTSP (порт 8554, логин sk-tracker, пароль — ключ)
+# и должен знать адрес этого компьютера:
+#   SK_TRACKER_URL=ws://<адрес сервиса>:8200/stream SK_TRACKER_API_KEY=<ключ> SK_TRACKER_RTSP_URL=rtsp://192.168.1.10:8554 \
+#   SK_ANALYSIS_PROVIDER=push docker compose up --build
+# Работы по камерам — два сервиса аналитики коллеги (контракт frame-analysis-v1, backend/docs). Настоящие — его
+# Docker-комплект 0.2.0 (свой compose, порты 18001 и 18002 на этом компьютере):
+#   DETERMINISTIC_SERVICE_URL=http://host.docker.internal:18001 VLM_LLM_SERVICE_URL=http://host.docker.internal:18002 \
+#   ANALYTICS_SERVICE_TOKEN=<из .env комплекта> docker compose up --build
+# Без комплекта — имитация обоих (один контейнер, два адреса):
+#   DETERMINISTIC_SERVICE_URL=http://analytics:8300/deterministic VLM_LLM_SERVICE_URL=http://analytics:8300/vlm_llm \
+#   docker compose --profile analytics up --build
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: stroykontrol
+      POSTGRES_PASSWORD: stroykontrol  # пароль стенда; для реальной установки задайте свой
+      POSTGRES_DB: stroykontrol
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stroykontrol"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # шлюз видео: забирает RTSP с камер и отдаёт браузеру WebRTC; потоки камер заводит сам бэкенд через API
+  video:
+    image: bluenviron/mediamtx:1.21.1
+    volumes:
+      - ./infra/mediamtx/mediamtx.yml:/mediamtx.yml:ro
+    environment:
+      MTX_APIADDRESS: :9997  # API — только внутри сети стенда (порт наружу не открыт)
+      MTX_AUTHHTTPADDRESS: http://backend:8100/api/video/auth
+      MTX_WEBRTCADDITIONALHOSTS: ${VIDEO_PUBLIC_HOST:-127.0.0.1}  # адрес, по которому браузер достучится до видео
+      MTX_WEBRTCLOCALUDPADDRESS: :${VIDEO_UDP_PORT:-8189}  # WebRTC сообщает браузеру этот порт — снаружи он должен быть тем же
+    ports:
+      - "${VIDEO_PORT:-8889}:8889"
+      - "${VIDEO_UDP_PORT:-8189}:${VIDEO_UDP_PORT:-8189}/udp"
+      # RTSP — для внешнего сервиса разметки: читать потоки камер можно только с учёткой (sk-tracker или токен входа)
+      - "${VIDEO_RTSP_PORT:-8554}:8554"
+
+  backend:
+    build: ./backend
+    environment:
+      SK_DATABASE_URL: postgresql+asyncpg://stroykontrol:stroykontrol@db:5432/stroykontrol
+      SK_SECRET_KEY: ${SK_SECRET_KEY:?Set a random SK_SECRET_KEY in .env before starting}
+      SK_DEMO_MODE: ${SK_DEMO_MODE:-false}
+      SK_DEMO_PASSWORD: ${SK_DEMO_PASSWORD:-demo}
+      SK_SEED_ON_START: ${SK_SEED_ON_START:-false}  # true only together with SK_DEMO_MODE=true
+      SK_KEYCLOAK_ISSUER: ${SK_KEYCLOAK_ISSUER:-}  # публичный URL realm для браузера и проверки iss
+      SK_KEYCLOAK_BACKCHANNEL_URL: ${SK_KEYCLOAK_BACKCHANNEL_URL:-}  # Docker URL Keycloak для backend; напр. http://keycloak:8080
+      SK_KEYCLOAK_CLIENT_ID: ${SK_KEYCLOAK_CLIENT_ID:-stroykontrol-web}
+      SK_KEYCLOAK_AUTO_PROVISION: ${SK_KEYCLOAK_AUTO_PROVISION:-true}
+      SK_KEYCLOAK_ADMIN_CLIENT_ID: ${SK_KEYCLOAK_ADMIN_CLIENT_ID:-stroykontrol-backend}
+      SK_KEYCLOAK_ADMIN_CLIENT_SECRET: ${SK_KEYCLOAK_ADMIN_CLIENT_SECRET:-}
+      SK_CORS_ORIGINS: http://localhost:${WEB_PORT:-8080}
+      SK_VIDEO_API_URL: http://video:9997
+      SK_VIDEO_RTSP_URL: rtsp://video:8554
+      SK_VIDEO_WEBRTC_URL: http://${VIDEO_PUBLIC_HOST:-localhost}:${VIDEO_PORT:-8889}
+      SK_FRAME_INTERVAL_S: ${SK_FRAME_INTERVAL_S:-2}
+      SK_CHECK_INTERVAL_S: ${SK_CHECK_INTERVAL_S:-60}
+      SK_ANALYSIS_PROVIDER: ${SK_ANALYSIS_PROVIDER:-auto}  # auto — своя модель; mock — демо-разметка роликов
+      SK_ANALYSIS_API_URL: ${SK_ANALYSIS_API_URL:-}
+      SK_ANALYSIS_API_KEY: ${SK_ANALYSIS_API_KEY:-}
+      SK_INGEST_API_KEY: ${SK_INGEST_API_KEY:-}
+      SK_REALTIME_FPS: ${SK_REALTIME_FPS:-8}  # рамки своей моделью по видео камер, которые смотрят; 0 — только раз в 2 с
+      # ядер на модель: в Docker Desktop для Mac 4 потока быстрее всех ядер (0,22 с против 0,35: в ВМ вперемешку быстрые
+      # и медленные ядра); на Linux-сервере можно 0 — решит ONNX Runtime
+      SK_DETECTOR_THREADS: ${SK_DETECTOR_THREADS:-4}
+      SK_TRACKER_URL: ${SK_TRACKER_URL:-}  # WebSocket внешнего сервиса разметки; пусто — рамки своей модели
+      SK_TRACKER_API_KEY: ${SK_TRACKER_API_KEY:-}
+      SK_TRACKER_RTSP_URL: ${SK_TRACKER_RTSP_URL:-}  # адрес видеошлюза для сервиса на другом компьютере
+      SK_TRACKER_VIDEO_DELAY_MS: ${SK_TRACKER_VIDEO_DELAY_MS:-150}
+      SK_EQUIPMENT_OBSERVATION_TIMEOUT_SECONDS: ${SK_EQUIPMENT_OBSERVATION_TIMEOUT_SECONDS:-90}
+      CAMERA_STAGE_MONITOR_URL: ${CAMERA_STAGE_MONITOR_URL:-}
+      CAMERA_STAGE_MONITOR_TOKEN: ${CAMERA_STAGE_MONITOR_TOKEN:-}
+      CAMERA_STAGE_MONITOR_TIMEOUT_SECONDS: ${CAMERA_STAGE_MONITOR_TIMEOUT_SECONDS:-15}
+      SK_CAMERA_STAGE_MONITOR_REFRESH_SECONDS: ${SK_CAMERA_STAGE_MONITOR_REFRESH_SECONDS:-0}
+      SK_CAMERA_STAGE_MONITOR_MAX_RETRIES: ${SK_CAMERA_STAGE_MONITOR_MAX_RETRIES:-1}
+      # сервисы аналитики коллеги — базовые адреса без пути метода; пусто — работы по камерам не определяются
+      DETERMINISTIC_SERVICE_URL: ${DETERMINISTIC_SERVICE_URL:-}
+      VLM_LLM_SERVICE_URL: ${VLM_LLM_SERVICE_URL:-}
+      ANALYTICS_SERVICE_TOKEN: ${ANALYTICS_SERVICE_TOKEN:-}
+      ANALYTICS_HTTP_TIMEOUT_SECONDS: ${ANALYTICS_HTTP_TIMEOUT_SECONDS:-1020}
+      SK_ANALYTICS_INTERVAL_MIN: ${SK_ANALYTICS_INTERVAL_MIN:-20}
+      SK_ANALYTICS_VLM_INTERVAL_MIN: ${SK_ANALYTICS_VLM_INTERVAL_MIN:-60}  # «по снимку» — платные вызовы модели
+    volumes:
+      - media:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # сервисы на этом компьютере (комплект аналитики коллеги) — и на Linux
+    depends_on:
+      db:
+        condition: service_healthy
+      video:
+        condition: service_started
+    ports:
+      - "${API_PORT:-8100}:8100"
+
+  # имитация сервиса разметки (детектор + трекер): рамки по демо-роликам 10 раз в секунду.
+  # Запускается только с профилем: docker compose --profile tracker up
+  tracker:
+    profiles: [tracker]
+    build: ./backend
+    command: ["/app/.venv/bin/uvicorn", "app.mock_tracker:app", "--host", "0.0.0.0", "--port", "8200"]
+    healthcheck:
+      disable: true
+    environment:
+      MOCK_TRACKER_BACKEND_URL: http://backend:8100
+      SK_TRACKER_API_KEY: ${SK_TRACKER_API_KEY:-}
+
+  # имитация двух сервисов аналитики коллеги по его контракту: /deterministic и /vlm_llm. Настоящие придут образами —
+  # тогда здесь будут они. Запускается только с профилем: docker compose --profile analytics up
+  analytics:
+    profiles: [analytics]
+    build: ./backend
+    command: ["/app/.venv/bin/uvicorn", "app.mock_analytics:app", "--host", "0.0.0.0", "--port", "8300"]
+    healthcheck:
+      disable: true
+    environment:
+      ANALYTICS_SERVICE_TOKEN: ${ANALYTICS_SERVICE_TOKEN:-}
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+volumes:
+  pgdata:
+    name: ${SK_DB_VOLUME:-hakaton-main_pgdata}
+  media:
+    name: ${SK_MEDIA_VOLUME:-hakaton-main_media}

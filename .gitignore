@@ -1,0 +1,29 @@
+# Local credentials; publish example configurations only.
+.env
+.env.*
+!.env.example
+*.key
+auto.crt
+Hakaton-main/infra/keycloak/clean.env
+Hakaton-main/infra/keycloak/generated/
+Hakaton-main/backend/data/
+yolo_service/data/
+
+# Local dependencies, caches, and generated reports.
+**/.venv/
+**/.inspect-venv/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.ruff_cache/
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/.DS_Store
+
+# Release archives and container images are built artifacts, not source.
+/service-release-0.5.0-linux-amd64.zip
+/service-release_1/service-release/images/

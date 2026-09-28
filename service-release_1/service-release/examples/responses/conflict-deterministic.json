@@ -1,0 +1,13 @@
+{
+  "http_status": 409,
+  "body": {
+    "schema_version": "frame-analysis-error-v1",
+    "request_id": "demo-concrete-v1",
+    "service": "deterministic",
+    "code": "idempotency_conflict",
+    "message": "Idempotency key was reused with different input",
+    "details": [],
+    "retryable": false,
+    "execution_state": "not_started"
+  }
+}

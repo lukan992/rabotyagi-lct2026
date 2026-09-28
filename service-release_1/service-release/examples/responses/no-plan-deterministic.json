@@ -1,0 +1,53 @@
+{
+  "http_status": 200,
+  "body": {
+    "schema_version": "frame-analysis-result-v1",
+    "request_id": "demo-no-plan-v1",
+    "analysis_id": "0362c282-f302-422f-a69c-72740c02718a",
+    "service": "deterministic",
+    "context": {
+      "site_id": "demo-no-plan-site",
+      "camera_id": "demo-camera",
+      "image_id": "demo-frame",
+      "observed_at": "2026-09-26T12:00:00Z",
+      "image_sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896",
+      "plan_id": null,
+      "plan_revision_id": null,
+      "plan_stream_code": "demo-stream",
+      "history_snapshot_id": "demo-history",
+      "catalog_version": "catalog-cf435bba295909ab953facca",
+      "input_sha256": "a79f1790056ef4edaf5a7992735db24c7a6c36050cd689caa914e933e6a853a9"
+    },
+    "versions": {
+      "service_version": "0.5.0",
+      "matrix_version": "construction-class-matrix-v2.0",
+      "profiles_version": null,
+      "vision_model": null,
+      "llm_model": null,
+      "schedule_rules_version": "schedule-rules-v1"
+    },
+    "current_work": {
+      "status": "no_plan",
+      "work_groups": []
+    },
+    "visual_observations": [],
+    "visual_relations": [],
+    "transition": {
+      "status": "no_published_plan",
+      "current_step_key": null,
+      "next_step_key": null,
+      "distinctive_codes": [],
+      "evidence_first_at": null,
+      "evidence_last_at": null,
+      "supporting_observations": 0,
+      "evidence_refs": []
+    },
+    "schedule": {
+      "status": "insufficient_evidence",
+      "items": []
+    },
+    "limitations": [
+      "Пункт плана не оценивается без плана и подтверждённой привязки участка."
+    ]
+  }
+}

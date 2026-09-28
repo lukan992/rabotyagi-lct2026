@@ -1,0 +1,12 @@
+# The backend alone joins the analytics release network. All other site services stay
+# on the hakaton-main default network; analytics ports remain loopback-only on host.
+services:
+  backend:
+    networks:
+      default: {}
+      analytics_release: {}
+
+networks:
+  analytics_release:
+    external: true
+    name: lct-analytics-release_default

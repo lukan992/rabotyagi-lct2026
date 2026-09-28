@@ -1,0 +1,4 @@
+# Use the supplied, locally verified vendor image and only its matching release references.
+# Build from service-release_1/service-release/references as the Docker context.
+FROM lct-analytics-deterministic:0.5.0
+COPY . /references/

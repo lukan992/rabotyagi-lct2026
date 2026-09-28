@@ -1,0 +1,19 @@
+{
+  "http_status": 422,
+  "body": {
+    "schema_version": "frame-analysis-error-v1",
+    "request_id": "demo-invalid-structure-v1",
+    "service": "deterministic",
+    "code": "invalid_context",
+    "message": "JSON does not satisfy the contract",
+    "details": [
+      {
+        "path": "/frame",
+        "code": "schema",
+        "message": "Value does not satisfy required"
+      }
+    ],
+    "retryable": false,
+    "execution_state": "not_started"
+  }
+}

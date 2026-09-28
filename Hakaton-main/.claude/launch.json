@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "frontend", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--prefix", "frontend"], "port": 5180, "autoPort": true },
+    { "name": "backend", "runtimeExecutable": "uv", "runtimeArgs": ["run", "--directory", "backend", "uvicorn", "app.main:app", "--port", "8100"], "port": 8100 },
+    { "name": "video", "runtimeExecutable": "bash", "runtimeArgs": ["tools/video-gateway.sh"], "port": 8889 },
+    { "name": "tracker", "runtimeExecutable": "env", "runtimeArgs": ["SK_TRACKER_API_KEY=dev-tracker-key", "uv", "run", "--directory", "backend", "uvicorn", "app.mock_tracker:app", "--port", "8200"], "port": 8200 },
+    { "name": "analytics", "runtimeExecutable": "uv", "runtimeArgs": ["run", "--directory", "backend", "uvicorn", "app.mock_analytics:app", "--port", "8300"], "port": 8300 }
+  ]
+}

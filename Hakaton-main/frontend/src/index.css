@@ -1,0 +1,125 @@
+@import "tailwindcss";
+@import "@fontsource-variable/golos-text";
+
+/* Вариант dark: для редких случаев, когда токенов недостаточно */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * Современный сдержанный продуктовый UI: Golos Text, мягкие радиусы, тонкие рамки, едва заметные тени.
+ * Один акцентный цвет; остальной цвет несёт смысл только в статусах.
+ *
+ * Светлая тема задаётся здесь, тёмная — переопределением тех же переменных ниже.
+ * Правило: цвета в компонентах только через токены, тогда тёмная тема получается сама.
+ */
+@theme {
+  --font-sans: "Golos Text Variable", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --color-background: #F6F7F9;
+  --color-foreground: #101828;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #101828;
+  --color-muted: #F2F4F7;
+  --color-muted-foreground: #5B6675;
+  --color-border: #E3E7ED;
+  --color-border-strong: #CDD3DC;
+  --color-input: #8792A3;  /* граница полей ввода: 3.1:1 на белом (WCAG 1.4.11 — поле должно быть видно) */
+  --color-primary: #1F5FD1;
+  --color-primary-hover: #194FB2;
+  --color-on-primary: #FFFFFF;
+  --color-ring: #1F5FD1;
+  --color-brand: #F5B800;
+
+  /* Статусы: ok/warn/danger — цвет текста и значков; *-solid — заливка кнопок с белым текстом; *-bg/*-fg — метки */
+  --color-ok: #17803A;
+  --color-ok-solid: #17803A;
+  --color-ok-bg: #E8F6EC;
+  --color-ok-fg: #12632D;
+  --color-warn: #B25E02;
+  --color-warn-solid: #B25E02;
+  --color-warn-bg: #FEF3DD;
+  --color-warn-fg: #8A4800;
+  --color-danger: #C4281C;
+  --color-danger-solid: #C4281C;
+  --color-danger-bg: #FDECEA;
+  --color-danger-fg: #971E15;
+  --color-info: #1F5FD1;
+  --color-info-bg: #EAF1FD;
+  --color-info-fg: #184A9F;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, .04);
+  --shadow-hover: 0 4px 12px -2px rgba(16, 24, 40, .08);
+  --shadow-pop: 0 16px 40px -12px rgba(16, 24, 40, .25), 0 2px 6px rgba(16, 24, 40, .06);
+}
+
+:root { color-scheme: light; }
+
+/*
+ * Тёмная тема. Все пары проверены на контраст: текст ≥ 4.5:1, элементы управления ≥ 3:1.
+ * Акцент светлее, чем в светлой теме, поэтому на кнопках с ним — тёмный текст (on-primary).
+ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-background: #0F1419;
+  --color-foreground: #E6EAF0;
+  --color-card: #171D26;
+  --color-card-foreground: #E6EAF0;
+  --color-muted: #202834;
+  --color-muted-foreground: #98A4B5;
+  --color-border: #2A3441;
+  --color-border-strong: #5C6B84;  /* границы полей ввода: ≥ 3:1 на карточке */
+  --color-input: #5C6B84;
+  --color-primary: #6FA0F5;
+  --color-primary-hover: #8DB3F8;
+  --color-on-primary: #0B1220;
+  --color-ring: #8DB3F8;
+
+  --color-ok: #6FD48B;
+  --color-ok-bg: #10291A;
+  --color-ok-fg: #8BE0A3;
+  --color-warn: #E5B15A;
+  --color-warn-bg: #3A2A0F;
+  --color-warn-fg: #F2C46B;
+  --color-danger: #F08A80;
+  --color-danger-solid: #D02F22;
+  --color-danger-bg: #3E1715;
+  --color-danger-fg: #F5A09A;
+  --color-info: #6FA0F5;
+  --color-info-bg: #172A4A;
+  --color-info-fg: #9DC0FA;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .35);
+  --shadow-hover: 0 4px 14px -2px rgba(0, 0, 0, .5);
+  --shadow-pop: 0 16px 40px -12px rgba(0, 0, 0, .7), 0 2px 6px rgba(0, 0, 0, .4);
+}
+
+html { font-size: 16px; }
+body {
+  @apply bg-background text-foreground font-sans antialiased;
+  margin: 0;
+  min-height: 100dvh;
+}
+* { box-sizing: border-box; }
+h1, h2 { letter-spacing: -0.01em; }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "_comment": "Разметка демонстрационных кадров для демо-анализатора. Рамка: x, y, w, h в процентах от кадра 16:9. moving=true — техника работает, её рамка слегка смещается от кадра к кадру.",
+  "pit-excavator": [{"type": "excavator", "confidence": 0.94, "box": [24.5, 41.5, 46.5, 57], "moving": true}],
+  "pit-loading": [
+    {"type": "excavator", "confidence": 0.95, "box": [7.5, 10, 48.5, 69], "moving": true},
+    {"type": "dump_truck", "confidence": 0.94, "box": [37, 45, 45.5, 44], "moving": true}
+  ],
+  "earthworks-loading": [
+    {"type": "excavator", "confidence": 0.93, "box": [32, 19.5, 33, 38.5], "moving": true},
+    {"type": "dump_truck", "confidence": 0.89, "box": [24.5, 49, 20, 22.5], "moving": true}
+  ],
+  "gate-crane": [{"type": "crane", "confidence": 0.91, "box": [0.5, 19, 95.5, 79], "moving": false}],
+  "gate-dumper": [
+    {"type": "excavator", "confidence": 0.88, "box": [16.5, 14, 24.5, 65], "moving": false},
+    {"type": "dump_truck", "confidence": 0.93, "box": [38, 13, 51, 65], "moving": false}
+  ],
+  "gate-mixer": [{"type": "mixer", "confidence": 0.87, "box": [34, 46, 18, 28], "moving": false}],
+  "gate-grabtruck": [
+    {"type": "excavator", "confidence": 0.86, "box": [60, 2, 25, 85], "moving": false},
+    {"type": "manipulator", "confidence": 0.9, "box": [47, 50, 30.5, 45], "moving": false}
+  ],
+  "foundation-pump": [{"type": "mixer", "confidence": 0.92, "box": [64.5, 54, 28, 20], "moving": true}],
+  "foundation-mixers": [
+    {"type": "mixer", "confidence": 0.91, "box": [6, 37, 33, 32], "moving": true},
+    {"type": "mixer", "confidence": 0.95, "box": [44, 36, 46.5, 34], "moving": true}
+  ],
+  "road-roller-a": [{"type": "roller", "confidence": 0.92, "box": [38, 42.5, 14.5, 25.5], "moving": true}],
+  "road-roller-b": [{"type": "roller", "confidence": 0.93, "box": [40, 35, 15, 30.5], "moving": true}],
+  "road-dumptruck": [{"type": "dump_truck", "confidence": 0.9, "box": [26, 27.5, 20, 31], "moving": false}],
+  "yard-bulldozer": [{"type": "bulldozer", "confidence": 0.95, "box": [12.5, 4, 82.5, 91], "moving": true}]
+}

@@ -1,0 +1,2779 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lct:frame-analysis:v1",
+  "title": "Target frame analysis contracts v1",
+  "description": "Design artifact. HTTP services are not implemented. Cross-field, catalogue and evidence rules are specified in BACKEND_INTEGRATION.md.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/result"
+    },
+    {
+      "$ref": "#/$defs/error"
+    },
+    {
+      "$ref": "#/$defs/catalog"
+    },
+    {
+      "$ref": "#/$defs/capabilities"
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "\\S"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 40,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "bbox": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "objectType": {
+      "type": "string",
+      "enum": [
+        "housing",
+        "education",
+        "healthcare",
+        "sports",
+        "culture",
+        "administrative",
+        "preschool",
+        "office",
+        "roads"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "enum": [
+        "deterministic",
+        "vlm_llm"
+      ]
+    },
+    "pointer": {
+      "type": "string",
+      "maxLength": 1000,
+      "pattern": "^/"
+    },
+    "detection": {
+      "type": "object",
+      "properties": {
+        "detection_id": {
+          "$ref": "#/$defs/id"
+        },
+        "class_code": {
+          "$ref": "#/$defs/id"
+        },
+        "bbox": {
+          "$ref": "#/$defs/bbox"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "track_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "detection_id",
+        "class_code",
+        "bbox",
+        "confidence"
+      ],
+      "additionalProperties": false
+    },
+    "cv": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "unavailable",
+            "failed"
+          ]
+        },
+        "source_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_version": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/detection"
+          },
+          "minItems": 0,
+          "maxItems": 200
+        }
+      },
+      "required": [
+        "status",
+        "source_ref",
+        "model_version",
+        "detections"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ok"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "detections": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "frame": {
+      "type": "object",
+      "properties": {
+        "image_id": {
+          "$ref": "#/$defs/id"
+        },
+        "camera_id": {
+          "$ref": "#/$defs/id"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "image_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "media_type": {
+          "type": "string",
+          "enum": [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+          ]
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8192
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8192
+        }
+      },
+      "required": [
+        "image_id",
+        "camera_id",
+        "observed_at",
+        "source_ref",
+        "image_sha256",
+        "media_type",
+        "width",
+        "height"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "plan_stream_code": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "roi_bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/bbox"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "plan_stream_code",
+        "roi_bbox",
+        "source_ref"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "plan_stream_code": {
+                "type": "null"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "roi_bbox": {
+                "type": "null"
+              },
+              "source_ref": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "source_ref": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "step": {
+      "type": "object",
+      "properties": {
+        "step_key": {
+          "$ref": "#/$defs/id"
+        },
+        "sequence_no": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stage_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "planned_start_at": {
+          "$ref": "#/$defs/time"
+        },
+        "planned_end_at": {
+          "$ref": "#/$defs/time"
+        }
+      },
+      "required": [
+        "step_key",
+        "sequence_no",
+        "stage_id",
+        "planned_start_at",
+        "planned_end_at"
+      ],
+      "additionalProperties": false
+    },
+    "plan": {
+      "type": "object",
+      "properties": {
+        "plan_id": {
+          "$ref": "#/$defs/id"
+        },
+        "revision_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          },
+          "minItems": 1,
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "plan_id",
+        "revision_id",
+        "source_ref",
+        "steps"
+      ],
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "properties": {
+        "observation_id": {
+          "$ref": "#/$defs/id"
+        },
+        "image_id": {
+          "$ref": "#/$defs/id"
+        },
+        "camera_id": {
+          "$ref": "#/$defs/id"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "image_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "cv": {
+          "$ref": "#/$defs/cv"
+        }
+      },
+      "required": [
+        "observation_id",
+        "image_id",
+        "camera_id",
+        "observed_at",
+        "source_ref",
+        "image_sha256",
+        "cv"
+      ],
+      "additionalProperties": false
+    },
+    "progress": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "$ref": "#/$defs/id"
+        },
+        "step_key": {
+          "$ref": "#/$defs/id"
+        },
+        "stage_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "plan_revision_id": {
+          "$ref": "#/$defs/id"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "in_progress",
+            "completed"
+          ]
+        },
+        "effective_at": {
+          "$ref": "#/$defs/time"
+        },
+        "recorded_at": {
+          "$ref": "#/$defs/time"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "actual_started_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actual_completed_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "event_id",
+        "step_key",
+        "stage_id",
+        "plan_revision_id",
+        "state",
+        "effective_at",
+        "recorded_at",
+        "source_ref",
+        "actual_started_at",
+        "actual_completed_at"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_started"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "actual_started_at": {
+                "type": "null"
+              },
+              "actual_completed_at": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "in_progress"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "actual_completed_at": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "history": {
+      "type": "object",
+      "properties": {
+        "snapshot_id": {
+          "$ref": "#/$defs/id"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window_start": {
+          "$ref": "#/$defs/time"
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/observation"
+          },
+          "minItems": 0,
+          "maxItems": 500
+        },
+        "progress_events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/progress"
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "as_of",
+        "window_start",
+        "complete",
+        "observations",
+        "progress_events"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "frame-analysis-input-v1"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "site_id": {
+          "$ref": "#/$defs/id"
+        },
+        "object_type_code": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/objectType"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "catalog_version": {
+          "$ref": "#/$defs/id"
+        },
+        "frame": {
+          "$ref": "#/$defs/frame"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "cv": {
+          "$ref": "#/$defs/cv"
+        },
+        "plan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/plan"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "history": {
+          "$ref": "#/$defs/history"
+        },
+        "equipment_activity": {
+          "$ref": "#/$defs/activityOptions"
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "site_id",
+        "object_type_code",
+        "catalog_version",
+        "frame",
+        "scope",
+        "cv",
+        "plan",
+        "history"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "properties": {
+                  "plan_stream_code": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "plan": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "site_id": {
+          "$ref": "#/$defs/id"
+        },
+        "camera_id": {
+          "$ref": "#/$defs/id"
+        },
+        "image_id": {
+          "$ref": "#/$defs/id"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "image_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "plan_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "plan_revision_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "plan_stream_code": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "history_snapshot_id": {
+          "$ref": "#/$defs/id"
+        },
+        "catalog_version": {
+          "$ref": "#/$defs/id"
+        },
+        "input_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "site_id",
+        "camera_id",
+        "image_id",
+        "observed_at",
+        "image_sha256",
+        "plan_id",
+        "plan_revision_id",
+        "plan_stream_code",
+        "history_snapshot_id",
+        "catalog_version",
+        "input_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "versions": {
+      "type": "object",
+      "properties": {
+        "service_version": {
+          "$ref": "#/$defs/id"
+        },
+        "matrix_version": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "profiles_version": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vision_model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "llm_model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schedule_rules_version": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "equipment_activity_rules_version": {
+          "const": "bbox-equipment-activity-v1"
+        },
+        "work_progress_rules_version": {
+          "const": "equipment-work-progress-v1"
+        }
+      },
+      "required": [
+        "service_version",
+        "matrix_version",
+        "profiles_version",
+        "vision_model",
+        "llm_model",
+        "schedule_rules_version"
+      ],
+      "additionalProperties": false
+    },
+    "weightMatch": {
+      "type": "object",
+      "properties": {
+        "class_code": {
+          "$ref": "#/$defs/id"
+        },
+        "role_weight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "signal_weight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "evidence_group": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "class_code",
+        "role_weight",
+        "signal_weight",
+        "evidence_group"
+      ],
+      "additionalProperties": false
+    },
+    "ranking": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "context_only",
+            "single_signal",
+            "supported_candidate"
+          ]
+        },
+        "signal_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "role_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "matches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/weightMatch"
+          },
+          "minItems": 1,
+          "maxItems": 56
+        }
+      },
+      "required": [
+        "status",
+        "signal_score",
+        "role_score",
+        "matches"
+      ],
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "properties": {
+        "step_key": {
+          "$ref": "#/$defs/id"
+        },
+        "stage_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ranking": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ranking"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "step_key",
+        "stage_id",
+        "ranking"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "cv_detection",
+            "visual_observation",
+            "visual_relation",
+            "progress_event"
+          ]
+        },
+        "ref": {
+          "$ref": "#/$defs/pointer"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "supports",
+            "contradicts"
+          ]
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "source",
+        "ref",
+        "role",
+        "explanation"
+      ],
+      "additionalProperties": false
+    },
+    "group": {
+      "type": "object",
+      "properties": {
+        "group_id": {
+          "$ref": "#/$defs/id"
+        },
+        "match_status": {
+          "type": "string",
+          "enum": [
+            "specific",
+            "ambiguous"
+          ]
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/candidate"
+          },
+          "minItems": 1,
+          "maxItems": 10
+        },
+        "visual_state": {
+          "type": "string",
+          "enum": [
+            "operation_indicated",
+            "presence_or_result_only",
+            "not_evaluated"
+          ]
+        },
+        "area_bbox": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/bbox"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "minItems": 1,
+          "maxItems": 24
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "group_id",
+        "match_status",
+        "candidates",
+        "visual_state",
+        "area_bbox",
+        "evidence",
+        "explanation"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "match_status": {
+                "const": "specific"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "candidates": {
+                "maxItems": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "candidates": {
+                "minItems": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    "currentWork": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "assessed",
+            "insufficient_evidence",
+            "outside_plan",
+            "no_plan",
+            "scope_unknown"
+          ]
+        },
+        "work_groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          },
+          "minItems": 0,
+          "maxItems": 8
+        }
+      },
+      "required": [
+        "status",
+        "work_groups"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "assessed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "work_groups": {
+                "minItems": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "work_groups": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualObservation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S"
+        },
+        "certainty": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "bbox": {
+          "$ref": "#/$defs/bbox"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "certainty",
+        "bbox"
+      ],
+      "additionalProperties": false
+    },
+    "visualRelation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "subject_id": {
+          "$ref": "#/$defs/id"
+        },
+        "predicate": {
+          "type": "string",
+          "enum": [
+            "inside",
+            "on",
+            "adjacent_to"
+          ]
+        },
+        "object_id": {
+          "$ref": "#/$defs/id"
+        },
+        "certainty": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "id",
+        "subject_id",
+        "predicate",
+        "object_id",
+        "certainty",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "transition": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "no_published_plan",
+            "needs_progress_anchor",
+            "no_next_stage",
+            "not_distinguishable_by_equipment",
+            "no_signal",
+            "single_or_short_signal",
+            "possible_start",
+            "history_incomplete",
+            "cv_unavailable",
+            "not_evaluated"
+          ]
+        },
+        "current_step_key": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "next_step_key": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "distinctive_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 40
+        },
+        "evidence_first_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_last_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "supporting_observations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pointer"
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "status",
+        "current_step_key",
+        "next_step_key",
+        "distinctive_codes",
+        "evidence_first_at",
+        "evidence_last_at",
+        "supporting_observations",
+        "evidence_refs"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "possible_start"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "current_step_key": {
+                "$ref": "#/$defs/id"
+              },
+              "next_step_key": {
+                "$ref": "#/$defs/id"
+              },
+              "distinctive_codes": {
+                "minItems": 1
+              },
+              "evidence_first_at": {
+                "$ref": "#/$defs/time"
+              },
+              "evidence_last_at": {
+                "$ref": "#/$defs/time"
+              },
+              "supporting_observations": {
+                "minimum": 2
+              },
+              "evidence_refs": {
+                "minItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "not_evaluated"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "current_step_key": {
+                "type": "null"
+              },
+              "next_step_key": {
+                "type": "null"
+              },
+              "distinctive_codes": {
+                "maxItems": 0
+              },
+              "evidence_first_at": {
+                "type": "null"
+              },
+              "evidence_last_at": {
+                "type": "null"
+              },
+              "supporting_observations": {
+                "const": 0
+              },
+              "evidence_refs": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "scheduleItem": {
+      "type": "object",
+      "properties": {
+        "step_key": {
+          "$ref": "#/$defs/id"
+        },
+        "stage_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "possible_delay",
+            "no_delay_indicated",
+            "insufficient_evidence"
+          ]
+        },
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "actual_completion_after_deadline",
+            "open_state_after_deadline",
+            "completed_by_deadline",
+            "deadline_not_reached",
+            "actual_completion_time_unknown",
+            "no_sourced_progress"
+          ]
+        },
+        "overdue_seconds": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pointer"
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        }
+      },
+      "required": [
+        "step_key",
+        "stage_id",
+        "status",
+        "reason_code",
+        "overdue_seconds",
+        "evidence_at",
+        "evidence_refs"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "possible_delay"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason_code": {
+                "type": "string",
+                "enum": [
+                  "actual_completion_after_deadline",
+                  "open_state_after_deadline"
+                ]
+              },
+              "overdue_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "evidence_at": {
+                "$ref": "#/$defs/time"
+              },
+              "evidence_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "no_delay_indicated"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason_code": {
+                "type": "string",
+                "enum": [
+                  "completed_by_deadline",
+                  "deadline_not_reached"
+                ]
+              },
+              "overdue_seconds": {
+                "const": 0
+              },
+              "evidence_at": {
+                "$ref": "#/$defs/time"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "insufficient_evidence"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason_code": {
+                "type": "string",
+                "enum": [
+                  "actual_completion_time_unknown",
+                  "no_sourced_progress"
+                ]
+              },
+              "overdue_seconds": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "possible_delay",
+            "no_delay_indicated",
+            "insufficient_evidence",
+            "not_evaluated"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scheduleItem"
+          },
+          "minItems": 0,
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "status",
+        "items"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "not_evaluated"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "items": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "frame-analysis-result-v1"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "analysis_id": {
+          "$ref": "#/$defs/id"
+        },
+        "service": {
+          "$ref": "#/$defs/service"
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "versions": {
+          "$ref": "#/$defs/versions"
+        },
+        "current_work": {
+          "$ref": "#/$defs/currentWork"
+        },
+        "visual_observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/visualObservation"
+          },
+          "minItems": 0,
+          "maxItems": 200
+        },
+        "visual_relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/visualRelation"
+          },
+          "minItems": 0,
+          "maxItems": 200
+        },
+        "transition": {
+          "$ref": "#/$defs/transition"
+        },
+        "schedule": {
+          "$ref": "#/$defs/schedule"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "minItems": 0,
+          "maxItems": 20
+        },
+        "equipment_activity": {
+          "$ref": "#/$defs/activityResult"
+        },
+        "work_progress": {
+          "$ref": "#/$defs/workProgress"
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "analysis_id",
+        "service",
+        "context",
+        "versions",
+        "current_work",
+        "visual_observations",
+        "visual_relations",
+        "transition",
+        "schedule",
+        "limitations"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "service": {
+                "const": "deterministic"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "versions": {
+                "properties": {
+                  "matrix_version": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "profiles_version": {
+                    "type": "null"
+                  },
+                  "vision_model": {
+                    "type": "null"
+                  },
+                  "llm_model": {
+                    "type": "null"
+                  },
+                  "schedule_rules_version": {
+                    "$ref": "#/$defs/id"
+                  }
+                }
+              },
+              "visual_observations": {
+                "maxItems": 0
+              },
+              "visual_relations": {
+                "maxItems": 0
+              },
+              "current_work": {
+                "properties": {
+                  "work_groups": {
+                    "items": {
+                      "properties": {
+                        "visual_state": {
+                          "const": "not_evaluated"
+                        },
+                        "candidates": {
+                          "items": {
+                            "properties": {
+                              "ranking": {
+                                "$ref": "#/$defs/ranking"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "transition": {
+                "properties": {
+                  "status": {
+                    "not": {
+                      "const": "not_evaluated"
+                    }
+                  }
+                }
+              },
+              "schedule": {
+                "properties": {
+                  "status": {
+                    "not": {
+                      "const": "not_evaluated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "versions": {
+                "properties": {
+                  "matrix_version": {
+                    "type": "null"
+                  },
+                  "profiles_version": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "vision_model": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "llm_model": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "schedule_rules_version": {
+                    "type": "null"
+                  }
+                }
+              },
+              "current_work": {
+                "properties": {
+                  "work_groups": {
+                    "items": {
+                      "properties": {
+                        "visual_state": {
+                          "type": "string",
+                          "enum": [
+                            "operation_indicated",
+                            "presence_or_result_only"
+                          ]
+                        },
+                        "candidates": {
+                          "items": {
+                            "properties": {
+                              "ranking": {
+                                "type": "null"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "transition": {
+                "properties": {
+                  "status": {
+                    "const": "not_evaluated"
+                  }
+                }
+              },
+              "schedule": {
+                "properties": {
+                  "status": {
+                    "const": "not_evaluated"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "errorDetail": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "code": {
+          "$ref": "#/$defs/id"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "path",
+        "code",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "frame-analysis-error-v1"
+        },
+        "request_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "service": {
+          "$ref": "#/$defs/service"
+        },
+        "code": {
+          "type": "string",
+          "enum": [
+            "invalid_request",
+            "unauthorized",
+            "forbidden",
+            "idempotency_conflict",
+            "observation_identity_conflict",
+            "plan_identity_conflict",
+            "catalog_version_mismatch",
+            "payload_too_large",
+            "context_too_large",
+            "unsupported_media_type",
+            "invalid_context",
+            "invalid_image",
+            "image_hash_mismatch",
+            "unknown_class",
+            "unknown_stage",
+            "ambiguous_progress",
+            "busy",
+            "model_invalid_response",
+            "model_failure",
+            "not_ready",
+            "dependency_unavailable",
+            "analysis_timeout",
+            "internal_error",
+            "execution_uncertain",
+            "analysis_not_found"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/errorDetail"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "execution_state": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "failed",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "service",
+        "code",
+        "message",
+        "details",
+        "retryable",
+        "execution_state"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "execution_state": {
+                "const": "unknown"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "equipmentClass": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/id"
+        },
+        "name_ru": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "code",
+        "name_ru",
+        "aliases"
+      ],
+      "additionalProperties": false
+    },
+    "workStage": {
+      "type": "object",
+      "properties": {
+        "stage_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "name_ru": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        },
+        "stage_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000,
+          "pattern": "\\S"
+        },
+        "stage_kind": {
+          "type": "string",
+          "enum": [
+            "concrete",
+            "summary",
+            "no_class"
+          ]
+        },
+        "object_type_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/objectType"
+          },
+          "minItems": 0,
+          "maxItems": 9
+        }
+      },
+      "required": [
+        "stage_id",
+        "name_ru",
+        "stage_path",
+        "stage_kind",
+        "object_type_codes"
+      ],
+      "additionalProperties": false
+    },
+    "catalog": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "frame-analysis-catalog-v1"
+        },
+        "catalog_version": {
+          "$ref": "#/$defs/id"
+        },
+        "equipment_classes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/equipmentClass"
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "work_stages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workStage"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "schema_version",
+        "catalog_version",
+        "equipment_classes",
+        "work_stages"
+      ],
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "image_max_bytes": {
+          "const": 25000000
+        },
+        "metadata_max_bytes": {
+          "const": 1000000
+        },
+        "image_max_side": {
+          "const": 8192
+        },
+        "image_max_pixels": {
+          "const": 40000000
+        },
+        "detections_max": {
+          "const": 200
+        },
+        "plan_steps_max": {
+          "const": 500
+        },
+        "history_observations_max": {
+          "const": 500
+        },
+        "progress_events_max": {
+          "const": 1000
+        },
+        "model_context_max_chars": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "idempotency_retention_seconds": {
+          "type": "integer",
+          "minimum": 604800
+        }
+      },
+      "required": [
+        "image_max_bytes",
+        "metadata_max_bytes",
+        "image_max_side",
+        "image_max_pixels",
+        "detections_max",
+        "plan_steps_max",
+        "history_observations_max",
+        "progress_events_max",
+        "model_context_max_chars",
+        "idempotency_retention_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "frame-analysis-capabilities-v1"
+        },
+        "service": {
+          "$ref": "#/$defs/service"
+        },
+        "service_version": {
+          "$ref": "#/$defs/id"
+        },
+        "input_version": {
+          "const": "frame-analysis-input-v1"
+        },
+        "result_version": {
+          "const": "frame-analysis-result-v1"
+        },
+        "catalog_version": {
+          "$ref": "#/$defs/id"
+        },
+        "limits": {
+          "$ref": "#/$defs/limits"
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "const": "equipment-activity-v1"
+          },
+          "minItems": 0,
+          "maxItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "service",
+        "service_version",
+        "input_version",
+        "result_version",
+        "catalog_version",
+        "limits"
+      ],
+      "additionalProperties": false
+    },
+    "activityWorkingPeriod": {
+      "type": "object",
+      "properties": {
+        "start_at": {
+          "$ref": "#/$defs/time"
+        },
+        "end_at": {
+          "$ref": "#/$defs/time"
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "start_at",
+        "end_at",
+        "source_ref"
+      ],
+      "additionalProperties": false
+    },
+    "activityOptions": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "equipment-activity-options-v1"
+        },
+        "camera_stable": {
+          "type": "boolean"
+        },
+        "idle_candidate_classes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 200,
+          "uniqueItems": true
+        },
+        "idle_threshold_seconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 604800
+        },
+        "max_observation_gap_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        },
+        "min_observations": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 501
+        },
+        "min_detection_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "center_change_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        },
+        "size_change_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "association_min_iou": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "association_max_center_shift_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "association_max_size_change_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "working_period": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/activityWorkingPeriod"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "class_idle_threshold_seconds": {
+          "type": "object",
+          "maxProperties": 200,
+          "propertyNames": {
+            "$ref": "#/$defs/id"
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 60,
+            "maximum": 604800
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "camera_stable",
+        "idle_candidate_classes"
+      ],
+      "additionalProperties": false
+    },
+    "activityParameters": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "equipment-activity-options-v1"
+        },
+        "camera_stable": {
+          "type": "boolean"
+        },
+        "idle_candidate_classes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 200,
+          "uniqueItems": true
+        },
+        "idle_threshold_seconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 604800
+        },
+        "max_observation_gap_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        },
+        "min_observations": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 501
+        },
+        "min_detection_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "center_change_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        },
+        "size_change_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "association_min_iou": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "association_max_center_shift_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "association_max_size_change_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "working_period": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/activityWorkingPeriod"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "class_idle_threshold_seconds": {
+          "type": "object",
+          "maxProperties": 200,
+          "propertyNames": {
+            "$ref": "#/$defs/id"
+          },
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 60,
+            "maximum": 604800
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "camera_stable",
+        "idle_candidate_classes",
+        "idle_threshold_seconds",
+        "max_observation_gap_seconds",
+        "min_observations",
+        "min_detection_confidence",
+        "center_change_ratio",
+        "size_change_ratio",
+        "association_min_iou",
+        "association_max_center_shift_ratio",
+        "association_max_size_change_ratio",
+        "working_period",
+        "class_idle_threshold_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "activityReason": {
+      "type": "string",
+      "enum": [
+        "camera_not_stable",
+        "current_detection_unreliable",
+        "working_period_boundary",
+        "observation_gap",
+        "historical_cv_unavailable",
+        "ambiguous_identity",
+        "identity_not_matched",
+        "historical_detection_unreliable",
+        "operation_indicated_in_linked_group",
+        "bbox_change_above_tolerance",
+        "too_few_observations",
+        "stationary_span_below_threshold",
+        "history_incomplete",
+        "working_period_unknown",
+        "outside_working_period",
+        "class_not_eligible_for_idle",
+        "stationary_during_working_period",
+        "insufficient_matching_history",
+        "current_cv_unavailable",
+        "no_current_detections"
+      ]
+    },
+    "activityItem": {
+      "type": "object",
+      "properties": {
+        "detection_id": {
+          "$ref": "#/$defs/id"
+        },
+        "class_code": {
+          "$ref": "#/$defs/id"
+        },
+        "track_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "association_method": {
+          "type": "string",
+          "enum": [
+            "external_track_id",
+            "bbox_geometry"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "movement_indicated",
+            "operation_indicated",
+            "stationary_observed",
+            "possible_idle",
+            "unknown"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/activityReason"
+          },
+          "minItems": 1,
+          "maxItems": 20,
+          "uniqueItems": true
+        },
+        "observation_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 501
+        },
+        "stationary_observation_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 501
+        },
+        "first_observed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "last_observed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "stationary_since": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stationary_observation_span_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "last_change_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "max_center_shift_ratio": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_size_change_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "idle_threshold_seconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 604800
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pointer"
+          },
+          "minItems": 1,
+          "maxItems": 501,
+          "uniqueItems": true
+        },
+        "visual_activity_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pointer"
+          },
+          "minItems": 0,
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "minItems": 1,
+          "maxItems": 10
+        }
+      },
+      "required": [
+        "detection_id",
+        "class_code",
+        "track_id",
+        "association_method",
+        "status",
+        "reason_codes",
+        "observation_count",
+        "stationary_observation_count",
+        "first_observed_at",
+        "last_observed_at",
+        "stationary_since",
+        "stationary_observation_span_seconds",
+        "last_change_at",
+        "max_center_shift_ratio",
+        "max_size_change_ratio",
+        "idle_threshold_seconds",
+        "evidence_refs",
+        "visual_activity_refs",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "activityResult": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "equipment-activity-result-v1"
+        },
+        "rules_version": {
+          "const": "bbox-equipment-activity-v1"
+        },
+        "camera_id": {
+          "$ref": "#/$defs/id"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "parameters": {
+          "$ref": "#/$defs/activityParameters"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "assessed",
+            "insufficient_evidence"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/activityReason"
+          },
+          "minItems": 0,
+          "maxItems": 20,
+          "uniqueItems": true
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/activityItem"
+          },
+          "minItems": 0,
+          "maxItems": 200
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "\\S"
+          },
+          "minItems": 1,
+          "maxItems": 10
+        }
+      },
+      "required": [
+        "schema_version",
+        "rules_version",
+        "camera_id",
+        "observed_at",
+        "parameters",
+        "status",
+        "reason_codes",
+        "items",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "workProgressStep": {
+      "type": "object",
+      "properties": {
+        "step_key": {
+          "$ref": "#/$defs/id"
+        },
+        "stage_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "confirmed_state": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "not_started",
+            "in_progress",
+            "completed"
+          ]
+        },
+        "confirmed_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "progress_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "pattern": "^/history/progress_events/[0-9]+$"
+          },
+          "maxItems": 1,
+          "uniqueItems": true
+        },
+        "activity_status": {
+          "type": "string",
+          "enum": [
+            "operation_indicated",
+            "equipment_movement_indicated",
+            "possible_inactivity",
+            "presence_only",
+            "insufficient_evidence",
+            "not_visual"
+          ]
+        },
+        "candidate_match_status": {
+          "type": "string",
+          "enum": [
+            "specific",
+            "ambiguous",
+            "compatibility_only",
+            "not_selected"
+          ]
+        },
+        "supporting_detection_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "pattern": "^/cv/detections/[0-9]+$"
+          },
+          "maxItems": 200,
+          "uniqueItems": true
+        },
+        "ignored_idle_detection_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "pattern": "^/cv/detections/[0-9]+$"
+          },
+          "maxItems": 200,
+          "uniqueItems": true
+        },
+        "uncertain_detection_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "pattern": "^/cv/detections/[0-9]+$"
+          },
+          "maxItems": 200,
+          "uniqueItems": true
+        },
+        "activity_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "pattern": "^/equipment_activity/items/[0-9]+$"
+          },
+          "maxItems": 200,
+          "uniqueItems": true
+        },
+        "visual_activity_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "pattern": "^/current_work/work_groups/[0-9]+$"
+          },
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "operation_indicated",
+              "equipment_movement_indicated",
+              "possible_inactivity",
+              "presence_only",
+              "insufficient_evidence",
+              "not_visual",
+              "idle_equipment_excluded",
+              "exact_work_not_established",
+              "activity_after_sourced_completion"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "step_key",
+        "stage_id",
+        "confirmed_state",
+        "confirmed_at",
+        "progress_evidence_refs",
+        "activity_status",
+        "candidate_match_status",
+        "supporting_detection_refs",
+        "ignored_idle_detection_refs",
+        "uncertain_detection_refs",
+        "activity_evidence_refs",
+        "visual_activity_refs",
+        "reason_codes",
+        "explanation"
+      ],
+      "additionalProperties": false
+    },
+    "workProgress": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "work-progress-result-v1"
+        },
+        "rules_version": {
+          "const": "equipment-work-progress-v1"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "assessed",
+            "insufficient_evidence",
+            "no_plan",
+            "scope_unknown"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "total_plan_steps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 500
+        },
+        "confirmed_completed_steps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 500
+        },
+        "next_stage_status": {
+          "type": "string",
+          "enum": [
+            "no_published_plan",
+            "needs_progress_anchor",
+            "no_next_stage",
+            "not_distinguishable_by_equipment",
+            "no_signal",
+            "single_or_short_signal",
+            "possible_start",
+            "history_incomplete",
+            "cv_unavailable",
+            "not_evaluated"
+          ]
+        },
+        "excluded_detection_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200,
+            "pattern": "^/(?:cv/detections/[0-9]+|history/observations/[0-9]+/cv/detections/[0-9]+)$"
+          },
+          "maxItems": 100200,
+          "uniqueItems": true
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workProgressStep"
+          },
+          "maxItems": 500
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "minItems": 1,
+          "maxItems": 10
+        }
+      },
+      "required": [
+        "schema_version",
+        "rules_version",
+        "status",
+        "summary",
+        "total_plan_steps",
+        "confirmed_completed_steps",
+        "next_stage_status",
+        "excluded_detection_refs",
+        "steps",
+        "limitations"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

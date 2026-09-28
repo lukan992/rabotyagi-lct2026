@@ -1,0 +1,13 @@
+{
+  "http_status": 503,
+  "body": {
+    "schema_version": "frame-analysis-error-v1",
+    "request_id": "demo-mixed-unconfirmed-v1",
+    "service": "vlm_llm",
+    "code": "not_ready",
+    "message": "Gateway credential is not configured",
+    "details": [],
+    "retryable": true,
+    "execution_state": "not_started"
+  }
+}

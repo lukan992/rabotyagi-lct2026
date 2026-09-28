@@ -1,0 +1,64 @@
+{
+  "http_status": 200,
+  "body": {
+    "schema_version": "frame-analysis-result-v1",
+    "request_id": "demo-only-no-class-v1",
+    "analysis_id": "7592272b-1a68-48aa-b17d-f604951c4d62",
+    "service": "deterministic",
+    "context": {
+      "site_id": "demo-only-no-class-site",
+      "camera_id": "demo-camera",
+      "image_id": "demo-frame",
+      "observed_at": "2026-09-26T12:00:00Z",
+      "image_sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896",
+      "plan_id": "demo-plan",
+      "plan_revision_id": "demo-revision",
+      "plan_stream_code": "demo-stream",
+      "history_snapshot_id": "demo-history",
+      "catalog_version": "catalog-cf435bba295909ab953facca",
+      "input_sha256": "8c8dc000bc12f85f5b0c79919b59c12a9ba7019470e85d5175179ec3bcffc567"
+    },
+    "versions": {
+      "service_version": "0.5.0",
+      "matrix_version": "construction-class-matrix-v2.0",
+      "profiles_version": null,
+      "vision_model": null,
+      "llm_model": null,
+      "schedule_rules_version": "schedule-rules-v1"
+    },
+    "current_work": {
+      "status": "insufficient_evidence",
+      "work_groups": []
+    },
+    "visual_observations": [],
+    "visual_relations": [],
+    "transition": {
+      "status": "needs_progress_anchor",
+      "current_step_key": null,
+      "next_step_key": null,
+      "distinctive_codes": [],
+      "evidence_first_at": null,
+      "evidence_last_at": null,
+      "supporting_observations": 0,
+      "evidence_refs": []
+    },
+    "schedule": {
+      "status": "insufficient_evidence",
+      "items": [
+        {
+          "step_key": "demo-purchase",
+          "stage_id": 39,
+          "status": "insufficient_evidence",
+          "reason_code": "no_sourced_progress",
+          "overdue_seconds": null,
+          "evidence_at": null,
+          "evidence_refs": []
+        }
+      ]
+    },
+    "limitations": [
+      "Пункты no_class не определяются по изображению или технике; их ход и сроки требуют внешних источников.",
+      "Для части сроков нет достаточного подтверждённого хода; отсутствие машин не считается отставанием."
+    ]
+  }
+}

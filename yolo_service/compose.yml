@@ -1,0 +1,59 @@
+services:
+  yolo-tracker-cpu:
+    profiles: [cpu]
+    build:
+      context: ../yolo_service
+    env_file: ../yolo_service/.env
+    environment:
+      YOLO_DEVICE: cpu
+      YOLO_MODEL_PATH: /models/yolo26m_multiscale_best.pt
+      YOLO_CLASS_MAPPING: /app/class_mapping.yolo26m-multiscale-v1.json
+      BACKEND_URL: http://backend:8100
+      SK_TRACKER_API_KEY: ${SK_TRACKER_API_KEY:?Set SK_TRACKER_API_KEY}
+    volumes:
+      - ${YOLO_MODEL_HOST_PATH:-/home/aidar/hackatons/hacks/models-finetune/yolo26m_multiscale_best.pt}:/models/yolo26m_multiscale_best.pt:ro
+      - yolo-outbox:/app/data
+    ports: ["${YOLO_HOST_PORT:-8200}:8200"]
+    networks:
+      default:
+        aliases: [yolo-tracker]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8200/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+
+  yolo-tracker-gpu:
+    profiles: [gpu]
+    build:
+      context: ../yolo_service
+      dockerfile: Dockerfile.gpu
+    env_file: ../yolo_service/.env
+    environment:
+      YOLO_DEVICE: cuda:0
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+      YOLO_MODEL_PATH: /models/yolo26m_multiscale_best.pt
+      YOLO_CLASS_MAPPING: /app/class_mapping.yolo26m-multiscale-v1.json
+      BACKEND_URL: http://backend:8100
+      SK_TRACKER_API_KEY: ${SK_TRACKER_API_KEY:?Set SK_TRACKER_API_KEY}
+    volumes:
+      - ${YOLO_MODEL_HOST_PATH:-/home/aidar/hackatons/hacks/models-finetune/yolo26m_multiscale_best.pt}:/models/yolo26m_multiscale_best.pt:ro
+      - yolo-outbox:/app/data
+    ports: ["${YOLO_HOST_PORT:-8200}:8200"]
+    networks:
+      default:
+        aliases: [yolo-tracker]
+    runtime: nvidia
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8200/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+
+volumes:
+  yolo-outbox:

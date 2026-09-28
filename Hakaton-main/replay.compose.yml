@@ -1,0 +1,27 @@
+# Loop one local MP4 as a scoped RTSP source for an ordinary site camera.
+# Start the site first, then:
+# docker compose --env-file .env -f replay.compose.yml up -d
+# REPLAY_VIDEO_FILE=/absolute/path/to/video.mp4 selects a different recording.
+name: stroykontrol-video-replay
+
+services:
+  replay:
+    image: hakaton-main-backend
+    command: ["/app/.venv/bin/python", "-m", "app.replay"]
+    restart: unless-stopped
+    healthcheck:
+      disable: true  # the backend image checks :8100, but this container only publishes RTSP
+    environment:
+      SK_SECRET_KEY: ${SK_SECRET_KEY:?Set SK_SECRET_KEY in the site's .env}
+      SK_VIDEO_RTSP_URL: rtsp://video:8554
+      REPLAY_FILE: /video/input.mp4
+      REPLAY_PATH: ${REPLAY_PATH:-replay-local}
+    volumes:
+      - ${REPLAY_VIDEO_FILE:-./backend/app/assets/clips/foundation-mixer.mp4}:/video/input.mp4:ro
+    networks:
+      - site
+
+networks:
+  site:
+    external: true
+    name: hakaton-main_default

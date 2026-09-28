@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "service_version": "0.5.0",
+  "unit_and_postgresql_tests": 113,
+  "postgresql_tests": 36,
+  "test_command": ".venv/Scripts/python.exe -m unittest discover -s tests -p test_*.py -q (LCT_RUN_POSTGRES_TESTS=1)",
+  "schemas_and_migrations_packaged_identically": true,
+  "wheel_sources_match": true,
+  "python_syntax": "passed",
+  "bundle_utf8_and_links": "passed",
+  "empty_secret_template": "passed",
+  "real_model_calls": 0,
+  "external_adapter_integration": "not_run_external_adapter_required",
+  "recognition_accuracy": "not_measured"
+}

@@ -1,0 +1,44 @@
+# Шлюз видео СтройКонтроля (mediamtx): забирает RTSP с камер и отдаёт браузерам WebRTC (задержка ~0,5 с).
+#
+# Потоки камер здесь не прописаны — их заводит сам сервер через API шлюза (путь «cam-<id камеры>»).
+# Кого пускать смотреть, шлюз спрашивает у сервера (POST /api/video/auth): видео камеры видит тот,
+# кто видит её объект. Публиковать (демо-ролики) и брать кадры на анализ может только сам сервер.
+#
+# Запуск для разработки:  mediamtx infra/mediamtx/mediamtx.yml   (или tools/video-gateway.sh)
+# В Docker адреса переопределяются переменными MTX_* (см. docker-compose.yml).
+
+logLevel: info
+logDestinations: [stdout]
+
+# API — только для сервера СтройКонтроля (в Docker — во внутренней сети)
+api: yes
+apiAddress: 127.0.0.1:9997
+
+# RTSP — сервер берёт отсюда кадры на анализ и публикует сюда демо-ролики; отсюда же видео читает сервис разметки
+# (учётка sk-tracker, только чтение cam-*). Без учётки поток камеры не отдаётся.
+rtsp: yes
+rtspAddress: :8554
+rtspTransports: [tcp]
+
+# WebRTC — видео для браузера
+webrtc: yes
+webrtcAddress: :8889
+webrtcAllowOrigins: ['*']
+webrtcLocalUDPAddress: :8189
+webrtcLocalTCPAddress: ''
+
+# остальные протоколы не нужны (MoQ к тому же создаёт сертификат auto.key в рабочей папке)
+rtmp: no
+hls: no
+srt: no
+moq: no
+
+authMethod: http
+authHTTPAddress: http://127.0.0.1:8100/api/video/auth
+authHTTPExclude:
+  - action: api
+  - action: metrics
+  - action: pprof
+
+paths:
+  all_others:

@@ -1,0 +1,7 @@
+fastapi==0.115.6
+httpx==0.28.1
+uvicorn[standard]==0.34.0
+websockets==14.1
+opencv-python-headless==4.10.0.84
+ultralytics==8.4.153
+lapx==0.5.11

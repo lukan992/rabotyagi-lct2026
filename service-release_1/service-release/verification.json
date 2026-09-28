@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "service_version": "0.5.0",
+  "platform": "linux/amd64",
+  "checks": [
+    "archive loaded; fresh PostgreSQL/bootstrap/HTTP; honest readiness without model key",
+    "real catalog export equals both APIs; schema/capabilities validated",
+    "14 example inputs on both APIs; v1/no_class and v2/resource provenance/coverage/manual arithmetic; errors/repeat/409/lookup",
+    "repeat additive bootstrap and immutable reference import on existing volume",
+    "actual LOGIN credentials: no admin/catalog mutation/legacy access/other role; RLS request and attempt isolation",
+    "same-volume application recreation preserves original results and exact image bytes",
+    "pg_dump/pg_restore on separate DB preserve audit/image/snapshots/references",
+    "container gateway timeout stays unknown across repeat/recreation; one explicitly local fixture request"
+  ],
+  "real_model_gateway": "not_run_no_user_provided_key",
+  "external_backend_integration": "not_run_external_team_required",
+  "recognition_accuracy": "not_measured",
+  "protocol_gateway": "explicit_local_test_fixture_only"
+}

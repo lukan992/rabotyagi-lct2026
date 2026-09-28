@@ -1,0 +1,9 @@
+.env
+.inspect-venv/
+.venv/
+data/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pt
+*.onnx

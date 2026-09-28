@@ -1,0 +1,46 @@
+[project]
+name = "stroykontrol-backend"
+version = "0.9.0"
+description = "СтройКонтроль: API мониторинга строительных площадок по камерам"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "aiosqlite>=0.20",
+    "pydantic-settings>=2.6",
+    "httpx>=0.28",
+    "python-multipart>=0.0.17",
+    "pyjwt>=2.10",
+    "pillow>=11.0",
+    "cryptography>=44.0",
+    "tzdata>=2024.2",
+    "alembic>=1.14",
+    "onnxruntime>=1.20",
+    "numpy>=2.0",
+    "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+postgres = ["asyncpg>=0.30"]
+
+[dependency-groups]
+dev = [
+    "jsonschema>=4.25",
+    "pytest>=8.3",
+    "rfc3339-validator>=0.1.4",
+    "ruff>=0.8",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 130
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+ignore = ["B008", "E501"]  # Depends() в аргументах — идиома FastAPI; длинные русские строки не переносим

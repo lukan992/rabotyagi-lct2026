@@ -1,0 +1,48 @@
+# Keycloak для локальной разработки СтройКонтроля — со своей базой PostgreSQL: сотрудники, роли и пароли
+# (в том числе заведённые в админке СтройКонтроля) переживают перезапуск и пересоздание контейнеров.
+#   docker compose -f infra/keycloak/compose.yml up -d
+# Консоль администратора: http://localhost:8080  (admin / admin)
+# Realm stroykontrol импортируется из realm-stroykontrol.json при первом запуске; дальше Keycloak работает со своей базой
+# и файл повторно не читает. Начать с чистого листа (снова из файла):  docker compose -f infra/keycloak/compose.yml down -v
+#
+# Затем у бэкенда (на хосте) задать issuer и секрет служебного клиента и перезапустить:
+#   SK_KEYCLOAK_ISSUER=http://localhost:8080/realms/stroykontrol \
+#   SK_KEYCLOAK_ADMIN_CLIENT_SECRET=stroykontrol-dev-backend-secret uv run uvicorn app.main:app --port 8100
+# Фронтенд подхватит режим из /api/meta без пересборки.
+services:
+  keycloak-db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak  # пароль стенда разработки; наружу база не открыта
+    volumes:
+      - keycloak-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./realm-stroykontrol.json:/opt/keycloak/data/import/realm-stroykontrol.json:ro
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+
+volumes:
+  keycloak-db:

@@ -1,0 +1,1029 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mediamtx-config
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: video
+    app.kubernetes.io/part-of: stroykontrol
+data:
+  mediamtx.yml: |
+    logLevel: info
+    logDestinations: [stdout]
+    api: yes
+    apiAddress: 127.0.0.1:9997
+    rtsp: yes
+    rtspAddress: :8554
+    rtspTransports: [tcp]
+    webrtc: yes
+    webrtcAddress: :8889
+    webrtcAllowOrigins: ['*']
+    webrtcLocalUDPAddress: :8189
+    webrtcLocalTCPAddress: ''
+    rtmp: no
+    hls: yes
+    hlsAddress: :8888
+    hlsAllowOrigins: []
+    hlsVariant: fmp4
+    srt: no
+    moq: no
+    authMethod: http
+    authHTTPAddress: http://backend:8100/api/video/auth
+    authHTTPExclude:
+      - action: api
+      - action: metrics
+      - action: pprof
+    paths:
+      all_others:
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: video
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: video
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  selector:
+    app.kubernetes.io/name: video
+  ports:
+    - name: webrtc
+      port: 8889
+      targetPort: webrtc
+    - name: rtsp
+      port: 8554
+      targetPort: rtsp
+    - name: api
+      port: 9997
+      targetPort: api
+    - name: hls
+      port: 8888
+      targetPort: hls
+    - name: webrtc-udp
+      protocol: UDP
+      port: 8189
+      targetPort: webrtc-udp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: video
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: video
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: video
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton5
+      containers:
+        - name: mediamtx
+          image: bluenviron/mediamtx:1.21.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: rtsp
+              containerPort: 8554
+            - name: webrtc
+              containerPort: 8889
+            - name: api
+              containerPort: 9997
+            - name: hls
+              containerPort: 8888
+            - name: webrtc-udp
+              containerPort: 8189
+              protocol: UDP
+          env:
+            - name: MTX_APIADDRESS
+              value: :9997
+            - name: MTX_AUTHHTTPADDRESS
+              value: http://backend:8100/api/video/auth
+            - name: MTX_WEBRTCADDITIONALHOSTS
+              value: construction.g-309.ru
+            - name: MTX_WEBRTCLOCALUDPADDRESS
+              value: :8189
+          volumeMounts:
+            - name: config
+              mountPath: /mediamtx.yml
+              subPath: mediamtx.yml
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            tcpSocket:
+              port: api
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 12
+          livenessProbe:
+            tcpSocket:
+              port: webrtc
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 6
+      volumes:
+        - name: config
+          configMap:
+            name: mediamtx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  selector:
+    app.kubernetes.io/name: backend
+  ports:
+    - name: http
+      port: 8100
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: backend
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: backend
+          image: construction.g-309.ru/stroykontrol/backend:20260928-hls-auth
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8100
+          env:
+            - name: SK_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: SK_DATABASE_URL
+            - name: SK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: SK_SECRET_KEY
+            - name: SK_DEMO_MODE
+              value: "false"
+            - name: SK_SEED_ON_START
+              value: "false"
+            - name: SK_KEYCLOAK_ISSUER
+              value: https://construction.g-309.ru/auth/realms/stroykontrol
+            - name: SK_KEYCLOAK_BACKCHANNEL_URL
+              value: http://keycloak:8080/auth
+            - name: SK_KEYCLOAK_CLIENT_ID
+              value: stroykontrol-web
+            - name: SK_KEYCLOAK_AUTO_PROVISION
+              value: "true"
+            - name: SK_KEYCLOAK_ADMIN_CLIENT_ID
+              value: stroykontrol-backend
+            - name: SK_KEYCLOAK_ADMIN_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: SK_KEYCLOAK_ADMIN_CLIENT_SECRET
+            - name: SK_CORS_ORIGINS
+              value: https://construction.g-309.ru
+            - name: SK_VIDEO_API_URL
+              value: http://video:9997
+            - name: SK_VIDEO_RTSP_URL
+              value: rtsp://video:8554
+            - name: SK_VIDEO_WEBRTC_URL
+              value: https://construction.g-309.ru
+            - name: SK_FRAME_INTERVAL_S
+              value: "2"
+            - name: SK_CHECK_INTERVAL_S
+              value: "60"
+            - name: SK_ANALYSIS_PROVIDER
+              value: push
+            - name: SK_TRACKER_URL
+              value: ws://tracker:8200/stream
+            - name: SK_TRACKER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: SK_TRACKER_API_KEY
+            - name: SK_TRACKER_RTSP_URL
+              value: rtsp://video:8554
+            - name: SK_TRACKER_VIDEO_DELAY_MS
+              value: "150"
+            - name: SK_EQUIPMENT_OBSERVATION_TIMEOUT_SECONDS
+              value: "90"
+            - name: DETERMINISTIC_SERVICE_URL
+              value: http://analytics-deterministic:8000
+            - name: VLM_LLM_SERVICE_URL
+              value: http://analytics-vlm:8000
+            - name: ANALYTICS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: ANALYTICS_SERVICE_TOKEN
+            - name: ANALYTICS_HTTP_TIMEOUT_SECONDS
+              value: "1020"
+            - name: SK_ANALYTICS_INTERVAL_MIN
+              value: "20"
+            - name: SK_ANALYTICS_VLM_INTERVAL_MIN
+              value: "60"
+            - name: CAMERA_STAGE_MONITOR_URL
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: CAMERA_STAGE_MONITOR_URL
+            - name: CAMERA_STAGE_MONITOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: CAMERA_STAGE_MONITOR_TOKEN
+          volumeMounts:
+            - name: media
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+          readinessProbe:
+            httpGet:
+              path: /api/meta
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 4
+            failureThreshold: 18
+          livenessProbe:
+            httpGet:
+              path: /api/meta
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 4
+            failureThreshold: 6
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: site-media
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  selector:
+    app.kubernetes.io/name: frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frontend
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: frontend
+          image: construction.g-309.ru/stroykontrol/frontend:20260928-hls-auth
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 6
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  selector:
+    app.kubernetes.io/name: keycloak
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: keycloak
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: keycloak
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: keycloak
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.0
+          imagePullPolicy: IfNotPresent
+          args: [start]
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: KC_DB
+              value: postgres
+            - name: KC_DB_URL
+              value: jdbc:postgresql://keycloak-db:5432/keycloak
+            - name: KC_DB_USERNAME
+              value: keycloak
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-runtime
+                  key: KC_DB_PASSWORD
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              value: keycloak-admin
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-runtime
+                  key: KC_BOOTSTRAP_ADMIN_PASSWORD
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_HTTP_RELATIVE_PATH
+              value: /auth
+            - name: KC_HOSTNAME
+              value: https://construction.g-309.ru/auth
+            - name: KC_HOSTNAME_STRICT
+              value: "true"
+            - name: KC_PROXY_HEADERS
+              value: xforwarded
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+          resources:
+            requests:
+              cpu: 500m
+              memory: 768Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          readinessProbe:
+            httpGet:
+              path: /auth/realms/master
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 4
+            failureThreshold: 18
+          livenessProbe:
+            httpGet:
+              path: /auth/realms/master
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 4
+            failureThreshold: 6
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tracker
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: tracker
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  selector:
+    app.kubernetes.io/name: tracker
+  ports:
+    - name: http
+      port: 8200
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tracker
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: tracker
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tracker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tracker
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: lab51-asus
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: tracker
+          image: construction.g-309.ru/stroykontrol/tracker-gpu:20260928
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8200
+          env:
+            - name: YOLO_DEVICE
+              value: cuda:0
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: compute,utility
+            - name: YOLO_MODEL_PATH
+              value: /models/yolo26m_multiscale_best.pt
+            - name: YOLO_CLASS_MAPPING
+              value: /app/class_mapping.yolo26m-multiscale-v1.json
+            - name: BACKEND_URL
+              value: http://backend:8100
+            - name: SK_TRACKER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tracker-runtime
+                  key: SK_TRACKER_API_KEY
+          volumeMounts:
+            - name: model
+              mountPath: /models
+              readOnly: true
+            - name: outbox
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "4"
+              memory: 8Gi
+              nvidia.com/gpu: "1"
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 90
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+      volumes:
+        - name: model
+          persistentVolumeClaim:
+            claimName: tracker-model
+        - name: outbox
+          persistentVolumeClaim:
+            claimName: tracker-outbox
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: analytics-bootstrap
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: analytics-bootstrap
+    app.kubernetes.io/part-of: stroykontrol
+  annotations:
+    stroykontrol.g-309.ru/run-only-if-analytics-restore-not-verified: "true"
+spec:
+  suspend: true
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: analytics-bootstrap
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: bootstrap
+          image: construction.g-309.ru/stroykontrol/bootstrap:20260928
+          imagePullPolicy: IfNotPresent
+          args: [bootstrap, --matrix, /references/matrix_v2.json, --profiles, /references/visual_work_profiles.sqlite3]
+          env:
+            - name: POSTGRES_HOST
+              value: analytics-db
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: construction_stages
+            - name: POSTGRES_USER
+              value: construction_app
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: POSTGRES_PASSWORD
+            - name: ANALYTICS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: ANALYTICS_SERVICE_TOKEN
+            - name: ANALYTICS_MATRIX_VERSION
+              value: construction-class-matrix-v2.0
+            - name: ANALYTICS_PROFILES_VERSION
+              value: visual-profiles-708cb01523c740f39b8789aa
+            - name: ANALYTICS_MAX_CONCURRENCY
+              value: "1"
+            - name: ANALYTICS_MODEL_TIMEOUT_SECONDS
+              value: "240"
+            - name: ANALYTICS_EXECUTION_TIMEOUT_SECONDS
+              value: "1020"
+            - name: ANALYTICS_DETERMINISTIC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: ANALYTICS_DETERMINISTIC_DB_PASSWORD
+            - name: ANALYTICS_VLM_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: ANALYTICS_VLM_DB_PASSWORD
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics-deterministic
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: analytics-deterministic
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  selector:
+    app.kubernetes.io/name: analytics-deterministic
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-deterministic
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: analytics-deterministic
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: analytics-deterministic
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: analytics-deterministic
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: deterministic
+          image: construction.g-309.ru/stroykontrol/deterministic:20260928
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: POSTGRES_HOST
+              value: analytics-db
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: construction_stages
+            - name: POSTGRES_USER
+              value: lct_deterministic_app
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: ANALYTICS_DETERMINISTIC_DB_PASSWORD
+            - name: ANALYTICS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: ANALYTICS_SERVICE_TOKEN
+            - name: ANALYTICS_MATRIX_VERSION
+              value: construction-class-matrix-v2.0
+            - name: ANALYTICS_PROFILES_VERSION
+              value: visual-profiles-708cb01523c740f39b8789aa
+            - name: ANALYTICS_MAX_CONCURRENCY
+              value: "1"
+            - name: ANALYTICS_MODEL_TIMEOUT_SECONDS
+              value: "240"
+            - name: ANALYTICS_EXECUTION_TIMEOUT_SECONDS
+              value: "1020"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 18
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 6
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics-vlm
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: analytics-vlm
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  selector:
+    app.kubernetes.io/name: analytics-vlm
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-vlm
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: analytics-vlm
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: analytics-vlm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: analytics-vlm
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: vlm
+          image: construction.g-309.ru/stroykontrol/vlm:20260928
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: POSTGRES_HOST
+              value: analytics-db
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: construction_stages
+            - name: POSTGRES_USER
+              value: lct_vlm_app
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: ANALYTICS_VLM_DB_PASSWORD
+            - name: ANALYTICS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: ANALYTICS_SERVICE_TOKEN
+            - name: ANALYTICS_MATRIX_VERSION
+              value: construction-class-matrix-v2.0
+            - name: ANALYTICS_PROFILES_VERSION
+              value: visual-profiles-708cb01523c740f39b8789aa
+            - name: ANALYTICS_MAX_CONCURRENCY
+              value: "1"
+            - name: ANALYTICS_MODEL_TIMEOUT_SECONDS
+              value: "240"
+            - name: ANALYTICS_EXECUTION_TIMEOUT_SECONDS
+              value: "1020"
+            - name: LITELLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: analytics-runtime
+                  key: LITELLM_API_KEY
+            - name: LITELLM_GATEWAY_URL
+              value: https://litellm.g-309.ru/v1
+            - name: ANALYTICS_MODEL
+              value: qwen3.8-27b
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          readinessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 18
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 6
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: replay-mixer
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: replay-mixer
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: replay-mixer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: replay-mixer
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: replay
+          image: construction.g-309.ru/stroykontrol/backend:20260928-hls-auth
+          imagePullPolicy: IfNotPresent
+          command: [/app/.venv/bin/python, -m, app.replay]
+          env:
+            - name: SK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: SK_SECRET_KEY
+            - name: SK_VIDEO_RTSP_URL
+              value: rtsp://video:8554
+            - name: REPLAY_FILE
+              value: /app/app/assets/clips/foundation-mixer.mp4
+            - name: REPLAY_PATH
+              value: replay-local
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: replay-road
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: replay-road
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: replay-road
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: replay-road
+        app.kubernetes.io/part-of: stroykontrol
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: graviton4
+      imagePullSecrets:
+        - name: registry-pull
+      containers:
+        - name: replay
+          image: construction.g-309.ru/stroykontrol/backend:20260928-hls-auth
+          imagePullPolicy: IfNotPresent
+          command: [/app/.venv/bin/python, -m, app.replay]
+          env:
+            - name: SK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: site-runtime
+                  key: SK_SECRET_KEY
+            - name: SK_VIDEO_RTSP_URL
+              value: rtsp://video:8554
+            - name: REPLAY_FILE
+              value: /app/app/assets/clips/road-dumptruck.mp4
+            - name: REPLAY_PATH
+              value: replay-road-lag
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: construction-web
+  namespace: construction
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: stroykontrol
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts: [construction.g-309.ru]
+      secretName: construction-tls
+  rules:
+    - host: construction.g-309.ru
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak
+                port:
+                  name: http
+          - path: /cam-
+            pathType: Prefix
+            backend:
+              service:
+                name: video
+                port:
+                  name: webrtc
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  name: http

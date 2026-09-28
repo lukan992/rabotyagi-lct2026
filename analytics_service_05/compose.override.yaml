@@ -1,0 +1,9 @@
+services:
+  vlm_llm:
+    image: lct-analytics-vlm-llm:0.5.0-spider
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    build:
+      context: ../../analytics_service_05
+      dockerfile: Dockerfile

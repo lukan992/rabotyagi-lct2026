@@ -1,0 +1,21 @@
+{
+  "wheel_resources": "passed",
+  "outside_repository": true,
+  "services": [
+    {
+      "service": "deterministic",
+      "http": "passed",
+      "catalog_stages": 377,
+      "ready_http": 503,
+      "database_migrated_to_v2": false
+    },
+    {
+      "service": "vlm_llm",
+      "http": "passed",
+      "catalog_stages": 377,
+      "ready_http": 503,
+      "database_migrated_to_v2": false
+    }
+  ],
+  "model_calls": 0
+}

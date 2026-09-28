@@ -1,0 +1,201 @@
+{
+ "schema_version": "frame-analysis-result-v1",
+ "request_id": "fa_6ae8e40907",
+ "analysis_id": "6829d0b7-4d6b-4507-b410-99748995ebc1",
+ "service": "vlm_llm",
+ "context": {
+  "site_id": "s1",
+  "camera_id": "c1",
+  "image_id": "sn_7139df6162",
+  "observed_at": "2026-09-26T18:25:20.149+03:00",
+  "image_sha256": "11cc96ee9999629963604665c2b938065e7a4eb3a29e7083221c61c3df1575f8",
+  "plan_id": "plan-s1",
+  "plan_revision_id": "rev-4b9520d51064d7d43607b6ee685298ae",
+  "plan_stream_code": "main",
+  "history_snapshot_id": "hist-6b0188d9f3b41b09114ea174855bdf31",
+  "catalog_version": "catalog-cf435bba295909ab953facca",
+  "input_sha256": "ac1ba80a333ca3cd169780cdd365fd36dc926213525e50dc61242da1318e08a9"
+ },
+ "versions": {
+  "service_version": "0.2.0",
+  "matrix_version": null,
+  "profiles_version": "visual-profiles-708cb01523c740f39b8789aa",
+  "vision_model": "qwen3.8-27b",
+  "llm_model": "qwen3.8-27b",
+  "schedule_rules_version": null
+ },
+ "current_work": {
+  "status": "assessed",
+  "work_groups": [
+   {
+    "group_id": "group-1",
+    "match_status": "ambiguous",
+    "visual_state": "operation_indicated",
+    "area_bbox": [
+     0.0,
+     0.1,
+     0.95,
+     0.85
+    ],
+    "candidates": [
+     {
+      "step_key": "s1-excavation",
+      "stage_id": 47,
+      "ranking": null
+     },
+     {
+      "step_key": "s1-soil",
+      "stage_id": 72,
+      "ranking": null
+     }
+    ],
+    "evidence": [
+     {
+      "source": "visual_observation",
+      "ref": "/visual_observations/0",
+      "role": "supports",
+      "explanation": "Экскаватор с ковшом находится в зоне котлована, что визуально совместимо с разработкой грунта."
+     },
+     {
+      "source": "visual_observation",
+      "ref": "/visual_observations/1",
+      "role": "supports",
+      "explanation": "Самосвал расположен рядом с экскаватором, что указывает на погрузку или вывоз грунта."
+     },
+     {
+      "source": "visual_observation",
+      "ref": "/visual_observations/2",
+      "role": "supports",
+      "explanation": "Видимые котлованы и траншеи соответствуют признакам земляных работ."
+     },
+     {
+      "source": "visual_observation",
+      "ref": "/visual_observations/3",
+      "role": "supports",
+      "explanation": "Насыпи грунта подтверждают наличие перемещаемого материала."
+     },
+     {
+      "source": "cv_detection",
+      "ref": "/cv/detections/0",
+      "role": "supports",
+      "explanation": "Обнаружен экскаватор в рабочей зоне."
+     },
+     {
+      "source": "cv_detection",
+      "ref": "/cv/detections/1",
+      "role": "supports",
+      "explanation": "Обнаружен самосвал в рабочей зоне."
+     },
+     {
+      "source": "progress_event",
+      "ref": "/history/progress_events/1",
+      "role": "supports",
+      "explanation": "Подтвержденный статус этапа s1-excavation (in_progress) совпадает с визуальными признаками."
+     }
+    ],
+    "explanation": "Визуальные признаки (экскаватор, самосвал, котлованы) совместимы с устройством котлована (s1-excavation) и выемкой грунта (s1-soil). Визуально различить эти этапы по одному статичному кадру невозможно, так как они описывают схожие операции с грунтом. Статус s1-excavation подтвержден как in_progress, что делает его наиболее вероятным, но визуальные признаки не исключают s1-soil."
+   }
+  ]
+ },
+ "visual_observations": [
+  {
+   "id": "o1",
+   "description": "Гусеничный экскаватор (Kobelco) с ковшом, загружающий грунт в кузов самосвала.",
+   "certainty": "high",
+   "bbox": [
+    0.08,
+    0.1,
+    0.55,
+    0.75
+   ]
+  },
+  {
+   "id": "o2",
+   "description": "Самосвал с открытым кузовом, в который загружается грунт.",
+   "certainty": "high",
+   "bbox": [
+    0.35,
+    0.45,
+    0.85,
+    0.85
+   ]
+  },
+  {
+   "id": "o3",
+   "description": "Вырытые котлованы и траншеи в грунте вокруг техники.",
+   "certainty": "high",
+   "bbox": [
+    0.0,
+    0.3,
+    0.95,
+    0.7
+   ]
+  },
+  {
+   "id": "o4",
+   "description": "Насыпи и кучи выкопанного грунта на поверхности.",
+   "certainty": "high",
+   "bbox": [
+    0.0,
+    0.25,
+    0.95,
+    0.6
+   ]
+  },
+  {
+   "id": "o5",
+   "description": "Человек, стоящий на заднем плане у насыпи грунта.",
+   "certainty": "high",
+   "bbox": [
+    0.3,
+    0.3,
+    0.35,
+    0.4
+   ]
+  }
+ ],
+ "visual_relations": [
+  {
+   "id": "r1",
+   "subject_id": "o1",
+   "predicate": "adjacent_to",
+   "object_id": "o2",
+   "certainty": "high",
+   "description": "Экскаватор находится рядом с самосвалом, выполняя погрузку."
+  },
+  {
+   "id": "r2",
+   "subject_id": "o1",
+   "predicate": "on",
+   "object_id": "o3",
+   "certainty": "high",
+   "description": "Экскаватор стоит на вырытой территории."
+  },
+  {
+   "id": "r3",
+   "subject_id": "o2",
+   "predicate": "on",
+   "object_id": "o3",
+   "certainty": "high",
+   "description": "Самосвал стоит на вырытой территории."
+  }
+ ],
+ "transition": {
+  "status": "not_evaluated",
+  "current_step_key": null,
+  "next_step_key": null,
+  "distinctive_codes": [],
+  "evidence_first_at": null,
+  "evidence_last_at": null,
+  "supporting_observations": 0,
+  "evidence_refs": []
+ },
+ "schedule": {
+  "status": "not_evaluated",
+  "items": []
+ },
+ "limitations": [
+  "Один статичный кадр не позволяет однозначно определить, какой именно этап плана (s1-excavation или s1-soil) выполняется в данный момент, так как визуальные признаки идентичны.",
+  "Отсутствие движения в кадре не позволяет подтвердить активную работу техники в момент съемки, однако наличие техники в рабочей зоне и подтвержденный статус этапа указывают на текущую фазу работ."
+ ]
+}

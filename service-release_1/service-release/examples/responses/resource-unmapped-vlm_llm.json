@@ -1,0 +1,98 @@
+{
+  "http_status": 200,
+  "body": {
+    "schema_version": "frame-analysis-result-v2",
+    "request_id": "demo-resource-unmapped-v2",
+    "analysis_id": "a573c484-8ba1-4021-9271-476f73508a03",
+    "service": "vlm_llm",
+    "context": {
+      "site_id": "demo-resource-unmapped-site",
+      "camera_id": "demo-camera",
+      "image_id": "demo-frame",
+      "observed_at": "2026-09-26T12:00:00Z",
+      "image_sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896",
+      "plan_id": null,
+      "plan_revision_id": null,
+      "plan_stream_code": "demo-stream",
+      "history_snapshot_id": "demo-history",
+      "catalog_version": "catalog-cf435bba295909ab953facca",
+      "input_sha256": "fce652108dd8d8b9a7d86d64ced0a29b59d5116fff4d075cf8ab2eead02a7fb7"
+    },
+    "versions": {
+      "service_version": "0.5.0",
+      "matrix_version": null,
+      "profiles_version": "visual-profiles-708cb01523c740f39b8789aa",
+      "vision_model": "qwen3.8-27b",
+      "llm_model": "qwen3.8-27b",
+      "schedule_rules_version": null,
+      "resource_rules_version": null
+    },
+    "current_work": {
+      "status": "no_plan",
+      "work_groups": []
+    },
+    "visual_observations": [],
+    "visual_relations": [],
+    "transition": {
+      "status": "not_evaluated",
+      "current_step_key": null,
+      "next_step_key": null,
+      "distinctive_codes": [],
+      "evidence_first_at": null,
+      "evidence_last_at": null,
+      "supporting_observations": 0,
+      "evidence_refs": []
+    },
+    "schedule": {
+      "status": "not_evaluated",
+      "items": []
+    },
+    "limitations": [
+      "Оперативные сроки и переходы не оцениваются: demonstration_mode, non_production_source, timestamp_unverified.",
+      "Планозависимый модельный вызов пропущен: план или привязка участка отсутствуют."
+    ],
+    "analysis_mode": "demonstration",
+    "source_context": {
+      "source_system": "synthetic-contract-example",
+      "source_snapshot_id": "demo-source-v2",
+      "source_ref": "demo:source",
+      "data_type": "synthetic_demo",
+      "timestamp_quality": "demonstration",
+      "spider_live_sync": false
+    },
+    "resource_assessment": {
+      "status": "not_evaluated",
+      "reason_codes": [
+        "no_independent_measurements",
+        "vlm_resources_not_evaluated"
+      ],
+      "stage_code": "P01",
+      "selection_basis": "planned_at_frame_time",
+      "basis": "cv_detections",
+      "coverage": "full_scope",
+      "equipment_items": [],
+      "planned_volume": {
+        "value": 100,
+        "unit": "m3"
+      },
+      "planned_work_shifts": 2,
+      "planned_productivity": {
+        "value": 50,
+        "unit": "m3/shift"
+      },
+      "actual_volume": null,
+      "actual_productivity": null,
+      "evidence_refs": [
+        "/source_context",
+        "/equipment_observation",
+        "/resource_target",
+        "/resource_plan/stages/0"
+      ],
+      "limitations": [
+        "Видимый счёт не устанавливает размер парка, дефицит техники или отставание.",
+        "Фактический объём и производительность неизвестны без независимых измерений; плановые единицы сохранены без конверсии.",
+        "Числовое сравнение ресурсов выполняет только deterministic."
+      ]
+    }
+  }
+}

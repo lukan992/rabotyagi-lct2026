@@ -1,0 +1,10 @@
+{
+  "_comment": "Разметка демо-роликов для демо-анализатора: что «видит» камера, которая показывает ролик. Рамка: x, y, w, h в процентах от кадра 16:9 — охватывает технику на всём ролике (камера и техника немного двигаются). moving=true — техника работает, рамка слегка смещается от кадра к кадру. Источники роликов — CREDITS.md.",
+  "pit-excavator": [{"type": "excavator", "confidence": 0.94, "box": [21, 19, 75.5, 61], "moving": true}],
+  "gate-crane": [{"type": "crane", "confidence": 0.91, "box": [0.5, 19, 95.5, 79], "moving": false}],
+  "foundation-mixer": [{"type": "mixer", "confidence": 0.93, "box": [0.5, 12, 77, 81], "moving": true}],
+  "gate-mixer": [{"type": "mixer", "confidence": 0.9, "box": [0.5, 17, 70.5, 75], "moving": false}],
+  "road-roller": [{"type": "roller", "confidence": 0.93, "box": [40, 35, 15, 30.5], "moving": true}],
+  "road-dumptruck": [{"type": "dump_truck", "confidence": 0.91, "box": [10, 19.5, 62, 70.5], "moving": true}],
+  "yard-bulldozer": [{"type": "bulldozer", "confidence": 0.95, "box": [23, 12.5, 42, 61.5], "moving": true}]
+}

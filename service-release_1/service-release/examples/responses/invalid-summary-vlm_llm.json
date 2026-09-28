@@ -1,0 +1,19 @@
+{
+  "http_status": 422,
+  "body": {
+    "schema_version": "frame-analysis-error-v1",
+    "request_id": "demo-invalid-summary-v1",
+    "service": "vlm_llm",
+    "code": "unknown_stage",
+    "message": "Plan must reference a concrete or no_class catalogue work",
+    "details": [
+      {
+        "path": "/plan/steps",
+        "code": "unknown_stage",
+        "message": "Plan must reference a concrete or no_class catalogue work"
+      }
+    ],
+    "retryable": false,
+    "execution_state": "not_started"
+  }
+}

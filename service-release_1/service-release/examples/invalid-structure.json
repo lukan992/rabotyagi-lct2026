@@ -1,0 +1,68 @@
+{
+  "schema_version": "frame-analysis-input-v1",
+  "request_id": "demo-invalid-structure-v1",
+  "site_id": "demo-invalid-structure-site",
+  "object_type_code": null,
+  "catalog_version": "catalog-cf435bba295909ab953facca",
+  "frame": {
+    "image_id": "demo-frame",
+    "camera_id": "demo-camera",
+    "observed_at": "2026-09-26T12:00:00Z",
+    "source_ref": "demo:synthetic-illustration",
+    "image_sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896",
+    "media_type": "image/png",
+    "height": 360
+  },
+  "scope": {
+    "plan_stream_code": "demo-stream",
+    "roi_bbox": null,
+    "source_ref": "demo:scope-fixture"
+  },
+  "cv": {
+    "status": "ok",
+    "source_ref": "demo:synthetic-cv-fixture",
+    "model_version": "demo-fixture-not-a-detector",
+    "detections": [
+      {
+        "detection_id": "demo-d1",
+        "class_code": "Excavator",
+        "bbox": [
+          0.25,
+          0.38,
+          0.67,
+          0.76
+        ],
+        "confidence": 0.9
+      }
+    ]
+  },
+  "plan": {
+    "plan_id": "demo-plan",
+    "revision_id": "demo-revision",
+    "source_ref": "demo:plan-fixture",
+    "steps": [
+      {
+        "step_key": "demo-work-a",
+        "sequence_no": 1,
+        "stage_id": 47,
+        "planned_start_at": "2026-09-01T00:00:00Z",
+        "planned_end_at": "2026-09-25T00:00:00Z"
+      },
+      {
+        "step_key": "demo-work-c",
+        "sequence_no": 3,
+        "stage_id": 65,
+        "planned_start_at": "2026-09-25T00:00:00Z",
+        "planned_end_at": "2026-10-01T00:00:00Z"
+      }
+    ]
+  },
+  "history": {
+    "snapshot_id": "demo-history",
+    "as_of": "2026-09-26T12:00:00Z",
+    "window_start": "2026-09-19T00:00:00Z",
+    "complete": true,
+    "observations": [],
+    "progress_events": []
+  }
+}

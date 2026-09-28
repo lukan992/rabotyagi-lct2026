@@ -1,0 +1,116 @@
+{
+  "http_status": 200,
+  "body": {
+    "schema_version": "frame-analysis-result-v2",
+    "request_id": "demo-resource-unavailable-v2",
+    "analysis_id": "1deb2f39-e554-4e00-b1b2-1b09fdfeba14",
+    "service": "deterministic",
+    "context": {
+      "site_id": "demo-resource-unavailable-site",
+      "camera_id": "demo-camera",
+      "image_id": "demo-frame",
+      "observed_at": "2026-09-26T12:00:00Z",
+      "image_sha256": "ae31d9a89ec6467109701e285b8a629e11c6601f8e56ebf111c996db6d952896",
+      "plan_id": null,
+      "plan_revision_id": null,
+      "plan_stream_code": "demo-stream",
+      "history_snapshot_id": "demo-history",
+      "catalog_version": "catalog-cf435bba295909ab953facca",
+      "input_sha256": "e40974f9f09dabb651a9d9268d2b504face91508fd95499190ccde5997f0605e"
+    },
+    "versions": {
+      "service_version": "0.5.0",
+      "matrix_version": "construction-class-matrix-v2.0",
+      "profiles_version": null,
+      "vision_model": null,
+      "llm_model": null,
+      "schedule_rules_version": "schedule-rules-v1",
+      "resource_rules_version": "resource-rules-v1"
+    },
+    "current_work": {
+      "status": "no_plan",
+      "work_groups": []
+    },
+    "visual_observations": [],
+    "visual_relations": [],
+    "transition": {
+      "status": "insufficient_evidence",
+      "current_step_key": null,
+      "next_step_key": null,
+      "distinctive_codes": [],
+      "evidence_first_at": null,
+      "evidence_last_at": null,
+      "supporting_observations": 0,
+      "evidence_refs": []
+    },
+    "schedule": {
+      "status": "insufficient_evidence",
+      "items": []
+    },
+    "limitations": [
+      "Оперативные сроки и переходы не оцениваются: demonstration_mode, non_production_source, timestamp_unverified.",
+      "Пункт плана не оценивается без плана и подтверждённой привязки участка."
+    ],
+    "analysis_mode": "demonstration",
+    "source_context": {
+      "source_system": "synthetic-contract-example",
+      "source_snapshot_id": "demo-source-v2",
+      "source_ref": "demo:source",
+      "data_type": "synthetic_demo",
+      "timestamp_quality": "demonstration",
+      "spider_live_sync": false
+    },
+    "resource_assessment": {
+      "status": "demonstration",
+      "reason_codes": [
+        "no_independent_measurements",
+        "demonstration_mode",
+        "observation_unavailable"
+      ],
+      "stage_code": "P01",
+      "selection_basis": "planned_at_frame_time",
+      "basis": "unavailable",
+      "coverage": "full_scope",
+      "equipment_items": [
+        {
+          "item_id": "demo-equipment",
+          "class_code": "Excavator",
+          "planned_quantity": 2,
+          "visible_count": null,
+          "visible_count_delta": null,
+          "status": "unknown",
+          "reason_codes": [
+            "observation_unavailable"
+          ],
+          "evidence_refs": [
+            "/resource_plan/stages/0/equipment/0",
+            "/equipment_observation"
+          ]
+        }
+      ],
+      "planned_volume": {
+        "value": 100,
+        "unit": "m3"
+      },
+      "planned_work_shifts": 2,
+      "planned_productivity": {
+        "value": 50,
+        "unit": "m3/shift"
+      },
+      "actual_volume": null,
+      "actual_productivity": null,
+      "evidence_refs": [
+        "/source_context",
+        "/equipment_observation",
+        "/resource_target",
+        "/resource_plan/stages/0"
+      ],
+      "limitations": [
+        "Видимый счёт не устанавливает размер парка, дефицит техники или отставание.",
+        "Фактический объём и производительность неизвестны без независимых измерений; плановые единицы сохранены без конверсии.",
+        "Демонстрационные данные не используются для оперативных тревог и подтверждения хода работ.",
+        "Неизвестные строки не сравниваются: причины приведены в reason_codes; отсутствие данных не заменено нулём."
+      ]
+    }
+  }
+}

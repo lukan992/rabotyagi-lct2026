@@ -1,0 +1,19 @@
+{
+  "http_status": 422,
+  "body": {
+    "schema_version": "frame-analysis-error-v2",
+    "request_id": "demo-resource-invalid-mode-v2",
+    "service": "vlm_llm",
+    "code": "data_mode_not_allowed",
+    "message": "Demonstration data and unvalidated manual counts require demonstration mode",
+    "details": [
+      {
+        "path": "/analysis_mode",
+        "code": "data_mode_not_allowed",
+        "message": "Demonstration data and unvalidated manual counts require demonstration mode"
+      }
+    ],
+    "retryable": false,
+    "execution_state": "not_started"
+  }
+}

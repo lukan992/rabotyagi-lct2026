@@ -1,0 +1,12 @@
+.DS_Store
+
+# автогенерируемые mediamtx TLS-файлы
+auto.crt
+auto.key
+
+# Локальные реквизиты источников и сервисов
+.env
+
+# Локальные реквизиты и импорт чистого Keycloak
+infra/keycloak/clean.env
+infra/keycloak/generated/

@@ -1,0 +1,166 @@
+{
+  "realm": "stroykontrol",
+  "enabled": true,
+  "sslRequired": "none",
+  "loginTheme": "keycloak.v2",
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "ru"
+  ],
+  "defaultLocale": "ru",
+  "displayName": "СтройКонтроль",
+  "roles": {
+    "realm": [
+      {
+        "name": "foreman",
+        "description": "Прораб"
+      },
+      {
+        "name": "manager",
+        "description": "Руководитель проекта"
+      },
+      {
+        "name": "inspector",
+        "description": "Инспектор"
+      },
+      {
+        "name": "admin",
+        "description": "Администратор"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "stroykontrol-web",
+      "name": "СтройКонтроль (веб)",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "rootUrl": "http://localhost:5180",
+      "baseUrl": "http://localhost:5180",
+      "redirectUris": [
+        "http://localhost:5180/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5180",
+        "+"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5180/*"
+      }
+    },
+    {
+      "clientId": "stroykontrol-backend",
+      "name": "СтройКонтроль (сервер): управление сотрудниками",
+      "description": "Служебный клиент: админка СтройКонтроля меняет через него сотрудников, роли и пароли. Секрет — только для разработки.",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "stroykontrol-dev-backend-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    }
+  ],
+  "users": [
+    {
+      "username": "prorab",
+      "enabled": true,
+      "firstName": "Андрей",
+      "lastName": "Кузнецов",
+      "email": "prorab@stroy.test",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "foreman"
+      ]
+    },
+    {
+      "username": "rukovoditel",
+      "enabled": true,
+      "firstName": "Мария",
+      "lastName": "Иванова",
+      "email": "ruk@stroy.test",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "manager"
+      ]
+    },
+    {
+      "username": "inspektor",
+      "enabled": true,
+      "firstName": "Дмитрий",
+      "lastName": "Соколов",
+      "email": "insp@stroy.test",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "inspector"
+      ]
+    },
+    {
+      "username": "admin",
+      "enabled": true,
+      "firstName": "Павел",
+      "lastName": "Орлов",
+      "email": "admin@stroy.test",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "admin"
+      ]
+    },
+    {
+      "username": "service-account-stroykontrol-backend",
+      "enabled": true,
+      "serviceAccountClientId": "stroykontrol-backend",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-users",
+          "query-users",
+          "view-realm"
+        ]
+      }
+    }
+  ],
+  "components": {
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "providerId": "declarative-user-profile",
+        "subComponents": {},
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\": [{\"name\": \"username\", \"displayName\": \"${username}\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"validations\": {\"length\": {\"min\": 2, \"max\": 255}, \"username-prohibited-characters\": {}, \"up-username-not-idn-homograph\": {}}}, {\"name\": \"email\", \"displayName\": \"${email}\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"validations\": {\"email\": {}, \"length\": {\"max\": 255}}}, {\"name\": \"firstName\", \"displayName\": \"${firstName}\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"validations\": {\"length\": {\"max\": 255}, \"person-name-prohibited-characters\": {}}}, {\"name\": \"lastName\", \"displayName\": \"${lastName}\", \"permissions\": {\"view\": [\"admin\", \"user\"], \"edit\": [\"admin\", \"user\"]}, \"multivalued\": false, \"validations\": {\"length\": {\"max\": 255}, \"person-name-prohibited-characters\": {}}}], \"groups\": [{\"name\": \"user-metadata\", \"displayHeader\": \"User metadata\", \"displayDescription\": \"Attributes, which refer to user metadata\"}]}"
+          ]
+        }
+      }
+    ]
+  }
+}

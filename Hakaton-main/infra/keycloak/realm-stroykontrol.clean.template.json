@@ -1,0 +1,72 @@
+{
+  "realm": "stroykontrol",
+  "enabled": true,
+  "sslRequired": "none",
+  "loginTheme": "keycloak.v2",
+  "internationalizationEnabled": true,
+  "supportedLocales": ["ru"],
+  "defaultLocale": "ru",
+  "displayName": "СтройКонтроль",
+  "roles": {
+    "realm": [
+      {"name": "foreman", "description": "Прораб"},
+      {"name": "manager", "description": "Руководитель проекта"},
+      {"name": "inspector", "description": "Инспектор"},
+      {"name": "admin", "description": "Администратор"}
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "stroykontrol-web",
+      "name": "СтройКонтроль (веб)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "rootUrl": "http://localhost:8080",
+      "baseUrl": "http://localhost:8080",
+      "redirectUris": ["http://localhost:8080/*"],
+      "webOrigins": ["http://localhost:8080"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:8080/*"
+      }
+    },
+    {
+      "clientId": "stroykontrol-backend",
+      "name": "СтройКонтроль (сервер): управление сотрудниками",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "__KC_SERVICE_CLIENT_SECRET__",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "firstName": "Администратор",
+      "lastName": "Системный",
+      "email": "admin@localhost.invalid",
+      "emailVerified": true,
+      "credentials": [
+        {"type": "password", "value": "__KC_SITE_ADMIN_PASSWORD__", "temporary": false}
+      ],
+      "realmRoles": ["admin"]
+    },
+    {
+      "username": "service-account-stroykontrol-backend",
+      "enabled": true,
+      "serviceAccountClientId": "stroykontrol-backend",
+      "clientRoles": {
+        "realm-management": ["manage-users", "view-users", "query-users", "view-realm"]
+      }
+    }
+  ]
+}
