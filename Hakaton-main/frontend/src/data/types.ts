@@ -256,6 +256,10 @@ export interface EquipmentCheckResult {
   rows: CheckRow[]
   extra: ExtraRow[]
   arriving: Partial<Record<EquipmentType, number>>
+  /** Approximate cross-camera count; null until an overlap pair has usable geometry. */
+  estimatedObserved?: Record<string, number> | null
+  estimatedSiteObserved?: Record<string, number> | null
+  overlapMatches: number
 }
 
 // ---------- работы по камерам: ответы сервисов аналитики (контракт frame-analysis-v1) ----------

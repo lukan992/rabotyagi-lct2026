@@ -1,0 +1,13 @@
+*
+!Dockerfile
+!Dockerfile.service
+!.dockerignore
+!pyproject.toml
+!README.md
+!service.py
+!src/
+!src/camera_overlap/
+!src/camera_overlap/**
+src/**/__pycache__/
+src/**/*.pyc
+src/**/*.pyo

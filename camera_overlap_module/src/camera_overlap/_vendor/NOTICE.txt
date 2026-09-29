@@ -1,0 +1,17 @@
+Selected source files from https://github.com/cvg/LightGlue
+Commit: eb42fee2d71449efb0aa5c10549752b5d75384d8
+Files: lightglue.py, superpoint.py, utils.py
+
+The original LightGlue LICENSE is preserved in LightGlue-LICENSE.txt.
+Existing per-file notices, including the SuperPoint notice, are preserved.
+These notices are not replaced by a license for the surrounding module.
+
+Local modification to superpoint.py:
+The constructor requires weights_path and loads a local torch checkpoint
+with map_location=cpu and weights_only=True. The automatic URL download is
+removed. Model architecture and feature extraction are unchanged.
+
+lightglue.py and utils.py are copied unchanged. The surrounding detector
+constructs LightGlue(features=None), remaps the original checkpoint keys,
+and validates missing/unexpected keys before use. No hub directory or global
+download function is patched.

@@ -550,6 +550,9 @@ class EquipmentCheckOut(ApiModel):
     rows: list[CheckRow]
     extra: list[ExtraRow]  # техника не по этапу
     arriving: dict[str, int]  # техника на въезде и складе — «подъезжает», в норму не засчитывается
+    estimated_observed: dict[str, int] | None = None  # отдельная приблизительная оценка по пересечениям
+    estimated_site_observed: dict[str, int] | None = None  # все зоны объекта, включая въезд и склад
+    overlap_matches: int = 0
 
 
 class CheckRunOut(ApiModel):

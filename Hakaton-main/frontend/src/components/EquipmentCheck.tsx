@@ -18,7 +18,13 @@ export function EquipmentCheck({ siteId }: { siteId: string }) {
   })
   if (isPending) return <div className="bg-card rounded-xl border border-border h-40 animate-pulse" aria-busy />
   if (isError || !data) return <p className="text-muted-foreground">Не удалось загрузить сверку техники.</p>
-  if (!data.stageName) return <p className="text-muted-foreground">На сегодня в календарном плане нет этапа работ.</p>
+  const estimatedTotal = data.estimatedSiteObserved
+    ? Object.values(data.estimatedSiteObserved).reduce((total, count) => total + count, 0)
+    : null
+  if (!data.stageName) return <div className="text-muted-foreground">
+    На сегодня в календарном плане нет этапа работ.
+    {estimatedTotal !== null && <div className="text-warn-fg">Техники на объекте с учётом пересечений: {estimatedTotal} (неточно)</div>}
+  </div>
   // лишняя техника уже показана своей строкой — в «подъезжает» её не дублируем, иначе автокран был бы и «лишним», и «подъезжающим»
   const extraTypes = new Set(data.extra.map((e) => e.type))
   const arriving = (Object.entries(data.arriving) as [EquipmentType, number][]).filter(([type]) => !extraTypes.has(type))
@@ -30,10 +36,12 @@ export function EquipmentCheck({ siteId }: { siteId: string }) {
           <div className="font-semibold text-[17px]">Техника на этапе «{data.stageName}»</div>
           <InfoTip label="Как считается техника">
             Сколько техники нужно по правилу этапа и сколько её видят камеры рабочей зоны. Техника на въезде и складе
-            считается подъезжающей: её видно, но в норму рабочей зоны она пока не засчитывается.
+            считается подъезжающей: её видно, но в норму рабочей зоны она пока не засчитывается. Оценка по пересечениям
+            сопоставляет рамки на разных камерах приблизительно и не влияет на автоматические предупреждения.
           </InfoTip>
         </div>
         {data.checkedAt && <div className="text-muted-foreground text-[14px]">данные на {fmtTime(data.checkedAt)}</div>}
+        {estimatedTotal !== null && <div className="text-warn-fg text-[15px] mt-1">Техники на объекте с учётом пересечений: {estimatedTotal} (неточно)</div>}
       </div>
       {!data.working ? (
         <p className="px-4 sm:px-5 py-3 bg-muted text-foreground text-[15px]">
@@ -53,6 +61,11 @@ export function EquipmentCheck({ siteId }: { siteId: string }) {
               <div className="text-muted-foreground text-[14px]">
                 {r.state === 'not_detected' ? `нужно ${r.need} — модель такую технику пока не распознаёт, проверьте на месте` : `нужно ${r.need}, видим ${r.have}`}
               </div>
+              {r.state !== 'not_detected' && data.estimatedObserved && (
+                <div className="text-warn-fg text-[14px]">
+                  С учётом пересечений: {data.estimatedObserved[r.type] ?? 0} (неточно)
+                </div>
+              )}
             </div>
             <StateChip state={r.state === 'not_detected' ? 'not_detected' : data.coverage && data.working ? r.state : 'unknown'} />
           </li>

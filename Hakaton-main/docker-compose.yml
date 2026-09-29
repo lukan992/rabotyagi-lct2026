@@ -71,6 +71,8 @@ services:
       SK_VIDEO_WEBRTC_URL: http://${VIDEO_PUBLIC_HOST:-localhost}:${VIDEO_PORT:-8889}
       SK_FRAME_INTERVAL_S: ${SK_FRAME_INTERVAL_S:-2}
       SK_CHECK_INTERVAL_S: ${SK_CHECK_INTERVAL_S:-60}
+      SK_OVERLAP_SERVICE_URL: http://camera-overlap:8000
+      SK_OVERLAP_SERVICE_TOKEN: ${SK_OVERLAP_SERVICE_TOKEN:-}
       SK_ANALYSIS_PROVIDER: ${SK_ANALYSIS_PROVIDER:-auto}  # auto — своя модель; mock — демо-разметка роликов
       SK_ANALYSIS_API_URL: ${SK_ANALYSIS_API_URL:-}
       SK_ANALYSIS_API_KEY: ${SK_ANALYSIS_API_KEY:-}
@@ -107,6 +109,19 @@ services:
         condition: service_started
     ports:
       - "${API_PORT:-8100}:8100"
+
+  camera-overlap:
+    build:
+      context: ../camera_overlap_module
+      dockerfile: Dockerfile.service
+    environment:
+      OVERLAP_DEVICE: ${OVERLAP_DEVICE:-cpu}
+      OVERLAP_SERVICE_TOKEN: ${SK_OVERLAP_SERVICE_TOKEN:-}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # имитация сервиса разметки (детектор + трекер): рамки по демо-роликам 10 раз в секунду.
   # Запускается только с профилем: docker compose --profile tracker up

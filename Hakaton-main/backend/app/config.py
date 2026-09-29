@@ -78,6 +78,12 @@ class Settings(BaseSettings):
     keep_frames_per_camera: int = 200  # сколько сохранённых кадров держать на камеру (доказательства не удаляются)
     keep_usage_days: int = Field(30, ge=1)  # сколько дней хранить учёт работы техники по часам и ответы аналитики
 
+    # Отдельный локальный сервис SuperPoint + LightGlue; пустой URL отключает поиск пересечений.
+    overlap_service_url: str | None = None
+    overlap_service_token: str | None = None
+    overlap_timeout_seconds: float = Field(120.0, gt=0, le=600)
+    overlap_sync_interval_seconds: float = Field(120.0, gt=0, le=3600)
+
     # --- какая работа идёт на кадре: два сервиса аналитики коллеги (контракт frame-analysis-v1, app/services/analytics) ---
     # Имена переменных — из контракта; с приставкой SK_ тоже работают. Базовые адреса без пути метода,
     # например http://analytics-deterministic:8000; не задан ни один — работы по камерам не определяются.

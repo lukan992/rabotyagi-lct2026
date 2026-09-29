@@ -247,6 +247,33 @@ class Snapshot(Base):
     )
 
 
+class CameraOverlap(Base):
+    """One measured overlap for a fixed pair of camera viewpoints on a site."""
+
+    __tablename__ = "camera_overlaps"
+
+    camera0_id: Mapped[str] = mapped_column(ForeignKey("cameras.id", ondelete="CASCADE"), primary_key=True)
+    camera1_id: Mapped[str] = mapped_column(ForeignKey("cameras.id", ondelete="CASCADE"), primary_key=True)
+    site_id: Mapped[str] = mapped_column(ForeignKey("sites.id", ondelete="CASCADE"), index=True)
+    status: Mapped[str] = mapped_column(String(24))  # candidate_overlap | insufficient_evidence | service_error
+    result: Mapped[dict | None] = mapped_column(JSON)
+    snapshot0_id: Mapped[str | None] = mapped_column(String(40))  # retained after normal snapshot cleanup
+    snapshot1_id: Mapped[str | None] = mapped_column(String(40))
+    camera0_fingerprint: Mapped[str] = mapped_column(String(64))
+    camera1_fingerprint: Mapped[str] = mapped_column(String(64))
+    attempts: Mapped[int] = mapped_column(default=0)
+    analyzed_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    error: Mapped[str | None] = mapped_column(String(300))
+
+    __table_args__ = (
+        CheckConstraint("camera0_id < camera1_id", name="ck_camera_overlaps_ordered_pair"),
+        CheckConstraint(
+            "status IN ('candidate_overlap', 'insufficient_evidence', 'service_error')",
+            name="ck_camera_overlaps_status",
+        ),
+    )
+
+
 class EquipmentUsage(Base):
     """Сколько работала техника: по часам, камерам и типам — из рамок сервиса разметки (треки 10–15 раз в секунду).
     present_s — сколько секунд этот тип был в кадре, moving_s — из них двигался, max_count — сколько машин сразу."""

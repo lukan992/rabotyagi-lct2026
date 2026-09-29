@@ -281,6 +281,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sites/{site_id}/camera-overlaps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Matrix */
+        get: operations["matrix_api_sites__site_id__camera_overlaps_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sites/{site_id}/camera-overlaps/recompute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Recompute */
+        post: operations["recompute_api_sites__site_id__camera_overlaps_recompute_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/snapshots": {
         parameters: {
             query?: never;
@@ -1481,6 +1515,19 @@ export interface components {
             arriving: {
                 [key: string]: number;
             };
+            /** Estimatedobserved */
+            estimatedObserved?: {
+                [key: string]: number;
+            } | null;
+            /** Estimatedsiteobserved */
+            estimatedSiteObserved?: {
+                [key: string]: number;
+            } | null;
+            /**
+             * Overlapmatches
+             * @default 0
+             */
+            overlapMatches: number;
         };
         /** EquipmentEventAck */
         EquipmentEventAck: {
@@ -1846,6 +1893,13 @@ export interface components {
             elapsedMs: number;
             /** Previewpath */
             previewPath?: string | null;
+        };
+        /** RecomputePair */
+        RecomputePair: {
+            /** Camera0Id */
+            camera0Id: string;
+            /** Camera1Id */
+            camera1Id: string;
         };
         /** ResourceAssessmentOut */
         ResourceAssessmentOut: {
@@ -3373,6 +3427,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProbeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    matrix_api_sites__site_id__camera_overlaps_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                site_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    recompute_api_sites__site_id__camera_overlaps_recompute_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                site_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecomputePair"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
