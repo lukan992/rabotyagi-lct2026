@@ -609,6 +609,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sites/{site_id}/spider/stage-links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ручные связи этапов Spider с локальными работами */
+        get: operations["spider_stage_links_api_sites__site_id__spider_stage_links_get"];
+        /** Сохранить ручную связь этапа Spider */
+        put: operations["update_spider_stage_link_api_sites__site_id__spider_stage_links_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/sites/{site_id}/spider/observations/{observation_id}/prepare": {
         parameters: {
             query?: never;
@@ -2100,6 +2118,8 @@ export interface components {
             analysisMode: ("demonstration" | "operational") | null;
             /** Resourceevidence */
             resourceEvidence: components["schemas"]["ResourceEvidenceOut"][];
+            /** Spidersnapshotid */
+            spiderSnapshotId: string | null;
         };
         /** SiteCount */
         SiteCount: {
@@ -2281,6 +2301,13 @@ export interface components {
             /** Errormessage */
             errorMessage: string | null;
         };
+        /** SpiderLocalStepOut */
+        SpiderLocalStepOut: {
+            /** Stepkey */
+            stepKey: string;
+            /** Name */
+            name: string;
+        };
         /** SpiderObservationAssetOut */
         SpiderObservationAssetOut: {
             /** Id */
@@ -2413,6 +2440,35 @@ export interface components {
             sourceComparisons: {
                 [key: string]: unknown;
             }[];
+        };
+        /** SpiderStageLinkIn */
+        SpiderStageLinkIn: {
+            /** Snapshotid */
+            snapshotId: string;
+            /** Stagecode */
+            stageCode: string;
+            /** Stepkey */
+            stepKey: string | null;
+        };
+        /** SpiderStageLinkOut */
+        SpiderStageLinkOut: {
+            /** Stagecode */
+            stageCode: string;
+            /** Stagename */
+            stageName: string;
+            /** Stepkey */
+            stepKey: string | null;
+            /** Stepname */
+            stepName: string | null;
+        };
+        /** SpiderStageLinksOut */
+        SpiderStageLinksOut: {
+            /** Snapshotid */
+            snapshotId: string | null;
+            /** Stages */
+            stages: components["schemas"]["SpiderStageLinkOut"][];
+            /** Localsteps */
+            localSteps: components["schemas"]["SpiderLocalStepOut"][];
         };
         /** StageIn */
         StageIn: {
@@ -4034,6 +4090,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SpiderOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    spider_stage_links_api_sites__site_id__spider_stage_links_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                site_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpiderStageLinksOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_spider_stage_link_api_sites__site_id__spider_stage_links_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                site_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SpiderStageLinkIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpiderStageLinksOut"];
                 };
             };
             /** @description Validation Error */

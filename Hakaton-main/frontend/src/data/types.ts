@@ -378,6 +378,8 @@ export interface ServiceAnswer {
   analysisMode: 'demonstration' | 'operational' | null
   /** Безопасные описания доказательств resourceAssessment, без сырого metadata. */
   resourceEvidence: ResourceEvidence[]
+  /** Идентификатор снимка Spider, реально переданного этому анализу. */
+  spiderSnapshotId: string | null
 }
 
 export interface CameraWork {
@@ -464,6 +466,12 @@ export interface SpiderSource {
   lastSuccessAt: string | null
   stale: boolean
   limitations: string[]
+}
+
+export interface SpiderStageLinks {
+  snapshotId: string | null
+  stages: { stageCode: string; stageName: string; stepKey: string | null; stepName: string | null }[]
+  localSteps: { stepKey: string; name: string }[]
 }
 
 /** Подключение конкретного объекта к Spider. Секрет токена сервер никогда не возвращает. */

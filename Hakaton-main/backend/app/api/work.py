@@ -324,6 +324,7 @@ def _answer(
     spider_stale: bool,
 ) -> ServiceAnswerOut:
     local_limitations = _spider_limitations(request, spider_stale)
+    source = _spider_metadata(request)
     answer = ServiceAnswerOut(
         service=service,
         state=row.state if row else "pending",
@@ -341,6 +342,7 @@ def _answer(
         resource_assessment=None,
         analysis_mode=None,
         resource_evidence=[],
+        spider_snapshot_id=source[0]["source_snapshot_id"] if source else None,
     )
     if row is None or row.state != "done" or not row.result:
         return answer

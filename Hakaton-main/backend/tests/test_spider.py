@@ -274,6 +274,45 @@ async def test_router_protects_source_and_exposes_resource_status(client, spider
     assert (await client.get(f"/api/sites/s2/spider/images/{prepared.json()['id']}", headers=manager)).status_code == 404
 
 
+async def test_manual_stage_links_are_scoped_validated_and_removable(client, spider_settings):
+    imported = await import_source(SessionLocal, "s1", transport=_transport(_documents(), _jpeg()))
+    snapshot_id = imported.snapshot_id
+    assert snapshot_id is not None
+    manager, foreman = await login_as(client, "manager"), await login_as(client, "foreman")
+    url = "/api/sites/s1/spider/stage-links"
+    empty = await client.get(url, headers=foreman)
+    assert empty.status_code == 200
+    assert empty.json()["snapshotId"] == snapshot_id
+    assert empty.json()["stages"][0]["stepKey"] is None
+
+    body = {"snapshotId": snapshot_id, "stageCode": "P04", "stepKey": "s1-excavation"}
+    assert (await client.put(url, headers=foreman, json=body)).status_code == 403
+    assert (await client.put(url, headers=manager, json={**body, "stageCode": "P99"})).status_code == 422
+    assert (await client.put(url, headers=manager, json={**body, "stepKey": "s2-excavation"})).status_code == 422
+    assert (await client.put(url, headers=manager, json={**body, "stepKey": "s1-l1-earth"})).status_code == 422
+    assert (await client.put(url, headers=manager, json={**body, "snapshotId": "x" * 64})).status_code == 409
+    saved = await client.put(url, headers=manager, json=body)
+    assert saved.status_code == 200, saved.text
+    assert next(stage for stage in saved.json()["stages"] if stage["stageCode"] == "P04")["stepKey"] == "s1-excavation"
+    assert next(stage for stage in (await client.get(url, headers=foreman)).json()["stages"] if stage["stageCode"] == "P04")["stepName"] == "Разработка котлована"
+
+    removed = await client.put(url, headers=manager, json={**body, "stepKey": None})
+    assert removed.status_code == 200
+    assert next(stage for stage in removed.json()["stages"] if stage["stageCode"] == "P04")["stepKey"] is None
+
+    assert (await client.put(url, headers=manager, json=body)).status_code == 200
+    changed = await client.put(
+        "/api/sites/s1/spider/connection", headers=manager,
+        json={"url": "http://spider.test", "token": "another-token"},
+    )
+    assert changed.status_code == 200
+    assert (await client.get(url, headers=manager)).json()["snapshotId"] is None
+    again = await import_source(SessionLocal, "s1", transport=_transport(_documents(), _jpeg()))
+    assert again.snapshot_id == snapshot_id
+    fresh_links = (await client.get(url, headers=manager)).json()
+    assert next(stage for stage in fresh_links["stages"] if stage["stageCode"] == "P04")["stepKey"] is None
+
+
 
 
 def test_selected_frame_resource_evidence_is_typed_sanitized_and_never_falls_back_to_another_request():

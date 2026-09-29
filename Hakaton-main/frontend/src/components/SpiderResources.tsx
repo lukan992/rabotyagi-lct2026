@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Image, Loader2, RefreshCw, Upload } from 'lucide-react'
 import { api, ApiError } from '@/api'
-import type { SpiderObservationAsset, SpiderSnapshot, SpiderStageResource } from '@/data'
+import type { SpiderObservationAsset, SpiderSnapshot, SpiderStageLinks, SpiderStageResource } from '@/data'
 import { fmtDate, fmtWhen } from '@/lib/utils'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
@@ -24,6 +24,12 @@ export function SpiderResources({ siteId, siteName, canImport }: { siteId: strin
     queryFn: () => api.spider(siteId),
     refetchInterval: 60_000,
   })
+  const linksKey = ['spider-stage-links', siteId]
+  const links = useQuery({ queryKey: linksKey, queryFn: () => api.spiderStageLinks(siteId), enabled: !!data?.snapshot })
+  const saveLink = useMutation({
+    mutationFn: (body: { snapshotId: string; stageCode: string; stepKey: string | null }) => api.saveSpiderStageLink(siteId, body),
+    onSuccess: (updated) => queryClient.setQueryData(linksKey, updated),
+  })
   const snapshotId = data?.snapshot?.id
   const importId = data?.lastImport?.id ?? null
   const asset = prepared?.siteId === siteId && prepared.importId === importId && prepared.asset.snapshotId === snapshotId ? prepared.asset : null
@@ -33,6 +39,7 @@ export function SpiderResources({ siteId, siteName, canImport }: { siteId: strin
       setConfirmImport(false)
       setPrepared(null)
       void queryClient.invalidateQueries({ queryKey: key })
+      void queryClient.invalidateQueries({ queryKey: linksKey })
     },
   })
   const prepare = useMutation({
@@ -72,7 +79,7 @@ export function SpiderResources({ siteId, siteName, canImport }: { siteId: strin
       {data.stale && data.lastImport?.errorMessage && (
         <p role="alert" className="mt-3 rounded-lg bg-warn-bg text-warn-fg px-3 py-2 text-[14px]">Последнее обновление источника не удалось: {data.lastImport.errorMessage}</p>
       )}
-      {!snapshot ? <EmptySource limitations={data.limitations} /> : <SourceSnapshot snapshot={snapshot} stale={data.stale} lastSuccessAt={data.lastSuccessAt} asset={asset} prepareError={prepare.isError ? prepare.error instanceof ApiError ? prepare.error.message : 'Не удалось подготовить фото источника.' : null} preparing={prepare.isPending} onPrepare={(observationId) => prepare.mutate({ observationId, snapshotId: snapshot.id })} />}
+      {!snapshot ? <EmptySource limitations={data.limitations} /> : <SourceSnapshot snapshot={snapshot} stale={data.stale} lastSuccessAt={data.lastSuccessAt} asset={asset} prepareError={prepare.isError ? prepare.error instanceof ApiError ? prepare.error.message : 'Не удалось подготовить фото источника.' : null} preparing={prepare.isPending} onPrepare={(observationId) => prepare.mutate({ observationId, snapshotId: snapshot.id })} links={links.data?.snapshotId === snapshot.id ? links.data : null} canEditLinks={canImport} linkPending={saveLink.isPending} linkError={saveLink.isError ? saveLink.error instanceof ApiError ? saveLink.error.message : 'Не удалось сохранить связь этапа.' : null} onLink={(stageCode, stepKey) => saveLink.mutate({ snapshotId: snapshot.id, stageCode, stepKey })} />}
       {canImport && <SpiderConnection siteId={siteId} />}
 
       <Modal open={confirmImport} onClose={() => !importSource.isPending && setConfirmImport(false)} title="Загрузить внешний источник">
@@ -100,7 +107,7 @@ function EmptySource({ limitations }: { limitations: string[] }) {
   )
 }
 
-function SourceSnapshot({ snapshot, stale, lastSuccessAt, asset, prepareError, preparing, onPrepare }: {
+function SourceSnapshot({ snapshot, stale, lastSuccessAt, asset, prepareError, preparing, onPrepare, links, canEditLinks, linkPending, linkError, onLink }: {
   snapshot: SpiderSnapshot
   stale: boolean
   lastSuccessAt: string | null
@@ -108,6 +115,11 @@ function SourceSnapshot({ snapshot, stale, lastSuccessAt, asset, prepareError, p
   prepareError: string | null
   preparing: boolean
   onPrepare: (observationId: string) => void
+  links: SpiderStageLinks | null
+  canEditLinks: boolean
+  linkPending: boolean
+  linkError: string | null
+  onLink: (stageCode: string, stepKey: string | null) => void
 }) {
   return (
     <div className="mt-4 space-y-4">
@@ -118,8 +130,10 @@ function SourceSnapshot({ snapshot, stale, lastSuccessAt, asset, prepareError, p
       </div>
       {snapshot.warning && <p className="rounded-lg bg-warn-bg text-warn-fg px-3 py-2 text-[14px]">{snapshot.warning}</p>}
       <p className="rounded-lg bg-warn-bg px-3 py-2 text-[14px] text-warn-fg">Spider не передаёт ID объекта. Принадлежность этого плана объекту не подтверждена источником.</p>
+      <p className="text-[14px] text-muted-foreground">Связь этапа Spider с работой местного плана задаёт руководитель вручную. Она служит только подписью в результатах фото и не подтверждает фактический этап или выполнение ресурсов.</p>
+      {linkError && <p role="alert" className="rounded-lg bg-danger-bg px-3 py-2 text-danger-fg">{linkError}</p>}
       <div className="space-y-3">
-        {snapshot.resources.stages.map((stage) => <ResourceStage key={stage.code} stage={stage} />)}
+        {snapshot.resources.stages.map((stage) => <ResourceStage key={stage.code} stage={stage} links={links} canEdit={canEditLinks} pending={linkPending} onLink={onLink} />)}
       </div>
       {prepareError && <p role="alert" className="rounded-lg bg-danger-bg text-danger-fg px-3 py-2 text-[14px]">{prepareError}</p>}
       {snapshot.resources.limitations.length > 0 && <p className="text-[14px] text-muted-foreground">Ограничения источника: {snapshot.resources.limitations.join(', ')}</p>}
@@ -142,13 +156,20 @@ function SourceSnapshot({ snapshot, stale, lastSuccessAt, asset, prepareError, p
   )
 }
 
-function ResourceStage({ stage }: { stage: SpiderStageResource }) {
+function ResourceStage({ stage, links, canEdit, pending, onLink }: { stage: SpiderStageResource; links: SpiderStageLinks | null; canEdit: boolean; pending: boolean; onLink: (stageCode: string, stepKey: string | null) => void }) {
+  const link = links?.stages.find((item) => item.stageCode === stage.code)
   const volume = stage.plannedVolume.value == null ? 'Нет данных' : `${stage.plannedVolume.value}${stage.plannedVolume.unit ? ` ${stage.plannedVolume.unit}` : ''}`
   const productivity = stage.plannedProductivity.value == null ? 'Нет данных' : `${stage.plannedProductivity.value}${stage.plannedProductivity.unit ? ` ${stage.plannedProductivity.unit}` : ''}`
   return (
     <article className="rounded-lg border border-border px-3 py-3">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1"><strong>{stage.code}</strong><span className="font-semibold">{stage.name}</span></div>
       <p className="mt-1 text-[14px] text-muted-foreground">{fmtDate(stage.start)} — {fmtDate(stage.finish)} · смен: {stage.plannedWorkShifts == null ? 'Нет данных' : stage.plannedWorkShifts}</p>
+      {canEdit && links ? <label className="mt-2 block text-[14px]">Ручная связь с местным планом
+        <select value={link?.stepKey ?? ''} disabled={pending} onChange={(event) => onLink(stage.code, event.target.value || null)} className="mt-1 block min-h-10 w-full rounded-lg border border-border-strong bg-card px-2">
+          <option value="">Не связана</option>
+          {links.localSteps.map((work) => <option key={work.stepKey} value={work.stepKey}>{work.name}</option>)}
+        </select>
+      </label> : link?.stepName ? <p className="mt-2 text-[14px] text-muted-foreground">Ручная связь с местным планом: {link.stepName}</p> : null}
       <dl className="mt-2 grid gap-x-4 gap-y-1 text-[14px] sm:grid-cols-2">
         <div><dt className="text-muted-foreground">Плановый объём</dt><dd>{volume}</dd></div>
         <div><dt className="text-muted-foreground">Производительность этапа</dt><dd>{productivity}</dd></div>

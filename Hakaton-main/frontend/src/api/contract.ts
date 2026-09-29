@@ -11,7 +11,7 @@ import type {
   EquipmentEventPage, EquipmentVisit, EquipmentVisitPage, ExtraRow, AnalyticsCatalog, CameraWork, CatalogWork, LiveCamera,
   Meta, PhotoAnalysis, PlanImport, PlanImportPhase, PlanImportWork, ProbeResult, ResourceAssessment, ResourceEquipment, ResourceEvidence,
   ResourceMeasure, Rule, Schedule, ScheduleItem, ServiceAnswer, Site, SiteWork, Snapshot, SpiderConnection, SpiderEquipmentResource,
-  SpiderImport, SpiderObservationAsset, SpiderResources, SpiderSnapshot, SpiderStageResource, SpiderSource, Stage,
+  SpiderImport, SpiderObservationAsset, SpiderResources, SpiderSnapshot, SpiderStageLinks, SpiderStageResource, SpiderSource, Stage,
   Transition, User, WeeklyReport, WorkEvidence, WorkGroup, WorkRef, Zone,
 } from '@/data'
 import type { components } from './openapi'
@@ -58,6 +58,7 @@ export type Contract = [
   Check<Same<SpiderImport, S['SpiderImportOut']>>,
   Check<Same<SpiderSnapshot, S['SpiderSnapshotOut']>>,
   Check<Same<SpiderSource, S['SpiderOut']>>,
+  Check<Same<SpiderStageLinks, S['SpiderStageLinksOut']>>,
   Check<Same<SpiderObservationAsset, S['SpiderObservationAssetOut']>>,
   Check<Same<SpiderConnection, S['SpiderConnectionOut']>>,
   Check<Same<PhotoAnalysis, S['PhotoAnalysisOut']>>,

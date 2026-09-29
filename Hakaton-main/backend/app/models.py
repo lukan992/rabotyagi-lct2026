@@ -390,6 +390,24 @@ class SpiderImport(Base):
     )
 
 
+class SpiderStageLink(Base):
+    """Explicit site-manager label connecting one imported Spider stage to a local plan work."""
+
+    __tablename__ = "spider_stage_links"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    site_id: Mapped[str] = mapped_column(ForeignKey("sites.id", ondelete="CASCADE"))
+    snapshot_id: Mapped[str] = mapped_column(ForeignKey("spider_snapshots.id", ondelete="CASCADE"))
+    connection_fingerprint: Mapped[str] = mapped_column(String(64))
+    stage_code: Mapped[str] = mapped_column(String(100))
+    step_key: Mapped[str] = mapped_column(ForeignKey("stages.id", ondelete="CASCADE"))
+
+    __table_args__ = (
+        UniqueConstraint("site_id", "snapshot_id", "connection_fingerprint", "stage_code",
+                         name="uq_spider_stage_links_source_stage"),
+    )
+
+
 class SpiderObservationAsset(Base):
     """Сохранённое исходное фото Spider и проверенный выбор этапа для одного observation."""
 
