@@ -150,6 +150,8 @@ async def test_photo_spider_is_opt_in_and_does_not_depend_on_camera_flag(client,
         data={"useSpider": "true"},
     )
     assert off.status_code == on.status_code == 201
+    assert all(answer["spiderSnapshotId"] is None for answer in off.json()["answers"])
+    assert all(answer["spiderSnapshotId"] == "spider-photo" for answer in on.json()["answers"])
 
     async with SessionLocal() as session:
         off_request = await session.scalar(

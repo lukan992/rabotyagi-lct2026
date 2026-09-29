@@ -2,7 +2,7 @@ import { downloadFile, request } from './client'
 import type {
   Alert, AlertStatus, AnalyticsCatalog, AuditEvent, Camera, CameraPatch, Connection, EquipmentCheckResult,
   EquipmentEventPage, EquipmentVisitPage, LiveCamera, Meta, NewCamera, PhotoAnalysis, PlanImport, ProbeResult, Rule, RuleInput,
-  Site, SiteInput, SiteWork, Snapshot, SpiderConnection, SpiderImport, SpiderObservationAsset, SpiderSource, Stage, StageInput, User,
+  Site, SiteInput, SiteWork, Snapshot, SpiderConnection, SpiderImport, SpiderObservationAsset, SpiderSource, SpiderStageLinks, Stage, StageInput, User,
   UserInput, UserPatch, WeeklyReport, Zone, ZoneInput,
 } from '@/data'
 
@@ -59,6 +59,9 @@ export const api = {
 
   /** Сохранённый защищённый снимок источника Camera Stage Monitor. */
   spider: (siteId: string) => request<SpiderSource>('GET', `/sites/${siteId}/spider`),
+  spiderStageLinks: (siteId: string) => request<SpiderStageLinks>('GET', `/sites/${siteId}/spider/stage-links`),
+  saveSpiderStageLink: (siteId: string, body: { snapshotId: string; stageCode: string; stepKey: string | null }) =>
+    request<SpiderStageLinks>('PUT', `/sites/${siteId}/spider/stage-links`, body),
   /** Импорт всегда получает ровно пять документов источника; подтверждается в UI. */
   importSpider: (siteId: string) => request<SpiderImport>('POST', `/sites/${siteId}/spider/import`),
   prepareSpiderObservation: (siteId: string, observationId: string, snapshotId: string) =>

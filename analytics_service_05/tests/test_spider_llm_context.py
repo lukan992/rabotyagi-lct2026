@@ -3,11 +3,11 @@ import io
 import json
 import unittest
 
-from PIL import Image
-
 from construction_analytics.contracts import structural, validate_request
+from construction_analytics.decision import MAX_PROMPT_CHARS
+from construction_analytics.pipeline import _decision_correction_prompt
 from construction_analytics.vlm import analyze
-
+from PIL import Image
 
 _image = io.BytesIO()
 Image.new("RGB", (1, 1)).save(_image, "PNG")
@@ -94,6 +94,38 @@ class Gateway:
 
 
 class SpiderPromptTests(unittest.TestCase):
+    def test_llm_retry_receives_previous_answer_and_missing_area_support(self):
+        previous = {
+            "work_groups": [{
+                "area_observation_ids": ["o1", "o2", "o3"],
+                "evidence": [
+                    {"source": "vision_observation", "ref": "o1", "role": "supports"},
+                    {"source": "vision_observation", "ref": "o2", "role": "contradicts"},
+                    {"source": "cv_detection", "ref": "d1", "role": "supports"},
+                ],
+            }],
+        }
+        retry = _decision_correction_prompt(
+            '{"input":"original"}', "system", {"payload": previous,
+                                                   "validation_errors": ["work_groups[0].area_support"]})
+
+        self.assertIn('"previous_response":', retry)
+        self.assertIn('"missing_area_support":{"0":["o2","o3"]}', retry)
+        self.assertIn('"area_observation_ids":["o1","o2","o3"]', retry)
+        self.assertIn("Не придумывай визуальные свидетельства", retry)
+
+    def test_llm_retry_keeps_missing_refs_when_previous_answer_exceeds_context(self):
+        previous = {"work_groups": [{"area_observation_ids": ["o1", "o2"],
+                                     "evidence": [{"source": "vision_observation", "ref": "o1",
+                                                   "role": "supports"}]}],
+                    "summary": "x" * MAX_PROMPT_CHARS}
+        retry = _decision_correction_prompt(
+            "{}", "system", {"payload": previous, "validation_errors": ["work_groups[0].area_support"]})
+
+        self.assertNotIn('"previous_response":', retry)
+        self.assertIn('"missing_area_support":{"0":["o2"]}', retry)
+        self.assertLessEqual(len(retry) + len("system"), MAX_PROMPT_CHARS)
+
     def _case(self, version="frame-analysis-input-v2"):
         image_sha = hashlib.sha256(PNG).hexdigest()
         case = {

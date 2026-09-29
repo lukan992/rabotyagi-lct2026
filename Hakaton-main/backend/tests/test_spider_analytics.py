@@ -20,7 +20,7 @@ from app.services.analytics.client import ServiceClient
 from app.services.analytics.request import input_fingerprint, serialize, spider_context
 from app.services.analytics.result import check_result
 from app.services.analytics.runner import Analytics
-from app.services.spider import import_source
+from app.services.spider import SpiderConnectionConfig, connection_fingerprint, import_source
 from tests.conftest import check, feed, login_as
 from tests.test_spider import _documents as spider_documents
 from tests.test_spider import _jpeg as spider_jpeg
@@ -28,6 +28,10 @@ from tests.test_spider import _transport as spider_transport
 
 pytestmark = pytest.mark.anyio
 V2_SCHEMA = json.loads((BASE_DIR / "docs" / "frame-analysis-v2.schema.json").read_text(encoding="utf-8"))
+
+
+def _fingerprint(origin: str) -> str:
+    return connection_fingerprint(SpiderConnectionConfig(origin=origin, token=None, custom=True))
 
 
 def conforms_v2(name: str, message: dict) -> list[str]:
@@ -225,6 +229,7 @@ async def test_spider_context_projects_latest_success_for_its_site(client):
                     id="import-s1",
                     site_id="s1",
                     source_url=snapshot.source_url,
+                    connection_fingerprint=_fingerprint(snapshot.source_url),
                     status="succeeded",
                     started_at=now - timedelta(minutes=2),
                     finished_at=now - timedelta(minutes=1),
@@ -234,6 +239,7 @@ async def test_spider_context_projects_latest_success_for_its_site(client):
                     id="import-s2",
                     site_id="s2",
                     source_url=other.source_url,
+                    connection_fingerprint=_fingerprint(other.source_url),
                     status="succeeded",
                     started_at=now - timedelta(minutes=1),
                     finished_at=now,
@@ -302,6 +308,7 @@ async def _save_import(
             id=import_id,
             site_id=site_id,
             source_url=snapshot.source_url,
+            connection_fingerprint=_fingerprint(snapshot.source_url),
             status=status,
             started_at=started_at,
             finished_at=finished_at,
@@ -327,6 +334,7 @@ async def test_spider_stale_uses_last_success_and_new_success_replaces_it(client
                 id="import-b",
                 site_id="s1",
                 source_url=first.source_url,
+                connection_fingerprint=_fingerprint(first.source_url),
                 status="failed",
                 started_at=now - timedelta(minutes=1),
                 finished_at=now - timedelta(minutes=1),
@@ -624,6 +632,7 @@ async def test_work_view_keeps_spider_provenance_at_request_time(client, analyti
                 id="ui-failed",
                 site_id="s1",
                 source_url=snapshot.source_url,
+                connection_fingerprint=_fingerprint(snapshot.source_url),
                 status="failed",
                 started_at=failed_at,
                 finished_at=failed_at,

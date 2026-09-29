@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CheckCircle2, Clock3, ImagePlus, Loader2, Upload } from 'lucide-react'
 import { api, ApiError } from '@/api'
-import { SITE_MANAGERS, type PhotoAnalysis, type ServiceAnswer } from '@/data'
+import { SITE_MANAGERS, type PhotoAnalysis, type ServiceAnswer, type SpiderStageLinks } from '@/data'
 import { useApp } from '@/store/context'
+import { analysisErrorMessage, manualStageCodes, workGroupPrefix } from '@/lib/analysisPresentation'
 import { fmtWhen } from '@/lib/utils'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
@@ -36,6 +37,7 @@ export function PhotoAnalyses({ siteId: fixedSiteId }: { siteId?: string }) {
     enabled: !!activeSiteId,
     refetchInterval: (query) => query.state.data?.some((photo) => photo.answers.length === 0 || photo.answers.some((answer) => answer.state === 'pending')) ? 3_000 : false,
   })
+  const links = useQuery({ queryKey: ['spider-stage-links', activeSiteId], queryFn: () => api.spiderStageLinks(activeSiteId), enabled: !!activeSiteId })
   const upload = useMutation({
     mutationFn: () => {
       if (!file) throw new Error('Выберите фотографию')
@@ -121,7 +123,7 @@ export function PhotoAnalyses({ siteId: fixedSiteId }: { siteId?: string }) {
           </CardBody></Card>
         </aside>
       </div>
-      {selected && <PhotoResult photo={selected} siteId={activeSiteId} preview={selected.id === created?.id ? localPreview : null} />}
+      {selected && <PhotoResult photo={selected} siteId={activeSiteId} preview={selected.id === created?.id ? localPreview : null} links={links.data ?? null} canSeeErrors={canUpload} />}
     </div>
   )
 }
@@ -129,12 +131,12 @@ export function PhotoAnalyses({ siteId: fixedSiteId }: { siteId?: string }) {
 function PhotoStatus({ photo }: { photo: PhotoAnalysis }) {
   if (photo.answers.length === 0) return <Badge tone="info"><Clock3 className="h-3.5 w-3.5" /> Подготавливаем</Badge>
   if (photo.answers.some((answer) => answer.state === 'pending')) return <Badge tone="info"><Clock3 className="h-3.5 w-3.5" /> Анализируем</Badge>
-  if (photo.answers.some((answer) => answer.state === 'error')) return <Badge tone="danger">Ошибка</Badge>
+  if (photo.answers.some((answer) => answer.state === 'error')) return photo.answers.some((answer) => answer.state === 'done') ? <Badge tone="warn">Частично</Badge> : <Badge tone="danger">Ошибка</Badge>
   if (photo.answers.some((answer) => answer.state === 'done')) return <Badge tone="ok"><CheckCircle2 className="h-3.5 w-3.5" /> Готово</Badge>
   return <Badge tone="neutral">Нет результата</Badge>
 }
 
-function PhotoResult({ photo, siteId, preview }: { photo: PhotoAnalysis; siteId: string; preview: string | null }) {
+function PhotoResult({ photo, siteId, preview, links, canSeeErrors }: { photo: PhotoAnalysis; siteId: string; preview: string | null; links: SpiderStageLinks | null; canSeeErrors: boolean }) {
   return (
     <section className="mt-5 grid gap-5 rounded-xl border border-border bg-card p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_380px]">
       <ProtectedPhoto siteId={siteId} photo={photo} preview={preview} />
@@ -145,7 +147,7 @@ function PhotoResult({ photo, siteId, preview }: { photo: PhotoAnalysis; siteId:
             Нейросетевые анализы стоят в очереди: ожидают {photo.llmWaiting}. Дождитесь завершения предыдущих анализов.
           </p>
         )}
-        {photo.answers.length === 0 ? <p className="text-muted-foreground">Ожидаем постановку анализа в очередь…</p> : <div className="space-y-3">{photo.answers.map((answer) => <PhotoAnswer key={answer.service} answer={answer} />)}</div>}
+        {photo.answers.length === 0 ? <p className="text-muted-foreground">Ожидаем постановку анализа в очередь…</p> : <div className="space-y-3">{photo.answers.map((answer) => <PhotoAnswer key={answer.service} answer={answer} links={links} canSeeErrors={canSeeErrors} />)}</div>}
       </div>
     </section>
   )
@@ -172,13 +174,15 @@ function ProtectedPhoto({ siteId, photo, preview }: { siteId: string; photo: Pho
   return <img src={url} alt={`Загруженная фотография от ${fmtWhen(photo.at)}`} className="max-h-[32rem] w-full rounded-lg bg-slate-900 object-contain" />
 }
 
-function PhotoAnswer({ answer }: { answer: ServiceAnswer }) {
+function PhotoAnswer({ answer, links, canSeeErrors }: { answer: ServiceAnswer; links: SpiderStageLinks | null; canSeeErrors: boolean }) {
   const groups = answer.groups.filter((group) => group.works.length > 0)
   return (
     <article className="rounded-lg border border-border p-3 text-[14px]">
       <div className="flex flex-wrap items-center justify-between gap-2"><strong>{SERVICE_LABEL[answer.service]}</strong><span className="text-muted-foreground">{answer.state === 'pending' ? 'Выполняется' : answer.state === 'done' ? 'Готово' : answer.state === 'error' ? 'Ошибка' : 'Нет результата'}</span></div>
-      {answer.error && <p role="alert" className="mt-2 text-danger-fg">{answer.error}</p>}
-      {groups.length > 0 && <ul className="mt-2 space-y-2">{groups.map((group, index) => <li key={`${group.match}-${index}`}><div className="font-medium">{group.works.map((work) => work.name).join(' / ')}</div>{group.explanation && <p className="text-muted-foreground">{group.explanation}</p>}</li>)}</ul>}
+      {(answer.state === 'error' || answer.state === 'unknown') && <p role="alert" className="mt-2 text-danger-fg">{analysisErrorMessage(answer)}</p>}
+      {canSeeErrors && answer.error && <details className="mt-2 text-[13px] text-muted-foreground"><summary className="cursor-pointer">Технические детали</summary><p className="break-words">{answer.errorCode && `${answer.errorCode}: `}{answer.error}</p></details>}
+      {answer.state === 'done' && groups.length === 0 && <p className="mt-2 text-muted-foreground">По этому фото нельзя надёжно определить работу. {answer.outcome === 'outside_plan' ? 'Возможно, работа вне плана.' : 'Нужен другой кадр или подтверждение на месте.'}</p>}
+      {groups.length > 0 && <ul className="mt-2 space-y-3">{groups.map((group, index) => <li key={`${group.match}-${index}`}><div><span className="text-muted-foreground">{workGroupPrefix(answer, group)}</span><span className="font-medium">{group.works.map((work) => `«${work.name}»`).join(group.match === 'ambiguous' ? ' или ' : ', ')}</span></div>{manualStageCodes(answer, group, links).length > 0 && <p className="text-muted-foreground">Этап Spider по ручной связи: {manualStageCodes(answer, group, links).join(', ')}</p>}{group.explanation && <p className="text-muted-foreground">{group.explanation}</p>}{group.evidence.length > 0 && <details className="mt-1 text-muted-foreground"><summary className="cursor-pointer">Почему так</summary><ul className="mt-1 list-disc pl-4">{group.evidence.map((evidence, evidenceIndex) => <li key={evidenceIndex}>{evidence.explanation}</li>)}</ul></details>}</li>)}</ul>}
       {answer.resourceAssessment ? (
         <ResourceAssessment
           assessment={answer.resourceAssessment}

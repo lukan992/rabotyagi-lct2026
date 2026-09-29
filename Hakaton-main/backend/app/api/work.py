@@ -3,8 +3,8 @@
 
 import json
 import re
-from typing import Any
 from datetime import datetime, timedelta
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
@@ -20,8 +20,8 @@ from app.schemas import (
     CatalogWorkOut,
     ResourceAssessmentOut,
     ResourceEvidenceOut,
-    ScheduleOut,
     ScheduleItemOut,
+    ScheduleOut,
     ServiceAnswerOut,
     SiteWorkOut,
     TransitionOut,
@@ -34,7 +34,7 @@ from app.services.analytics.catalog import Catalog, CatalogError, object_type
 from app.services.analytics.request import plan_problem, plan_works
 from app.services.analytics.runner import fresh_snapshot, get_analytics, work_cameras
 from app.services.engine import local_day
-from app.services.spider import resolve_connection
+from app.services.spider import connection_fingerprint, resolve_connection
 
 router = APIRouter(tags=["Работы по камерам"])
 RECENT = 10  # сколько последних отправок камеры просматривать в поисках готового ответа
@@ -324,6 +324,7 @@ def _answer(
     spider_stale: bool,
 ) -> ServiceAnswerOut:
     local_limitations = _spider_limitations(request, spider_stale)
+    source = _spider_metadata(request)
     answer = ServiceAnswerOut(
         service=service,
         state=row.state if row else "pending",
@@ -341,6 +342,7 @@ def _answer(
         resource_assessment=None,
         analysis_mode=None,
         resource_evidence=[],
+        spider_snapshot_id=source[0]["source_snapshot_id"] if source else None,
     )
     if row is None or row.state != "done" or not row.result:
         return answer
@@ -481,6 +483,7 @@ async def site_work(session: AsyncSession, site: Site, user: User) -> SiteWorkOu
             .where(
                 SpiderImport.site_id == site.id,
                 SpiderImport.source_url == connection.origin,
+                SpiderImport.connection_fingerprint == connection_fingerprint(connection),
                 SpiderImport.status == "succeeded",
             )
             .limit(1)

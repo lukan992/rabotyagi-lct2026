@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import hmac
 import json
 import math
 import os
@@ -105,6 +106,16 @@ class SpiderConnectionConfig:
     custom: bool
 
 
+def connection_fingerprint(connection: SpiderConnectionConfig) -> str:
+    """Identify an active connection without persisting or exposing its token."""
+    if connection.origin is None:
+        raise SpiderError("source_not_configured")
+    key = hashlib.sha256(f"spider-import:{get_settings().secret_key}".encode()).digest()
+    return hmac.new(
+        key, _canonical({"origin": connection.origin, "token": connection.token}), hashlib.sha256
+    ).hexdigest()
+
+
 async def resolve_connection(session: AsyncSession, site_id: str) -> SpiderConnectionConfig:
     """Resolve an explicit site connection before the legacy global fallback."""
     connection = await session.get(SpiderConnection, site_id)
@@ -167,28 +178,36 @@ def _items(document: SourceDocument, *, expected: type = list) -> list[dict[str,
 
 def _resource_stage(item: dict[str, Any]) -> dict[str, Any]:
     code, name = item.get("code"), item.get("name")
-    if not isinstance(code, str) or not code or not isinstance(name, str) or not name:
+    if (not isinstance(code, str) or not code.strip() or len(code) > 100
+            or not isinstance(name, str) or not name.strip() or len(name) > 1000):
         raise SpiderError("source_invalid_document")
     start, finish = _timestamp(item.get("start"), f"{code}.start"), _timestamp(item.get("finish"), f"{code}.finish")
-    if datetime.fromisoformat(finish) < datetime.fromisoformat(start):
+    if len(start) > 40 or len(finish) > 40 or datetime.fromisoformat(finish) <= datetime.fromisoformat(start):
         raise SpiderError("source_invalid_document")
     shifts = _number(item.get("planned_work_shifts"), f"{code}.planned_work_shifts", integer=True)
     volume = _number(item.get("planned_volume"), f"{code}.planned_volume")
     volume_unit = item.get("volume_unit")
     productivity = item.get("planned_productivity")
     equipment = item.get("equipment")
-    if not isinstance(volume_unit, str) or not isinstance(productivity, dict) or not isinstance(equipment, list):
+    if (not 0 < shifts <= 1_000_000 or volume > 10**15
+            or not isinstance(volume_unit, str) or not volume_unit.strip() or len(volume_unit) > 100
+            or not isinstance(productivity, dict) or not isinstance(equipment, list) or len(equipment) > 200):
         raise SpiderError("source_invalid_document")
     productivity_value = _number(productivity.get("value"), f"{code}.planned_productivity.value")
     productivity_unit = productivity.get("unit")
-    if not isinstance(productivity_unit, str):
+    if (productivity_value > 10**15 or not isinstance(productivity_unit, str)
+            or not productivity_unit.strip() or len(productivity_unit) > 100):
         raise SpiderError("source_invalid_document")
     normalized_equipment = []
     for resource in equipment:
-        if not isinstance(resource, dict) or not isinstance(resource.get("name"), str):
+        if (not isinstance(resource, dict) or not isinstance(resource.get("name"), str)
+                or not resource["name"].strip() or len(resource["name"]) > 1000):
+            raise SpiderError("source_invalid_document")
+        quantity = _number(resource.get("quantity"), f"{code}.quantity", integer=True)
+        if quantity > 1_000_000:
             raise SpiderError("source_invalid_document")
         normalized_equipment.append(
-            {"source_name": resource["name"], "planned_quantity": _number(resource.get("quantity"), f"{code}.quantity", integer=True),
+            {"source_name": resource["name"], "planned_quantity": quantity,
              "unit_productivity": None, "limitations": ["unit_productivity_not_provided"]}
         )
     return {
@@ -210,6 +229,8 @@ def _normalize(documents: dict[str, SourceDocument]) -> dict[str, Any]:
     photos = _items(documents["/api/v1/photo-equipment"])
     comparisons = _items(documents["/api/v1/comparisons"])
     stages = [_resource_stage(item) for item in stages_raw]
+    if len(stages) > 500 or sum(len(stage["equipment"]) for stage in stages) > 10_000:
+        raise SpiderError("source_invalid_document")
     codes = {stage["code"] for stage in stages}
     if len(codes) != len(stages):
         raise SpiderError("source_invalid_document")
@@ -227,11 +248,13 @@ def _normalize(documents: dict[str, SourceDocument]) -> dict[str, Any]:
     if equipment_codes != codes:
         raise SpiderError("source_resource_conflict")
     observation_ids = set()
+    observations_by_id: dict[str, dict[str, Any]] = {}
     for item in observations:
         observation_id, stage = item.get("observation"), item.get("observed_stage")
         if not isinstance(observation_id, str) or observation_id in observation_ids or stage not in codes:
             raise SpiderError("source_invalid_document")
         observation_ids.add(observation_id)
+        observations_by_id[observation_id] = item
         _timestamp(item.get("timestamp_iso"), f"{observation_id}.timestamp_iso")
         if not isinstance(item.get("image_url"), str):
             raise SpiderError("source_invalid_document")
@@ -239,6 +262,13 @@ def _normalize(documents: dict[str, SourceDocument]) -> dict[str, Any]:
         for item in items:
             if item.get(id_field) not in observation_ids or item.get(stage_field) not in codes:
                 raise SpiderError("source_invalid_document")
+            observation = observations_by_id[item[id_field]]
+            if items is photos:
+                if (item[stage_field] != observation["observed_stage"]
+                        or ("image_url" in item and item["image_url"] != observation["image_url"])):
+                    raise SpiderError("source_observation_conflict")
+            elif item.get("observed_stage") != observation["observed_stage"]:
+                raise SpiderError("source_observation_conflict")
     return {
         "stages": stages,
         "limitations": ["stage_mapping_not_configured", "equipment_mapping_not_configured", "unit_productivity_not_provided"],
@@ -338,9 +368,9 @@ def _image(data: bytes) -> tuple[str, int, int, str, str]:
     return media_type, width, height, hashlib.sha256(data).hexdigest(), extension
 
 
-async def _failed_import(session_factory: async_sessionmaker[AsyncSession], site_id: str, origin: str, started_at: datetime, documents: dict[str, SourceDocument], error: SpiderError) -> SpiderImport:
+async def _failed_import(session_factory: async_sessionmaker[AsyncSession], site_id: str, origin: str, fingerprint: str, started_at: datetime, documents: dict[str, SourceDocument], error: SpiderError) -> SpiderImport:
     async with session_factory() as session:
-        row = SpiderImport(id=new_id("spimp"), site_id=site_id, source_url=origin, status="failed", started_at=started_at, finished_at=utcnow(),
+        row = SpiderImport(id=new_id("spimp"), site_id=site_id, source_url=origin, connection_fingerprint=fingerprint, status="failed", started_at=started_at, finished_at=utcnow(),
                            fetches=[doc.fetch_record() for doc in documents.values()], partial_documents={path: doc.stored() for path, doc in documents.items()},
                            error_code=error.code, error_message=error.message)
         session.add(row)
@@ -356,6 +386,7 @@ async def import_source(
         connection = await resolve_connection(session, site_id)
     if connection.origin is None:
         raise SpiderError("source_not_configured")
+    fingerprint = connection_fingerprint(connection)
     started_at = utcnow()
     client = SpiderClient(connection.origin, connection.token, transport=transport)
     documents: dict[str, SourceDocument] = {}
@@ -394,6 +425,7 @@ async def import_source(
                     id=new_id("spimp"),
                     site_id=site_id,
                     source_url=client.origin,
+                    connection_fingerprint=fingerprint,
                     status="succeeded",
                     started_at=started_at,
                     finished_at=utcnow(),
@@ -407,7 +439,7 @@ async def import_source(
     except SpiderError as exc:
         if exc.document is not None:
             documents[exc.document.path] = exc.document
-        return await _failed_import(session_factory, site_id, client.origin, started_at, documents, exc)
+        return await _failed_import(session_factory, site_id, client.origin, fingerprint, started_at, documents, exc)
     finally:
         await client.aclose()
 
@@ -416,6 +448,7 @@ async def _refresh_group(
     session_factory: async_sessionmaker[AsyncSession], connection: SpiderConnectionConfig, site_ids: list[str]
 ) -> list[SpiderImport]:
     assert connection.origin is not None
+    fingerprint = connection_fingerprint(connection)
     started_at = utcnow()
     client = SpiderClient(connection.origin, connection.token)
     documents: dict[str, SourceDocument] = {}
@@ -452,6 +485,7 @@ async def _refresh_group(
                         id=new_id("spimp"),
                         site_id=site_id,
                         source_url=client.origin,
+                        connection_fingerprint=fingerprint,
                         status="succeeded",
                         started_at=started_at,
                         finished_at=utcnow(),
@@ -466,7 +500,7 @@ async def _refresh_group(
                 return rows
     except SpiderError as exc:
         return [
-            await _failed_import(session_factory, site_id, client.origin, started_at, documents, exc)
+            await _failed_import(session_factory, site_id, client.origin, fingerprint, started_at, documents, exc)
             for site_id in site_ids
         ]
     finally:
@@ -522,6 +556,9 @@ def _verified_target(snapshot: SpiderSnapshot, observation: dict[str, Any], docu
         (stage for stage in snapshot.resources.get("stages", []) if stage.get("code") == planned_resource["code"]), None
     )
     if planned_resource != snapshot_resource:
+        raise SpiderError("source_revision_conflict")
+    comparisons = json.loads(snapshot.documents["/api/v1/comparisons"]["body"]).get("items", [])
+    if any(item.get("observation") == observation["observation"] and item.get("planned_stage") != planned_resource["code"] for item in comparisons):
         raise SpiderError("source_revision_conflict")
     return planned
 
@@ -590,6 +627,7 @@ async def _prepare_observation(
             .where(
                 SpiderImport.site_id == site_id,
                 SpiderImport.source_url == connection.origin,
+                SpiderImport.connection_fingerprint == connection_fingerprint(connection),
                 SpiderImport.status == "succeeded",
                 SpiderImport.snapshot_id == snapshot_id,
             )
@@ -601,12 +639,22 @@ async def _prepare_observation(
         observation = next((item for item in _observations(snapshot) if item.get("observation") == observation_id), None)
         if not isinstance(observation, dict):
             raise SpiderError("source_observation_not_found")
-        existing = await session.scalar(select(SpiderObservationAsset).where(SpiderObservationAsset.snapshot_id == snapshot_id, SpiderObservationAsset.observation_id == observation_id).order_by(SpiderObservationAsset.fetched_at.desc()).limit(1))
+        existing = await session.scalar(
+            select(SpiderObservationAsset).where(
+                SpiderObservationAsset.site_id == site_id,
+                SpiderObservationAsset.snapshot_id == snapshot_id,
+                SpiderObservationAsset.observation_id == observation_id,
+                SpiderObservationAsset.connection_fingerprint == connection_fingerprint(connection),
+            ).order_by(SpiderObservationAsset.fetched_at.desc()).limit(1)
+        )
         if existing and existing.target_document is not None:
             return existing
     client = SpiderClient(connection.origin, connection.token, transport=transport)
     try:
         if existing is None:
+            current_observations = await client.document("/api/v1/observations")
+            if current_observations.sha256 != snapshot.documents["/api/v1/observations"]["sha256"]:
+                raise SpiderError("source_revision_conflict")
             image_url = observation.get("image_url")
             if not isinstance(image_url, str):
                 raise SpiderError("unsafe_image_url")
@@ -615,10 +663,12 @@ async def _prepare_observation(
             directory = get_settings().data_dir / "spider" / "images"
             path = directory / f"{digest}.{extension}"
             await asyncio.to_thread(_publish_image, directory, path, raw, digest)
-            asset = SpiderObservationAsset(id=new_id("spasset"), snapshot_id=snapshot_id, observation_id=observation_id, image_sha256=digest,
+            asset = SpiderObservationAsset(id=new_id("spasset"), site_id=site_id, snapshot_id=snapshot_id,
+                                           connection_fingerprint=connection_fingerprint(connection), observation_id=observation_id, image_sha256=digest,
                                            media_type=media_type, width=width, height=height, storage_path=str(path), source_image_url=image_url,
                                            observed_at=datetime.fromisoformat(_timestamp(observation.get("timestamp_iso"), "timestamp_iso")),
-                                           timestamp_quality="synthetic_demo", fetched_at=utcnow(), target_attempts=[])
+                                           timestamp_quality="demonstration" if snapshot.data_type == "synthetic_demo" else "unknown",
+                                           fetched_at=utcnow(), target_attempts=[])
             async with session_factory() as session:
                 session.add(asset)
                 await session.commit()

@@ -3,8 +3,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, m } from 'framer-motion'
 import { ChevronDown, Loader2, RefreshCw } from 'lucide-react'
 import { api, ApiError, mediaUrl } from '@/api'
-import type { AnalyticsService, CameraWork, ServiceAnswer, SiteWork, WorkGroup } from '@/data'
+import type { AnalyticsService, CameraWork, ServiceAnswer, SiteWork, SpiderStageLinks, WorkGroup } from '@/data'
 import { useApp } from '@/store/context'
+import { analysisErrorMessage, manualStageCodes, workGroupPrefix } from '@/lib/analysisPresentation'
 import { cn, fmtDate, fmtTime, fmtWhen, plural } from '@/lib/utils'
 import { Badge } from './ui/Badge'
 import { Button } from './ui/Button'
@@ -38,24 +39,6 @@ const TRANSITION: Record<string, (next: string) => string> = {
   no_next_stage: () => 'Идёт последняя работа плана.',
 }
 
-/** Почему нет ответа — по коду отказа сервиса (раздел 11 контракта); подробность от сервиса видят руководитель и админ */
-const REFUSAL: Record<string, string> = {
-  not_ready: 'Сервис не готов к работе',
-  dependency_unavailable: 'Сервису недоступна модель',
-  model_failure: 'Ошибка модели сервиса',
-  model_invalid_response: 'Модель сервиса ответила не по формату',
-  analysis_timeout: 'Сервис не успел ответить',
-  busy: 'Сервис занят',
-  unreachable: 'Нет связи с сервисом',
-  unauthorized: 'Сервис не принял токен доступа',
-  forbidden: 'Сервис не принял токен доступа',
-  catalog_version_mismatch: 'Справочник сервиса обновился — проверьте виды работ в плане',
-  invalid_result: 'Ответ сервиса не относится к этому кадру',
-  execution_uncertain: 'Неизвестно, выполнен ли анализ',
-}
-const refusal = (code: string | null, fallback: string) =>
-  code && REFUSAL[code] ? REFUSAL[code] : code && /^(invalid|unknown|image|idempotency|observation|plan|ambiguous)/.test(code) ? 'Сервис отклонил запрос' : fallback
-
 const days = (seconds: number) => plural(Math.max(1, Math.round(seconds / 86_400)), 'день', 'дня', 'дней')
 
 const works = (group: WorkGroup) =>
@@ -76,6 +59,7 @@ export function WorkByCameras({ siteId, className }: { siteId: string; className
     // пока ждём ответы — чаще: «по технике» отвечает за секунды, «по снимку» — до нескольких минут
     refetchInterval: (query) => (waiting(query.state.data) ? 5_000 : 60_000),
   })
+  const links = useQuery({ queryKey: ['spider-stage-links', siteId], queryFn: () => api.spiderStageLinks(siteId), enabled: !!data?.sourceConfigured })
   const run = useMutation({
     mutationFn: () => api.runSiteWork(siteId),
     onSuccess: (fresh: SiteWork) => {
@@ -167,7 +151,7 @@ export function WorkByCameras({ siteId, className }: { siteId: string; className
           <p className="mt-3 text-[15px] text-muted-foreground">На объекте нет камер рабочих зон — сервисам нечего отправлять.</p>
         ) : (
           <div className="mt-3 divide-y divide-border">
-            {data.cameras.map((camera) => <CameraBlock key={camera.cameraId} camera={camera} canSeeErrors={data.canRun} />)}
+            {data.cameras.map((camera) => <CameraBlock key={camera.cameraId} camera={camera} canSeeErrors={data.canRun} links={links.data ?? null} />)}
           </div>
         )}
 
@@ -187,7 +171,7 @@ function waiting(data: SiteWork | undefined) {
   return !!data && (data.running || data.cameras.some((c) => c.answers.some((a) => a.state === 'pending' || a.newerPending)))
 }
 
-function CameraBlock({ camera, canSeeErrors }: { camera: CameraWork; canSeeErrors: boolean }) {
+function CameraBlock({ camera, canSeeErrors, links }: { camera: CameraWork; canSeeErrors: boolean; links: SpiderStageLinks | null }) {
   const observed = camera.answers.find((a) => a.observedAt)?.observedAt
   return (
     <div className="py-3 first:pt-0 last:pb-0 flex gap-3 sm:gap-4">
@@ -208,7 +192,7 @@ function CameraBlock({ camera, canSeeErrors }: { camera: CameraWork; canSeeError
           <p className="mt-1.5 text-[15px] text-muted-foreground">Кадр этой камеры ещё не отправлялся.</p>
         ) : (
           <dl className="mt-1.5 space-y-2">
-            {camera.answers.map((answer) => <Answer key={answer.service} answer={answer} canSeeErrors={canSeeErrors} />)}
+            {camera.answers.map((answer) => <Answer key={answer.service} answer={answer} canSeeErrors={canSeeErrors} links={links} />)}
           </dl>
         )}
       </div>
@@ -216,7 +200,7 @@ function CameraBlock({ camera, canSeeErrors }: { camera: CameraWork; canSeeError
   )
 }
 
-function Answer({ answer, canSeeErrors }: { answer: ServiceAnswer; canSeeErrors: boolean }) {
+function Answer({ answer, canSeeErrors, links }: { answer: ServiceAnswer; canSeeErrors: boolean; links: SpiderStageLinks | null }) {
   const [open, setOpen] = useState(false)
   const details = answer.groups.flatMap((g) => g.evidence.map((e) => e.explanation)).filter(Boolean)
   const more = details.length > 0
@@ -228,11 +212,12 @@ function Answer({ answer, canSeeErrors }: { answer: ServiceAnswer; canSeeErrors:
           <span className="inline-flex items-center gap-1.5 text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" aria-hidden />Ждём ответ…</span>
         )}
         {answer.state === 'error' && (
-          <span className="text-danger">{refusal(answer.errorCode, 'Сервис не ответил')}{canSeeErrors && answer.error ? `: ${answer.error}` : ''}</span>
+          <span className="text-danger">{analysisErrorMessage(answer)}</span>
         )}
         {answer.state === 'unknown' && (
-          <span className="text-warn">{refusal(answer.errorCode, 'Неизвестно, выполнен ли анализ')}{canSeeErrors && answer.error ? `: ${answer.error}` : ''}</span>
+          <span className="text-warn">{analysisErrorMessage(answer)}</span>
         )}
+        {canSeeErrors && answer.error && (answer.state === 'error' || answer.state === 'unknown') && <details className="mt-1 text-[13px] text-muted-foreground"><summary className="cursor-pointer">Технические детали</summary><p className="break-words">{answer.errorCode && `${answer.errorCode}: `}{answer.error}</p></details>}
         {answer.state === 'done' && answer.outcome !== 'assessed' && (
           <span className={answer.outcome === 'outside_plan' ? 'text-warn' : 'text-muted-foreground'}>
             {OUTCOME[answer.outcome ?? ''] ?? 'Работу не назвал'}
@@ -240,9 +225,10 @@ function Answer({ answer, canSeeErrors }: { answer: ServiceAnswer; canSeeErrors:
         )}
         {answer.groups.map((group, n) => (
           <p key={n}>
-            {group.match === 'ambiguous' && <span className="text-muted-foreground">Одна из работ: </span>}
+            <span className="text-muted-foreground">{workGroupPrefix(answer, group)}</span>
             <span className="font-medium">{works(group)}</span>
             {VISUAL[group.visualState] && <span className="text-muted-foreground"> — {VISUAL[group.visualState]}</span>}
+            {manualStageCodes(answer, group, links).length > 0 && <span className="text-muted-foreground"> · этап Spider по ручной связи: {manualStageCodes(answer, group, links).join(', ')}</span>}
           </p>
         ))}
         {answer.groups.length > 0 && answer.groups[0].explanation && (

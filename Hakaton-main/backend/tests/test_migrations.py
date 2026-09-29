@@ -84,6 +84,40 @@ async def test_0012_preserves_existing_cameras_and_enables_spider_for_them():
     async with engine.connect() as conn:
         assert (await conn.execute(text("SELECT spider_enabled FROM cameras WHERE id = 'legacy-camera'"))).scalar_one() == 1
 
+
+async def test_0013_preserves_existing_spider_imports_and_assets():
+    await seed._drop_everything()
+    await _run(lambda conn: command.upgrade(dbschema.alembic_config(conn), "0012"))
+    async with engine.begin() as conn:
+        await conn.execute(text(
+            "INSERT INTO sites (id, name, address, contractor, foreman_name, kind, position, work_from, work_to, work_days) "
+            "VALUES ('legacy-site', 'Старый объект', '', '', '', 'other', 0, 0, 24, '1111111')"
+        ))
+        await conn.execute(text(
+            "INSERT INTO spider_snapshots (id, source_url, api_version, documents, resources, resource_revision_id, created_at) "
+            "VALUES ('legacy-snapshot', 'https://spider.example', 'v1', '{}', '{}', 'old-revision', '2026-09-27 00:00:00+00:00')"
+        ))
+        await conn.execute(text(
+            "INSERT INTO spider_imports (id, site_id, source_url, status, started_at, snapshot_id, fetches, partial_documents) "
+            "VALUES ('legacy-import', 'legacy-site', 'https://spider.example', 'succeeded', "
+            "'2026-09-27 00:00:00+00:00', 'legacy-snapshot', '[]', '{}')"
+        ))
+        await conn.execute(text(
+            "INSERT INTO spider_observation_assets (id, snapshot_id, observation_id, image_sha256, media_type, width, height, "
+            "storage_path, source_image_url, observed_at, fetched_at, target_attempts) "
+            "VALUES ('legacy-asset', 'legacy-snapshot', 'observation-1', 'old-image', 'image/png', 1, 1, "
+            "'spider/images/old-image.png', 'https://spider.example/image.png', "
+            "'2026-09-27 00:00:00+00:00', '2026-09-27 00:00:00+00:00', '[]')"
+        ))
+    await _run(dbschema.upgrade)
+    async with engine.connect() as conn:
+        assert (await conn.execute(text(
+            "SELECT connection_fingerprint FROM spider_imports WHERE id = 'legacy-import'"
+        ))).scalar_one() is None
+        assert (await conn.execute(text(
+            "SELECT site_id, connection_fingerprint, image_sha256 FROM spider_observation_assets WHERE id = 'legacy-asset'"
+        ))).one() == (None, None, "old-image")
+
 async def test_reset_removes_tables_dropped_by_later_migrations():
     """Сброс базы, отставшей на миграцию: таблица, которую поздняя миграция убрала из моделей (stage_estimates — в 0008),
     не мешает удалить остальные, хотя ссылается на них внешними ключами."""

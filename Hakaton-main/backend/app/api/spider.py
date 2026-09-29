@@ -14,18 +14,29 @@ from sqlalchemy import select
 from app.api.deps import get_site
 from app.config import get_settings
 from app.db import SessionLocal, utcnow
-from app.models import SpiderConnection, SpiderImport, SpiderObservationAsset, SpiderSnapshot, User
+from app.models import SpiderConnection, SpiderImport, SpiderObservationAsset, SpiderSnapshot, SpiderStageLink, Stage, User
 from app.schemas import (
     SpiderConnectionIn,
     SpiderConnectionOut,
     SpiderImportOut,
+    SpiderLocalStepOut,
     SpiderObservationAssetOut,
     SpiderOut,
     SpiderPrepareIn,
     SpiderSnapshotOut,
+    SpiderStageLinkIn,
+    SpiderStageLinkOut,
+    SpiderStageLinksOut,
 )
 from app.security import SITE_MANAGERS, CurrentUser, Session, encrypt_secret, require_roles
-from app.services.spider import SpiderError, import_source, prepare_observation, resolve_connection, validate_origin
+from app.services.spider import (
+    SpiderError,
+    connection_fingerprint,
+    import_source,
+    prepare_observation,
+    resolve_connection,
+    validate_origin,
+)
 
 router = APIRouter(prefix="/sites/{site_id}/spider", tags=["Источник Camera Stage Monitor"])
 settings = get_settings()
@@ -203,7 +214,12 @@ async def spider_status(site_id: str, user: CurrentUser, session: Session) -> Sp
     if connection.origin is None:
         imports: list[SpiderImport] = []
     else:
-        imports = list(await session.scalars(query.where(SpiderImport.source_url == connection.origin).order_by(SpiderImport.started_at.desc())))
+        imports = list(await session.scalars(
+            query.where(
+                SpiderImport.source_url == connection.origin,
+                SpiderImport.connection_fingerprint == connection_fingerprint(connection),
+            ).order_by(SpiderImport.started_at.desc(), SpiderImport.id.desc())
+        ))
     latest = imports[0] if imports else None
     success = next((item for item in imports if item.status == "succeeded" and item.snapshot_id), None)
     snapshot = await session.get(SpiderSnapshot, success.snapshot_id) if success and success.snapshot_id else None
@@ -220,6 +236,100 @@ async def spider_status(site_id: str, user: CurrentUser, session: Session) -> Sp
         stale=stale,
         limitations=limitations,
     )
+
+
+async def _active_source(session: Session, site_id: str) -> tuple[SpiderSnapshot | None, str | None]:
+    connection = await resolve_connection(session, site_id)
+    if connection.origin is None:
+        return None, None
+    fingerprint = connection_fingerprint(connection)
+    latest_success = await session.scalar(
+        select(SpiderImport)
+        .where(
+            SpiderImport.site_id == site_id,
+            SpiderImport.source_url == connection.origin,
+            SpiderImport.connection_fingerprint == fingerprint,
+            SpiderImport.status == "succeeded",
+            SpiderImport.snapshot_id.is_not(None),
+        )
+        .order_by(SpiderImport.started_at.desc(), SpiderImport.id.desc())
+        .limit(1)
+    )
+    return (await session.get(SpiderSnapshot, latest_success.snapshot_id), fingerprint) if latest_success else (None, fingerprint)
+
+
+async def _stage_links_out(session: Session, site_id: str, snapshot: SpiderSnapshot | None,
+                           fingerprint: str | None) -> SpiderStageLinksOut:
+    works = list(await session.scalars(
+        select(Stage).where(Stage.site_id == site_id, Stage.level == 2)
+        .order_by(Stage.start_date, Stage.position, Stage.id)
+    ))
+    local_steps = [SpiderLocalStepOut(step_key=work.id, name=work.name) for work in works]
+    if snapshot is None or fingerprint is None:
+        return SpiderStageLinksOut(snapshot_id=None, stages=[], local_steps=local_steps)
+    links = list(await session.scalars(
+        select(SpiderStageLink).where(
+            SpiderStageLink.site_id == site_id,
+            SpiderStageLink.snapshot_id == snapshot.id,
+            SpiderStageLink.connection_fingerprint == fingerprint,
+        )
+    ))
+    linked = {link.stage_code: link.step_key for link in links}
+    names = {work.id: work.name for work in works}
+    stages = []
+    for stage in snapshot.resources["stages"]:
+        step_key = linked.get(stage["code"])
+        if step_key not in names:
+            step_key = None
+        stages.append(SpiderStageLinkOut(
+            stage_code=stage["code"], stage_name=stage["name"],
+            step_key=step_key, step_name=names.get(step_key),
+        ))
+    return SpiderStageLinksOut(snapshot_id=snapshot.id, stages=stages, local_steps=local_steps)
+
+
+@router.get("/stage-links", response_model=SpiderStageLinksOut, summary="Ручные связи этапов Spider с локальными работами")
+async def spider_stage_links(site_id: str, user: CurrentUser, session: Session) -> SpiderStageLinksOut:
+    await get_site(session, user, site_id)
+    snapshot, fingerprint = await _active_source(session, site_id)
+    return await _stage_links_out(session, site_id, snapshot, fingerprint)
+
+
+@router.put("/stage-links", response_model=SpiderStageLinksOut, summary="Сохранить ручную связь этапа Spider")
+async def update_spider_stage_link(
+    site_id: str,
+    body: SpiderStageLinkIn,
+    user: Annotated[User, require_roles(*SITE_MANAGERS)],
+    session: Session,
+) -> SpiderStageLinksOut:
+    await get_site(session, user, site_id)
+    snapshot, fingerprint = await _active_source(session, site_id)
+    if snapshot is None or fingerprint is None or snapshot.id != body.snapshot_id:
+        raise HTTPException(status.HTTP_409_CONFLICT, "Снимок Spider изменился — обновите связи этапов")
+    if body.stage_code not in {stage["code"] for stage in snapshot.resources["stages"]}:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Этапа Spider нет в текущем снимке")
+    if body.step_key is not None:
+        work = await session.get(Stage, body.step_key)
+        if work is None or work.site_id != site_id or work.level != 2:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Работы нет в локальном плане объекта")
+    existing = await session.scalar(select(SpiderStageLink).where(
+        SpiderStageLink.site_id == site_id,
+        SpiderStageLink.snapshot_id == snapshot.id,
+        SpiderStageLink.connection_fingerprint == fingerprint,
+        SpiderStageLink.stage_code == body.stage_code,
+    ))
+    if body.step_key is None:
+        if existing is not None:
+            await session.delete(existing)
+    elif existing is None:
+        session.add(SpiderStageLink(
+            site_id=site_id, snapshot_id=snapshot.id,
+            connection_fingerprint=fingerprint, stage_code=body.stage_code, step_key=body.step_key,
+        ))
+    else:
+        existing.step_key = body.step_key
+    await session.commit()
+    return await _stage_links_out(session, site_id, snapshot, fingerprint)
 
 
 @router.post("/observations/{observation_id}/prepare", response_model=SpiderObservationAssetOut, summary="Сохранить фото и проверить этап источника")
@@ -251,8 +361,11 @@ async def spider_image(site_id: str, asset_id: str, user: CurrentUser, session: 
         .join(SpiderImport, SpiderImport.snapshot_id == SpiderObservationAsset.snapshot_id)
         .where(
             SpiderObservationAsset.id == asset_id,
+            SpiderObservationAsset.site_id == site_id,
+            SpiderObservationAsset.connection_fingerprint == connection_fingerprint(connection),
             SpiderImport.site_id == site_id,
             SpiderImport.source_url == connection.origin,
+            SpiderImport.connection_fingerprint == connection_fingerprint(connection),
             SpiderImport.status == "succeeded",
         )
         .limit(1)

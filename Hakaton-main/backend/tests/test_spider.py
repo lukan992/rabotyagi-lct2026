@@ -12,11 +12,12 @@ from PIL import Image
 from sqlalchemy import func, select
 
 from app.api import spider as spider_api
-from app.config import get_settings
 from app.api import work as work_api
+from app.config import get_settings
 from app.db import SessionLocal, utcnow
 from app.models import SpiderConnection, SpiderImport, SpiderObservationAsset, SpiderSnapshot
 from app.security import decrypt_secret
+from app.services.analytics.request import spider_context
 from app.services.spider import SpiderError, import_source, prepare_observation
 from tests.conftest import login_as
 
@@ -110,6 +111,31 @@ async def test_import_is_content_addressed_and_rejects_partial_revision(client, 
         assert await session.scalar(select(func.count()).select_from(SpiderSnapshot)) == 2
 
 
+@pytest.mark.parametrize(
+    ("path", "field", "value"),
+    [
+        ("/api/v1/photo-equipment", "observed_stage_code", "P04"),
+        ("/api/v1/comparisons", "observed_stage", "P04"),
+        ("/api/v1/photo-equipment", "image_url", "/api/v1/images/different.png"),
+    ],
+)
+async def test_import_rejects_conflicting_observation_documents(client, spider_settings, path, field, value):
+    docs, photo = _documents(), _jpeg()
+    docs[path]["items"][0][field] = value
+    imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    assert imported.status == "failed" and imported.error_code == "source_observation_conflict"
+
+
+@pytest.mark.parametrize("field", ["planned_work_shifts", "finish", "volume_unit"])
+async def test_import_rejects_resources_incompatible_with_v2(client, spider_settings, field):
+    docs, photo = _documents(), _jpeg()
+    for path in ("/api/v1/stages", "/api/v1/equipment"):
+        stage = docs[path]["items"][0]
+        stage[field] = {"planned_work_shifts": 0, "finish": stage["start"], "volume_unit": " "}[field]
+    imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    assert imported.status == "failed" and imported.error_code == "source_invalid_document"
+
+
 async def test_prepare_persists_verified_photo_and_retries_only_target(client, spider_settings):
     docs, photo, calls = _documents(), _jpeg(), []
     imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
@@ -120,6 +146,7 @@ async def test_prepare_persists_verified_photo_and_retries_only_target(client, s
     prepared = await prepare_observation(SessionLocal, "s1", imported.snapshot_id, "OBS01", transport=_transport(docs, photo, calls=calls))
     assert calls and all("plan-at" in url for url in calls)  # error replay does not fetch photo again
     assert prepared.target_document["code"] == "P03"
+    assert prepared.timestamp_quality == "demonstration"
     async with SessionLocal() as session:
         asset = await session.get(SpiderObservationAsset, prepared.id)
         assert asset is not None and len(asset.target_attempts) == 2
@@ -148,6 +175,35 @@ async def test_prepare_rejects_plan_stage_or_timestamp_outside_snapshot(client, 
     async with SessionLocal() as session:
         asset = await session.get(SpiderObservationAsset, resource_conflict.id)
         assert asset is not None and len(asset.target_attempts) == 2
+
+
+async def test_prepare_rejects_changed_observations_before_image_download(client, spider_settings):
+    docs, photo, calls = _documents(), _jpeg(), []
+    imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    changed = copy.deepcopy(docs)
+    changed["/api/v1/observations"]["items"][0]["timestamp_iso"] = "2026-09-16T10:00:00+03:00"
+    with pytest.raises(SpiderError, match="source_revision_conflict"):
+        await prepare_observation(
+            SessionLocal, "s1", imported.snapshot_id, "OBS01", transport=_transport(changed, photo, calls=calls)
+        )
+    assert len(calls) == 1 and "/observations" in calls[0]
+
+
+async def test_production_source_does_not_label_photo_as_demo(client, spider_settings):
+    docs, photo = _documents(), _jpeg()
+    for document in docs.values():
+        document["data_type"] = "production"
+    imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    asset = await prepare_observation(SessionLocal, "s1", imported.snapshot_id, "OBS01", transport=_transport(docs, photo))
+    assert asset.timestamp_quality == "unknown"
+
+
+async def test_prepare_rejects_plan_at_that_disagrees_with_saved_comparison(client, spider_settings):
+    docs, photo = _documents(), _jpeg()
+    docs["/api/v1/comparisons"]["items"][0]["planned_stage"] = "P04"
+    imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    asset = await prepare_observation(SessionLocal, "s1", imported.snapshot_id, "OBS01", transport=_transport(docs, photo))
+    assert asset.target_document is None and asset.target_error == "source_revision_conflict"
 
 
 async def test_prepare_serializes_attempts_and_never_replaces_wrong_digest(client, spider_settings):
@@ -216,6 +272,45 @@ async def test_router_protects_source_and_exposes_resource_status(client, spider
     image = await client.get(prepared.json()["imageUrl"], headers=manager)
     assert image.status_code == 200 and image.content == photo and image.headers["content-type"] == "image/jpeg"
     assert (await client.get(f"/api/sites/s2/spider/images/{prepared.json()['id']}", headers=manager)).status_code == 404
+
+
+async def test_manual_stage_links_are_scoped_validated_and_removable(client, spider_settings):
+    imported = await import_source(SessionLocal, "s1", transport=_transport(_documents(), _jpeg()))
+    snapshot_id = imported.snapshot_id
+    assert snapshot_id is not None
+    manager, foreman = await login_as(client, "manager"), await login_as(client, "foreman")
+    url = "/api/sites/s1/spider/stage-links"
+    empty = await client.get(url, headers=foreman)
+    assert empty.status_code == 200
+    assert empty.json()["snapshotId"] == snapshot_id
+    assert empty.json()["stages"][0]["stepKey"] is None
+
+    body = {"snapshotId": snapshot_id, "stageCode": "P04", "stepKey": "s1-excavation"}
+    assert (await client.put(url, headers=foreman, json=body)).status_code == 403
+    assert (await client.put(url, headers=manager, json={**body, "stageCode": "P99"})).status_code == 422
+    assert (await client.put(url, headers=manager, json={**body, "stepKey": "s2-excavation"})).status_code == 422
+    assert (await client.put(url, headers=manager, json={**body, "stepKey": "s1-l1-earth"})).status_code == 422
+    assert (await client.put(url, headers=manager, json={**body, "snapshotId": "x" * 64})).status_code == 409
+    saved = await client.put(url, headers=manager, json=body)
+    assert saved.status_code == 200, saved.text
+    assert next(stage for stage in saved.json()["stages"] if stage["stageCode"] == "P04")["stepKey"] == "s1-excavation"
+    assert next(stage for stage in (await client.get(url, headers=foreman)).json()["stages"] if stage["stageCode"] == "P04")["stepName"] == "Разработка котлована"
+
+    removed = await client.put(url, headers=manager, json={**body, "stepKey": None})
+    assert removed.status_code == 200
+    assert next(stage for stage in removed.json()["stages"] if stage["stageCode"] == "P04")["stepKey"] is None
+
+    assert (await client.put(url, headers=manager, json=body)).status_code == 200
+    changed = await client.put(
+        "/api/sites/s1/spider/connection", headers=manager,
+        json={"url": "http://spider.test", "token": "another-token"},
+    )
+    assert changed.status_code == 200
+    assert (await client.get(url, headers=manager)).json()["snapshotId"] is None
+    again = await import_source(SessionLocal, "s1", transport=_transport(_documents(), _jpeg()))
+    assert again.snapshot_id == snapshot_id
+    fresh_links = (await client.get(url, headers=manager)).json()
+    assert next(stage for stage in fresh_links["stages"] if stage["stageCode"] == "P04")["stepKey"] is None
 
 
 
@@ -399,6 +494,42 @@ async def test_site_connection_redacts_token_and_hides_old_origin_imports(client
     assert all(request.headers.get("authorization") is None for request in requests)
     assert (await client.put("/api/sites/s1/spider/connection", headers=manager, json={"url": "https://two.test/path"})).status_code == 422
 
+async def test_rotating_token_hides_previous_import_and_photo(client, spider_settings):
+    manager = await login_as(client, "manager")
+    docs, photo = _documents(), _jpeg()
+    connection_url = "/api/sites/s1/spider/connection"
+    assert (await client.put(connection_url, headers=manager, json={"url": "http://spider.test", "token": "first"})).status_code == 200
+    imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    asset = await prepare_observation(SessionLocal, "s1", imported.snapshot_id, "OBS01", transport=_transport(docs, photo))
+    assert (await client.get("/api/sites/s1/spider", headers=manager)).json()["snapshot"]["id"] == imported.snapshot_id
+
+    assert (await client.put(connection_url, headers=manager, json={"url": "http://spider.test", "token": "second"})).status_code == 200
+    source = (await client.get("/api/sites/s1/spider", headers=manager)).json()
+    assert source["snapshot"] is None and source["lastImport"] is None
+    assert (await client.get(f"/api/sites/s1/spider/images/{asset.id}", headers=manager)).status_code == 404
+    async with SessionLocal() as session:
+        assert await spider_context(session, "s1", now=utcnow()) is None
+
+    refreshed = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    assert refreshed.snapshot_id == imported.snapshot_id
+    assert (await client.get("/api/sites/s1/spider", headers=manager)).json()["snapshot"]["id"] == imported.snapshot_id
+    new_asset = await prepare_observation(SessionLocal, "s1", refreshed.snapshot_id, "OBS01", transport=_transport(docs, photo))
+    assert new_asset.id != asset.id and new_asset.image_sha256 == asset.image_sha256
+    assert (await client.get(f"/api/sites/s1/spider/images/{new_asset.id}", headers=manager)).status_code == 200
+
+
+async def test_same_source_does_not_share_prepared_photo_between_sites(client, spider_settings):
+    admin = await login_as(client, "admin")
+    docs, photo = _documents(), _jpeg()
+    first = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
+    second = await import_source(SessionLocal, "s2", transport=_transport(docs, photo))
+    assert first.snapshot_id == second.snapshot_id
+    asset = await prepare_observation(SessionLocal, "s1", first.snapshot_id, "OBS01", transport=_transport(docs, photo))
+    assert (await client.get(f"/api/sites/s2/spider/images/{asset.id}", headers=admin)).status_code == 404
+    other = await prepare_observation(SessionLocal, "s2", second.snapshot_id, "OBS01", transport=_transport(docs, photo))
+    assert other.id != asset.id and other.image_sha256 == asset.image_sha256
+
+
 async def test_unconfigured_source_rejects_without_transport(client, spider_settings, monkeypatch):
     monkeypatch.setattr(spider_settings, "camera_stage_monitor_url", None)
     with pytest.raises(SpiderError, match="source_not_configured"):
@@ -410,6 +541,7 @@ async def test_unconfigured_source_rejects_without_transport(client, spider_sett
 async def test_cross_origin_observation_url_is_never_requested(client, spider_settings):
     docs, photo = _documents(), _jpeg()
     docs["/api/v1/observations"]["items"][0]["image_url"] = "https://elsewhere.test/photo.jpg"
+    docs["/api/v1/photo-equipment"]["items"][0]["image_url"] = "https://elsewhere.test/photo.jpg"
     imported = await import_source(SessionLocal, "s1", transport=_transport(docs, photo))
     with pytest.raises(SpiderError, match="unsafe_image_url"):
         await prepare_observation(SessionLocal, "s1", imported.snapshot_id, "OBS01", transport=_transport(docs, photo))

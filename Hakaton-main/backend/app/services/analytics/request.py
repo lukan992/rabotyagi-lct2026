@@ -34,7 +34,7 @@ from app.schemas import SpiderResourcesOut
 from app.services.analytics.catalog import Catalog, object_type
 from app.services.analytics.images import FrameImage, load_image
 from app.services.analytics.observations import detections_of
-from app.services.spider import resolve_connection
+from app.services.spider import connection_fingerprint, resolve_connection
 
 INPUT_SCHEMA = "frame-analysis-input-v1"
 SPIDER_INPUT_SCHEMA = "frame-analysis-input-v2"
@@ -274,7 +274,11 @@ async def spider_context(session: AsyncSession, site_id: str, *, now: datetime) 
     imports = list(
         await session.scalars(
             select(SpiderImport)
-            .where(SpiderImport.site_id == site_id, SpiderImport.source_url == connection.origin)
+            .where(
+                SpiderImport.site_id == site_id,
+                SpiderImport.source_url == connection.origin,
+                SpiderImport.connection_fingerprint == connection_fingerprint(connection),
+            )
             .order_by(SpiderImport.started_at.desc(), SpiderImport.id.desc())
         )
     )

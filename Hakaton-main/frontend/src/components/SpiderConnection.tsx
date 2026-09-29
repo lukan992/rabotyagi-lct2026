@@ -21,6 +21,7 @@ export function SpiderConnection({ siteId }: { siteId: string }) {
       setTouched(false)
       void queryClient.invalidateQueries({ queryKey: key })
       void queryClient.invalidateQueries({ queryKey: ['spider', siteId] })
+      void queryClient.invalidateQueries({ queryKey: ['spider-stage-links', siteId] })
     },
   })
 

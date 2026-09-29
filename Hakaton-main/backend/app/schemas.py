@@ -798,6 +798,30 @@ class SpiderOut(ApiModel):
 
 
 
+class SpiderStageLinkIn(ApiModel):
+    snapshot_id: str = Field(min_length=64, max_length=64)
+    stage_code: str = Field(min_length=1, max_length=100)
+    step_key: str | None = Field(min_length=1, max_length=40)
+
+
+class SpiderStageLinkOut(ApiModel):
+    stage_code: str
+    stage_name: str
+    step_key: str | None
+    step_name: str | None
+
+
+class SpiderLocalStepOut(ApiModel):
+    step_key: str
+    name: str
+
+
+class SpiderStageLinksOut(ApiModel):
+    snapshot_id: str | None
+    stages: list[SpiderStageLinkOut]
+    local_steps: list[SpiderLocalStepOut]
+
+
 class SpiderPrepareIn(ApiModel):
     snapshot_id: str = Field(min_length=64, max_length=64)
 
@@ -1043,6 +1067,7 @@ class ServiceAnswerOut(ApiModel):
     resource_assessment: ResourceAssessmentOut | None
     analysis_mode: Literal["demonstration", "operational"] | None
     resource_evidence: list[ResourceEvidenceOut]
+    spider_snapshot_id: str | None  # source snapshot used by this answer, if any
 
 
 class CameraWorkOut(ApiModel):
