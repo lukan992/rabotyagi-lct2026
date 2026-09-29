@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lct-camera-overlap"
+version = "0.1.0"
+description = "Image-only approximate shared regions with local SuperPoint and LightGlue"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "torch==2.7.1", "numpy==2.1.2", "Pillow==12.2.0",
+  "kornia==0.8.3", "opencv-python==5.0.0.93",
+]
+
+[project.scripts]
+camera-overlap = "camera_overlap.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+camera_overlap = ["weights/*.pth", "weights/*.json", "_vendor/*.txt", "_vendor/*.json", "schemas/*.json"]

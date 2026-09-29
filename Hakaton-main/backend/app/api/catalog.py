@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import SiteIdQuery, get_site, scope
 from app.db import utcnow
-from app.models import CheckRun, Rule, RuleItem, Site, Stage, Zone, new_id
+from app.models import CameraOverlap, CheckRun, Rule, RuleItem, Site, Stage, Zone, new_id
 from app.schemas import (
     CheckRow,
     CheckRunOut,
@@ -28,6 +28,7 @@ from app.security import CurrentUser, Session, require_roles
 from app.services import audit
 from app.services.analysis import detectable_types
 from app.services.engine import current_stage, local_day, site_state
+from app.services.overlap_count import estimate_counts
 from app.services.pipeline import get_pipeline
 from app.services.plan import site_progress, stages_by_site
 from app.services.workhours import describe as describe_hours
@@ -227,6 +228,11 @@ async def delete_rule(key: str, user: CurrentUser, session: Session, request: Re
 async def equipment_check(site_id: str, user: CurrentUser, session: Session) -> EquipmentCheckOut:
     site = await get_site(session, user, site_id)
     state = await site_state(session, site_id, utcnow())
+    overlaps = list(await session.scalars(select(CameraOverlap).where(CameraOverlap.site_id == site_id)))
+    estimated, overlap_matches = estimate_counts(state.latest, state.cameras, overlaps, max_skew_seconds=60)
+    estimated_site, _ = estimate_counts(
+        state.latest, state.cameras, overlaps, max_skew_seconds=60, work_only=False,
+    )
     rows, extra = [], []
     detectable = detectable_types()
     if state.rule:
@@ -255,6 +261,9 @@ async def equipment_check(site_id: str, user: CurrentUser, session: Session) -> 
         rows=rows,
         extra=extra,
         arriving=dict(state.arriving),
+        estimated_observed=estimated,
+        estimated_site_observed=estimated_site,
+        overlap_matches=overlap_matches,
     )
 
 

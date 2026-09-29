@@ -1,0 +1,24 @@
+{
+  "repository": "https://github.com/cvg/LightGlue",
+  "commit": "eb42fee2d71449efb0aa5c10549752b5d75384d8",
+  "files": [
+    {
+      "file": "lightglue.py",
+      "original_sha256": "77891cc7ff79aea7b03f310288d12549db6704f4a1ec42b0b3364527e31f6546",
+      "local_sha256": "77891cc7ff79aea7b03f310288d12549db6704f4a1ec42b0b3364527e31f6546",
+      "modified": false
+    },
+    {
+      "file": "superpoint.py",
+      "original_sha256": "a06c9adf6222046e4dfb03e47abb9d665730236c96ed9f9ae8ea71d8174aff5d",
+      "local_sha256": "40238924434fc42f57d33d50b72cdbbd1ae928e2f9d607f77c3ea946d3f08b7c",
+      "modified": true
+    },
+    {
+      "file": "utils.py",
+      "original_sha256": "f172b3b1399748ed91433d27bd2d2881633f4624e8397bda07c842283ed224aa",
+      "local_sha256": "f172b3b1399748ed91433d27bd2d2881633f4624e8397bda07c842283ed224aa",
+      "modified": false
+    }
+  ]
+}

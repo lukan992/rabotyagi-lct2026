@@ -17,6 +17,7 @@ from app.api import (
     analyze,
     audit,
     auth,
+    camera_overlaps,
     cameras,
     catalog,
     equipment,
@@ -38,6 +39,7 @@ from app.seed import prepare_database
 from app.services import video
 from app.services.analysis import LocalAnalyzer, detectable_types, get_analyzer, provider_name
 from app.services.analytics.runner import get_analytics
+from app.services.camera_overlaps import sync_loop as overlap_sync_loop
 from app.services.equipment_visits import mark_stale_visits
 from app.services.pipeline import get_pipeline
 from app.services.realtime import LiveTracking
@@ -90,6 +92,8 @@ async def lifespan(_: FastAPI):
     settings.frames_dir.mkdir(parents=True, exist_ok=True)
     await prepare_database()
     background_tasks = [asyncio.create_task(_sweep_equipment_visits())]
+    if settings.overlap_service_url:
+        background_tasks.append(asyncio.create_task(overlap_sync_loop()))
     if settings.camera_stage_monitor_refresh_seconds > 0:
         background_tasks.append(asyncio.create_task(_refresh_spider_sources()))
     analyzer, relay = get_analyzer(), get_relay()  # своя модель загружается здесь — до первого кадра
@@ -221,7 +225,7 @@ async def meta() -> MetaOut:
 
 
 for module in (
-    auth, catalog, cameras, snapshots, photo_analyses, alerts, analyze, reports, ingest, equipment, spider,
+    auth, catalog, cameras, camera_overlaps, snapshots, photo_analyses, alerts, analyze, reports, ingest, equipment, spider,
     video_api, tracks, work, audit, admin, plan,
 ):
     api.include_router(module.router)

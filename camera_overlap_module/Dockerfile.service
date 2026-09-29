@@ -1,0 +1,27 @@
+FROM python:3.13.12-slim-bookworm
+
+ARG TORCH_FLAVOR=cpu
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    OMP_NUM_THREADS=8 \
+    MKL_NUM_THREADS=8
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+RUN case "$TORCH_FLAVOR" in cpu|cu128) ;; *) echo "TORCH_FLAVOR must be cpu or cu128" >&2; exit 2 ;; esac \
+    && python -m pip install --no-cache-dir "torch==2.7.1" \
+       --index-url "https://download.pytorch.org/whl/${TORCH_FLAVOR}"
+
+WORKDIR /opt/camera-overlap
+COPY pyproject.toml README.md ./
+COPY src ./src
+COPY service.py ./
+RUN python -m pip install --no-cache-dir . "fastapi>=0.115,<1" "uvicorn>=0.32,<1" "python-multipart>=0.0.17,<1" \
+    && python -m pip check \
+    && python -c "from camera_overlap.weights import verify_weights; verify_weights()" \
+    && useradd --uid 10001 --create-home overlap
+
+USER 10001:10001
+EXPOSE 8000
+CMD ["uvicorn", "service:app", "--host", "0.0.0.0", "--port", "8000"]

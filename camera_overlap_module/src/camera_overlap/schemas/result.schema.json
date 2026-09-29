@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:lct:camera-overlap:result:v1",
+  "type": "object",
+  "required": ["schema_version", "module_version", "model", "weights_sha256", "status", "images", "geometry", "config", "device", "elapsed_seconds", "interpretation", "limitations"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "camera-overlap-v1"},
+    "module_version": {"const": "0.1.0"},
+    "model": {"const": "superpoint_lightglue"},
+    "weights_sha256": {"type": "object", "minProperties": 2, "maxProperties": 2, "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "status": {"enum": ["candidate_overlap", "insufficient_evidence"]},
+    "images": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/image"}},
+    "geometry": {
+      "type": "object",
+      "required": ["matches", "selected_inliers", "selected_geometry", "mode", "rejection_reasons", "mask_fractions", "H_image0_to_image1", "F_original_pixels", "F_normalized", "geometry_long_edge"],
+      "properties": {
+        "matches": {"type": "integer", "minimum": 0},
+        "selected_inliers": {"type": "integer", "minimum": 0},
+        "selected_geometry": {"enum": ["F", "H"]},
+        "mode": {"enum": ["matched_support", "planar_extent", "insufficient_support"]},
+        "rejection_reasons": {"type": "array", "items": {"type": "string"}},
+        "mask_fractions": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "minimum": 0, "maximum": 1}},
+        "H_image0_to_image1": {"$ref": "#/$defs/nullableMatrix"},
+        "F_original_pixels": {"$ref": "#/$defs/nullableMatrix"},
+        "F_normalized": {"$ref": "#/$defs/nullableMatrix"},
+        "geometry_long_edge": {"type": "integer", "minimum": 1}
+      }
+    },
+    "config": {"type": "object"},
+    "device": {"type": "string"},
+    "elapsed_seconds": {"type": "number", "minimum": 0},
+    "interpretation": {"type": "string"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "artifacts": {
+      "type": "object", "required": ["masks", "matches", "preview"], "additionalProperties": false,
+      "properties": {"masks": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"}}, "matches": {"type": "string"}, "preview": {"type": "string"}}
+    }
+  },
+  "allOf": [{"if": {"properties": {"status": {"const": "insufficient_evidence"}}}, "then": {"properties": {"geometry": {"properties": {"mode": {"const": "insufficient_support"}, "mask_fractions": {"const": [0, 0]}}}}}, "else": {"properties": {"geometry": {"properties": {"mode": {"enum": ["matched_support", "planar_extent"]}, "rejection_reasons": {"maxItems": 0}}}}}}],
+  "$defs": {
+    "point": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "minimum": 0}},
+    "ring": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/point"}},
+    "nullableMatrix": {"anyOf": [{"type": "null"}, {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}}}]},
+    "image": {
+      "type": "object", "additionalProperties": false,
+      "required": ["width", "height", "coordinate_space", "source_path", "encoded_sha256", "rgb_sha256", "mask_size", "mask_to_image_scale", "regions"],
+      "properties": {
+        "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1},
+        "coordinate_space": {"const": "exif_oriented_pixels"},
+        "source_path": {"type": ["string", "null"]},
+        "encoded_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "rgb_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "mask_size": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+        "mask_to_image_scale": {"type": "number", "exclusiveMinimum": 0},
+        "regions": {"type": "array", "items": {"type": "object", "required": ["exterior", "holes"], "additionalProperties": false, "properties": {"exterior": {"$ref": "#/$defs/ring"}, "holes": {"type": "array", "items": {"$ref": "#/$defs/ring"}}}}}
+      }
+    }
+  }
+}
